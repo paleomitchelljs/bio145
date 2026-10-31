@@ -23,8 +23,8 @@ they are different classes); no real-data panels; no R panels.
 ## Layout
 
 ```
-index.html                 landing page (reads LOCKS.txt)
-LOCKS.txt                  release gate, one row per lesson (o open / x locked), same as BIO 202
+index.html                 course page: by chapter, each lecture's deck on the left and its homework on the right (reads LOCKS.txt)
+LOCKS.txt                  release gate, one row per lesson and per lecture deck (o open / x locked), same as BIO 202
 app/lessons/lessonN.html   the lessons
 app/assets/
   b145.css                 the BIO 202 lesson stylesheet (same palette), lifted into one shared file, plus drill/tile/cross styles

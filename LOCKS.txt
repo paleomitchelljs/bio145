@@ -37,3 +37,13 @@ lesson33        o   Switching genes: lac operon, histones, introns
 lesson34        o   Gels, blots, restriction enzymes, recombinant DNA and PCR
 lesson35        o   Reading genomes: Sanger, GWAS and pharmacogenomics
 lesson36        o   Omics and CRISPR editing
+# lecture decks (lectures/lecNN/)
+lec01           o   What is life?
+lec02           o   Atoms, bonds, and redox
+lec03           o   Water, pH, and shape
+lec04           o   Carbohydrates and lipids
+lec05           o   Steroids and proteins
+lec06           o   Folding, and nucleic acids
+lec07           o   Why cells are small
+lec08           o   The rooms of a cell
+lec09           o   Tracks, ropes, and walls

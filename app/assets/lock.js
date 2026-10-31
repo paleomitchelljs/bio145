@@ -48,17 +48,23 @@
   "use strict";
 
   // How far the current page sits below the repo root. Lessons and scaffolds
-  // live two directories down (app/lessons/, app/scaffolds/); the landing page
-  // is at the root.
+  // live two directories down (app/lessons/, app/scaffolds/), and so do the
+  // lecture decks (lectures/lec01/); the landing page is at the root.
   function rootPrefix() {
-    return /\/app\//.test(global.location.pathname) ? "../../" : "./";
+    const p = global.location.pathname;
+    if (/\/app\//.test(p) || /\/lectures\/lec\d+\//.test(p)) return "../../";
+    if (/\/lectures\//.test(p)) return "../";
+    return "./";
   }
   function locksUrl() { return rootPrefix() + "LOCKS.txt"; }
 
   // The key for the current page: the filename without .html, so
-  // app/lessons/lesson7.html -> "lesson7" and
+  // app/lessons/lesson7.html -> "lesson7", lectures/lec07/ -> "lec07", and
   // app/scaffolds/s04_fixation_probability.html -> "s04".
   function pageKey() {
+    // A lecture deck is a folder (lectures/lec01/index.html, or just lectures/lec01/): its key is the folder name.
+    const lec = global.location.pathname.match(/\/lectures\/(lec\d+)\//);
+    if (lec) return lec[1];
     const file = (global.location.pathname.split("/").pop() || "").replace(/\.html?$/i, "");
     if (!file) return null;
     const m = file.match(/^(s\d+)_/);     // scaffolds carry a descriptive tail
@@ -86,7 +92,10 @@
   let cached = null;
   function load() {
     if (cached) return cached;
-    cached = fetch(locksUrl(), { cache: "no-store" })
+    let got;
+    try { got = fetch(locksUrl(), { cache: "no-store" }); }   // no fetch at all: fail open, like any other failure
+    catch (e) { got = Promise.reject(e); }
+    cached = got
       .then(r => (r.ok ? r.text() : ""))
       .then(t => parse(t))
       // An instructor unlock makes every row read as open, so the landing page

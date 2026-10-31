@@ -4,7 +4,14 @@ Interactive presentations to replace the PowerPoints, one per lecture. Chapters 
 deck follows its lecture's 2026 outline (`refs/outlines/2026_lecNN_outline.tex`) for topics and order, and takes its
 slide text from the matching PowerPoint (`refs/lectures/lec_chptNN.pptx`), reworded toward the outline's phrasing.
 
-Open `lectures/index.html`, or a deck's `lecNN/index.html`, straight from the file. No build step.
+Open the course page (`index.html` at the repo root: each lecture's deck on the left, its homework on the right), or a
+deck's `lectures/lecNN/index.html`, straight from the file. No build step.
+
+## Locking
+
+Each deck has a row in `LOCKS.txt` (`lec01` … `lec09`), next to the homework rows, and loads `app/assets/lock.js`, so
+it locks exactly like a lesson: change `o` to `x`, commit, push. A locked deck shows the "Not open yet" notice (with the
+instructor passphrase box), and its card on the course page goes gray. Everything is open now.
 
 ## Running a deck
 
@@ -74,7 +81,8 @@ Needs `npm install` at the repo root once (jsdom). It catches script errors and 
 
     python3 lectures/tools/make_page.py 10 "Title" "one-line description"
 
-then write `lec10/content.js` and `lec10/figs.js` (copy a neighbor's), and add a card to `lectures/index.html`.
+then write `lec10/content.js` and `lec10/figs.js` (copy a neighbor's), add a `lec10` row to `LOCKS.txt`, and swap the
+"deck not built yet" placeholder on the course page for a link (copy lecture 9's card).
 
 ## Draft status and things to check
 

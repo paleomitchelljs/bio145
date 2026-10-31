@@ -13,7 +13,7 @@ const decks = fs.readdirSync(ROOT).filter((d) => /^lec\d\d$/.test(d) && (!want.l
     const file = path.join(ROOT, d, 'index.html'), errs = [], vc = new VirtualConsole();
     vc.on('jsdomError', (e) => /Could not load link/.test(e.message) || errs.push(String((e.detail && e.detail.stack) || e.message).split('\n').slice(0, 2).join(' ')));
     const dom = new JSDOM(fs.readFileSync(file, 'utf8'), { url: 'file://' + file, runScripts: 'dangerously', resources: 'usable', virtualConsole: vc, pretendToBeVisual: true,
-      beforeParse(w) { w.matchMedia = () => ({ matches: false, addEventListener() {}, addListener() {} }); w.scrollTo = () => {}; } });
+      beforeParse(w) { w.fetch = () => Promise.reject(new Error('no fetch in checks')); w.matchMedia = () => ({ matches: false, addEventListener() {}, addListener() {} }); w.scrollTo = () => {}; } });
     await new Promise((r) => setTimeout(r, 600));
     const w = dom.window, D = w.Deck, notes = [];
     if (!D || !D.content) { console.log(d, 'DID NOT START', errs.slice(0, 3)); bad++; continue; }

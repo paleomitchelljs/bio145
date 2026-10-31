@@ -3,115 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BIO 145 — Lessons</title>
+<title>BIO 145</title>
+<meta name="description" content="BIO 145, Cell and Molecular Biology: lecture decks and homework, by chapter.">
 <style>
   :root {
-    --bg: #fafaf7;
-    --panel: #ffffff;
-    --ink: #1d1d1b;
-    --muted: #6b6b68;
-    --accent: #b23a48;
-    --accent2: #2f6b8f;
-    --rule: #e2e0d9;
+    --bg: #fafaf7; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b68; --accent: #b23a48; --accent2: #2f6b8f; --rule: #e2e0d9; --stripe: #f4f2ec;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #161a18; --panel: #1f2522; --ink: #ecebe4; --muted: #9a9f99; --accent: #e07a86; --accent2: #79b8ec; --rule: #343b37; --stripe: #262c29; color-scheme: dark; }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
-  body {
-    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    padding: 48px 24px 96px;
-  }
-  main { max-width: 760px; margin: 0 auto; }
-  h1 { font-size: 34px; margin: 0 0 6px; letter-spacing: -0.01em; }
-  .tag { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
-  .lede { font-size: 17px; color: var(--ink); margin: 0 0 36px; max-width: 60ch; }
-  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 32px 0 12px; font-weight: 600; }
-  h3.unit { font-size:13px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:28px 0 12px; font-weight:600; }
-  h3.unit .note { text-transform:none; font-style:italic; letter-spacing:0; }
-  .card {
-    display: block;
-    background: var(--panel);
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 16px 20px;
-    text-decoration: none;
-    color: inherit;
-    margin: 0 0 10px;
-    transition: border-color 120ms;
-  }
-  .card:hover { border-color: var(--accent); }
+  body { font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; padding: 40px 16px 80px; }
+  main { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 34px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .tag { color: var(--muted); font-size: 15px; margin: 0 0 26px; }
+  .heads { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+  h2.ch { font-size: 18px; margin: 30px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); font-weight: 600; }
+  h2.ch span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-right: 8px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 10px; }
+  .card { display: block; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 16px; text-decoration: none; color: inherit; transition: border-color 120ms; min-width: 0; }
+  a.card:hover { border-color: var(--accent); }
+  a.card.lec:hover { border-color: var(--accent2); }
   .card .num { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
-  .card .ttl { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
-  .card .sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
-  .card.outline { opacity: 0.72; border-style: dashed; }
-  .card.outline:hover { border-color: var(--accent); }
-
-  /* Release gate. A locked card is inert: grayed, not clickable, and labeled
-     so the sequence of the term stays legible without the work being open. */
-  .card.locked {
-    opacity: 0.5;
-    background: repeating-linear-gradient(
-      -45deg, var(--panel), var(--panel) 8px, #f4f2ec 8px, #f4f2ec 16px);
-    pointer-events: none;
-    cursor: default;
-  }
-  .card.locked:hover { border-color: var(--rule); }
+  .card .ttl { font-size: 17px; font-weight: 600; margin: 2px 0 0; }
+  .card .sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .card.none { opacity: 0.55; border-style: dashed; background: transparent; }
+  .card.none .ttl { font-weight: 500; }
+  /* Release gate (LOCKS.txt): a locked card is inert, grayed and labeled. */
+  .card.locked { opacity: 0.5; background: repeating-linear-gradient(-45deg, var(--panel), var(--panel) 8px, var(--stripe) 8px, var(--stripe) 16px); pointer-events: none; cursor: default; }
   .card.locked .ttl { font-weight: 500; }
-  .card .lockmark {
-    float: right; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase;
-    color: var(--muted); border: 1px solid var(--rule); border-radius: 10px;
-    padding: 1px 9px; background: var(--bg);
-  }
-  /* display: hide in LOCKS.txt */
-  .card.locked.gone { display: none; }
-  /* A heading whose whole section is hidden goes with it. */
-  h2.gone, h3.gone { display: none; }
-  footer {
-    max-width: 760px; margin: 72px auto 0; padding-top: 18px;
-    border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted);
-  }
+  .card .lockmark { float: right; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--rule); border-radius: 10px; padding: 1px 9px; background: var(--bg); }
+  .card.locked.gone { visibility: hidden; }
+  .row.gone, h2.gone { display: none; }
+  @media (max-width: 680px) { .row, .heads { grid-template-columns: 1fr; gap: 6px; } .heads span + span { display: none; } .row { margin-bottom: 18px; } }
+  footer { max-width: 1100px; margin: 64px auto 0; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted); }
   footer a { color: var(--muted); }
 </style>
 </head>
 <body>
 <main>
   <h1>BIO 145</h1>
-  <p class="tag">Interactive lessons · Coe College</p>
-  <h2>Lessons</h2>
-  <a class="card" href="app/lessons/lesson1.html"><div class="num">Lesson 1</div><div class="ttl">Is it alive? Heredity, metabolism, and how science reasons</div></a>
-  <a class="card" href="app/lessons/lesson2.html"><div class="num">Lesson 2</div><div class="ttl">Greedy oxygen: who gets the electrons, and what shape does with it</div></a>
-  <a class="card" href="app/lessons/lesson3.html"><div class="num">Lesson 3</div><div class="ttl">Water, buffers and shape: pH, isomers and functional groups</div></a>
-  <a class="card" href="app/lessons/lesson4.html"><div class="num">Lesson 4</div><div class="ttl">Building molecules: functional groups and the joins between monomers</div></a>
-  <a class="card" href="app/lessons/lesson5.html"><div class="num">Lesson 5</div><div class="ttl">Proteins: jobs, side chains, four levels, steroids</div></a>
-  <a class="card" href="app/lessons/lesson6.html"><div class="num">Lesson 6</div><div class="ttl">Folding a chain in water: proteins</div></a>
-  <a class="card" href="app/lessons/lesson7.html"><div class="num">Lesson 7</div><div class="ttl">Scale and the levels of life</div></a>
-  <a class="card" href="app/lessons/lesson8.html"><div class="num">Lesson 8</div><div class="ttl">The cell's rooms: organelles and the endomembrane route</div></a>
-  <a class="card" href="app/lessons/lesson9.html"><div class="num">Lesson 9</div><div class="ttl">Motors: kinesin walks on ATP, filaments slide</div></a>
-  <a class="card" href="app/lessons/lesson10.html"><div class="num">Lesson 10</div><div class="ttl">Jiggling across a membrane: diffusion and osmosis</div></a>
-  <a class="card" href="app/lessons/lesson11.html"><div class="num">Lesson 11</div><div class="ttl">Across the membrane: tonicity, pumps, vesicles and junctions</div></a>
-  <a class="card" href="app/lessons/lesson12.html"><div class="num">Lesson 12</div><div class="ttl">Passing the message: signaling pathways and receptors</div></a>
-  <a class="card" href="app/lessons/lesson13.html"><div class="num">Lesson 13</div><div class="ttl">Downhill and uphill: free energy, the hill, and paying with ATP</div></a>
-  <a class="card" href="app/lessons/lesson14.html"><div class="num">Lesson 14</div><div class="ttl">Enzymes: redox, working conditions, inhibitors</div></a>
-  <a class="card" href="app/lessons/lesson15.html"><div class="num">Lesson 15</div><div class="ttl">Starting respiration: glycolysis, PFK and drugs that hit enzymes</div></a>
-  <a class="card" href="app/lessons/lesson16.html"><div class="num">Lesson 16</div><div class="ttl">Citric acid cycle and the chain: carbons, ATP, and heat</div></a>
-  <a class="card" href="app/lessons/lesson17.html"><div class="num">Lesson 17</div><div class="ttl">Other fuels, fermentation, and light</div></a>
-  <a class="card" href="app/lessons/lesson18.html"><div class="num">Lesson 18</div><div class="ttl">Light reactions: the leaf, the chloroplast, the electron's path</div></a>
-  <a class="card" href="app/lessons/lesson19.html"><div class="num">Lesson 19</div><div class="ttl">The Calvin cycle, photorespiration, C4 and CAM</div></a>
-  <a class="card" href="app/lessons/lesson21.html"><div class="num">Lesson 21</div><div class="ttl">Packing and copying a cell: chromatin, the cell cycle, mitosis</div></a>
-  <a class="card" href="app/lessons/lesson22.html"><div class="num">Lesson 22</div><div class="ttl">Checkpoints, cyclins and cancer</div></a>
-  <a class="card" href="app/lessons/lesson23.html"><div class="num">Lesson 23</div><div class="ttl">Dividing a cell: mitosis and meiosis</div></a>
-  <a class="card" href="app/lessons/lesson24.html"><div class="num">Lesson 24</div><div class="ttl">Eggs, drive, bees and the vocabulary of genetics</div></a>
-  <a class="card" href="app/lessons/lesson25.html"><div class="num">Lesson 25</div><div class="ttl">Parents to offspring: F1 and F2</div></a>
-  <a class="card" href="app/lessons/lesson26.html"><div class="num">Lesson 26</div><div class="ttl">Mystery crosses: dominance, blending, both at once, and test crosses</div></a>
-  <a class="card" href="app/lessons/lesson27.html"><div class="num">Lesson 27</div><div class="ttl">Hit the ratio: one gene, two genes, the X, and genes that travel together</div></a>
-  <a class="card" href="app/lessons/lesson28.html"><div class="num">Lesson 28</div><div class="ttl">Heavy and light: the Meselson–Stahl experiment</div></a>
-  <a class="card" href="app/lessons/lesson29.html"><div class="num">Lesson 29</div><div class="ttl">The copying relay: DNA replication, molecule by molecule</div></a>
-  <a class="card" href="app/lessons/lesson30.html"><div class="num">Lesson 30</div><div class="ttl">Reading a gene: transcription, the codon wheel, and mutations</div></a>
-  <a class="card" href="app/lessons/lesson31.html"><div class="num">Lesson 31</div><div class="ttl">Translation, mRNA lifetimes and the RNA zoo</div></a>
-  <a class="card" href="app/lessons/lesson32.html"><div class="num">Lesson 32</div><div class="ttl">Somites, mutation types, and reverse transcription</div></a>
-  <a class="card" href="app/lessons/lesson33.html"><div class="num">Lesson 33</div><div class="ttl">Switching genes: lac operon, histones, introns</div></a>
-  <a class="card" href="app/lessons/lesson34.html"><div class="num">Lesson 34</div><div class="ttl">Gels, blots, restriction enzymes, recombinant DNA and PCR</div></a>
-  <a class="card" href="app/lessons/lesson35.html"><div class="num">Lesson 35</div><div class="ttl">Reading genomes: Sanger, GWAS and pharmacogenomics</div></a>
-  <a class="card" href="app/lessons/lesson36.html"><div class="num">Lesson 36</div><div class="ttl">Omics and CRISPR editing</div></a>
+  <p class="tag">Cell and Molecular Biology · Coe College</p>
+  <div class="heads"><span>Lecture</span><span>Homework</span></div>
+  <h2 class="ch"><span>Chapter 1</span> The Study of Life</h2>
+  <div class="row"><a class="card lec" data-lock="lec01" href="lectures/lec01/"><div class="num">Lecture 1</div><div class="ttl">What is life?</div><div class="sub">Introduction: Life and Science</div></a><a class="card hw" data-lock="lesson1" href="app/lessons/lesson1.html"><div class="num">Homework 1</div><div class="ttl">Is it alive? Heredity, metabolism, and how science reasons</div></a></div>
+  <h2 class="ch"><span>Chapter 2</span> The Chemical Foundation of Life</h2>
+  <div class="row"><a class="card lec" data-lock="lec02" href="lectures/lec02/"><div class="num">Lecture 2</div><div class="ttl">Atoms, bonds, and redox</div><div class="sub">Atoms, Bonds, and Redox</div></a><a class="card hw" data-lock="lesson2" href="app/lessons/lesson2.html"><div class="num">Homework 2</div><div class="ttl">Greedy oxygen: who gets the electrons, and what shape does with it</div></a></div>
+  <div class="row"><a class="card lec" data-lock="lec03" href="lectures/lec03/"><div class="num">Lecture 3</div><div class="ttl">Water, pH, and shape</div><div class="sub">Water, pH, and the Shape Principle</div></a><a class="card hw" data-lock="lesson3" href="app/lessons/lesson3.html"><div class="num">Homework 3</div><div class="ttl">Water, buffers and shape: pH, isomers and functional groups</div></a></div>
+  <h2 class="ch"><span>Chapter 3</span> Biological Macromolecules</h2>
+  <div class="row"><a class="card lec" data-lock="lec04" href="lectures/lec04/"><div class="num">Lecture 4</div><div class="ttl">Carbohydrates and lipids</div><div class="sub">Carbohydrates and Lipids</div></a><a class="card hw" data-lock="lesson4" href="app/lessons/lesson4.html"><div class="num">Homework 4</div><div class="ttl">Building molecules: functional groups and the joins between monomers</div></a></div>
+  <div class="row"><a class="card lec" data-lock="lec05" href="lectures/lec05/"><div class="num">Lecture 5</div><div class="ttl">Steroids and proteins</div><div class="sub">Steroids, Proteins, and Protein Structure</div></a><a class="card hw" data-lock="lesson5" href="app/lessons/lesson5.html"><div class="num">Homework 5</div><div class="ttl">Proteins: jobs, side chains, four levels, steroids</div></a></div>
+  <div class="row"><a class="card lec" data-lock="lec06" href="lectures/lec06/"><div class="num">Lecture 6</div><div class="ttl">Folding, and nucleic acids</div><div class="sub">Protein Folding, Nucleic Acids, and Exam 1 Review</div></a><a class="card hw" data-lock="lesson6" href="app/lessons/lesson6.html"><div class="num">Homework 6</div><div class="ttl">Folding a chain in water: proteins</div></a></div>
+  <h2 class="ch"><span>Chapter 4</span> Cell Structure</h2>
+  <div class="row"><a class="card lec" data-lock="lec07" href="lectures/lec07/"><div class="num">Lecture 7</div><div class="ttl">Why cells are small</div><div class="sub">Cell Size, Diffusion, and Endosymbiosis</div></a><a class="card hw" data-lock="lesson7" href="app/lessons/lesson7.html"><div class="num">Homework 7</div><div class="ttl">Scale and the levels of life</div></a></div>
+  <div class="row"><a class="card lec" data-lock="lec08" href="lectures/lec08/"><div class="num">Lecture 8</div><div class="ttl">The rooms of a cell</div><div class="sub">Organelles and the Endomembrane System</div></a><a class="card hw" data-lock="lesson8" href="app/lessons/lesson8.html"><div class="num">Homework 8</div><div class="ttl">The cell&#x27;s rooms: organelles and the endomembrane route</div></a></div>
+  <div class="row"><a class="card lec" data-lock="lec09" href="lectures/lec09/"><div class="num">Lecture 9</div><div class="ttl">Tracks, ropes, and walls</div><div class="sub">Cytoskeleton and Extracellular Structures</div></a><a class="card hw" data-lock="lesson9" href="app/lessons/lesson9.html"><div class="num">Homework 9</div><div class="ttl">Motors: kinesin walks on ATP, filaments slide</div></a></div>
+  <h2 class="ch"><span>Chapter 5</span> Structure and Function of Plasma Membranes</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 10</div><div class="ttl">Biological Membranes and Passive Transport</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson10" href="app/lessons/lesson10.html"><div class="num">Homework 10</div><div class="ttl">Jiggling across a membrane: diffusion and osmosis</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 11</div><div class="ttl">Tonicity, Active Transport, and Cell Junctions</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson11" href="app/lessons/lesson11.html"><div class="num">Homework 11</div><div class="ttl">Across the membrane: tonicity, pumps, vesicles and junctions</div></a></div>
+  <h2 class="ch"><span>Chapter 9</span> Cell Communication</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 12</div><div class="ttl">Cell Communication and Signal Transduction</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson12" href="app/lessons/lesson12.html"><div class="num">Homework 12</div><div class="ttl">Passing the message: signaling pathways and receptors</div></a></div>
+  <h2 class="ch"><span>Chapter 6</span> Metabolism</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 13</div><div class="ttl">Metabolism: Energy, Thermodynamics, and ATP</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson13" href="app/lessons/lesson13.html"><div class="num">Homework 13</div><div class="ttl">Downhill and uphill: free energy, the hill, and paying with ATP</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 14</div><div class="ttl">Redox Reactions, Enzymes, and Allosteric Regulation</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson14" href="app/lessons/lesson14.html"><div class="num">Homework 14</div><div class="ttl">Enzymes: redox, working conditions, inhibitors</div></a></div>
+  <h2 class="ch"><span>Chapter 7</span> Cellular Respiration</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 15</div><div class="ttl">Drug Mechanisms and the Start of Aerobic Respiration</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson15" href="app/lessons/lesson15.html"><div class="num">Homework 15</div><div class="ttl">Starting respiration: glycolysis, PFK and drugs that hit enzymes</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 16</div><div class="ttl">Citric Acid Cycle, Electron Transport, and Efficiency</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson16" href="app/lessons/lesson16.html"><div class="num">Homework 16</div><div class="ttl">Citric acid cycle and the chain: carbons, ATP, and heat</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 17</div><div class="ttl">Alternative Fuels, Fermentation, and Photosynthesis</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson17" href="app/lessons/lesson17.html"><div class="num">Homework 17</div><div class="ttl">Other fuels, fermentation, and light</div></a></div>
+  <h2 class="ch"><span>Chapter 8</span> Photosynthesis</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 18</div><div class="ttl">Photosynthesis I: Light Reactions</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson18" href="app/lessons/lesson18.html"><div class="num">Homework 18</div><div class="ttl">Light reactions: the leaf, the chloroplast, the electron&#x27;s path</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 19</div><div class="ttl">Photosynthesis II: Calvin Cycle and Beyond</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson19" href="app/lessons/lesson19.html"><div class="num">Homework 19</div><div class="ttl">The Calvin cycle, photorespiration, C4 and CAM</div></a></div>
+  <h2 class="ch"><span>Chapter 10</span> Cell Reproduction</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 20</div><div class="ttl">(not recorded)</div><div class="sub">no recording, no deck</div></div><div class="card hw none"><div class="num">Homework</div><div class="ttl">none for this lecture</div></div></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 21</div><div class="ttl">Chromatin, Chromosomes, and the Cell Cycle</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson21" href="app/lessons/lesson21.html"><div class="num">Homework 21</div><div class="ttl">Packing and copying a cell: chromatin, the cell cycle, mitosis</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 22</div><div class="ttl">Cell Cycle Control, Cytokinesis, and Cancer</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson22" href="app/lessons/lesson22.html"><div class="num">Homework 22</div><div class="ttl">Checkpoints, cyclins and cancer</div></a></div>
+  <h2 class="ch"><span>Chapter 11</span> Meiosis and Sexual Reproduction</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 23</div><div class="ttl">Sexual Reproduction and Meiosis</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson23" href="app/lessons/lesson23.html"><div class="num">Homework 23</div><div class="ttl">Dividing a cell: mitosis and meiosis</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 24</div><div class="ttl">Oogenesis, Meiotic Drive, and Mendel&#x27;s Setting</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson24" href="app/lessons/lesson24.html"><div class="num">Homework 24</div><div class="ttl">Eggs, drive, bees and the vocabulary of genetics</div></a></div>
+  <h2 class="ch"><span>Chapter 12</span> Mendel&#x27;s Experiments and Heredity</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 25</div><div class="ttl">Mendel&#x27;s Experiments and the Nature of Dominance</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson25" href="app/lessons/lesson25.html"><div class="num">Homework 25</div><div class="ttl">Parents to offspring: F1 and F2</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 26</div><div class="ttl">Beyond Simple Dominance</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson26" href="app/lessons/lesson26.html"><div class="num">Homework 26</div><div class="ttl">Mystery crosses: dominance, blending, both at once, and test crosses</div></a></div>
+  <h2 class="ch"><span>Chapter 13</span> Modern Understandings of Inheritance</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 27</div><div class="ttl">Morgan, Fly Genetics, and Linkage</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson27" href="app/lessons/lesson27.html"><div class="num">Homework 27</div><div class="ttl">Hit the ratio: one gene, two genes, the X, and genes that travel together</div></a></div>
+  <h2 class="ch"><span>Chapter 14</span> DNA Structure and Function</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 28</div><div class="ttl">DNA Structure, Replication, and Mutation</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson28" href="app/lessons/lesson28.html"><div class="num">Homework 28</div><div class="ttl">Heavy and light: the Meselson–Stahl experiment</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 29</div><div class="ttl">Replication Completion and the Central Dogma</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson29" href="app/lessons/lesson29.html"><div class="num">Homework 29</div><div class="ttl">The copying relay: DNA replication, molecule by molecule</div></a></div>
+  <h2 class="ch"><span>Chapter 15</span> Genes and Proteins</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 30</div><div class="ttl">Transcription and mRNA Processing</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson30" href="app/lessons/lesson30.html"><div class="num">Homework 30</div><div class="ttl">Reading a gene: transcription, the codon wheel, and mutations</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 31</div><div class="ttl">Translation, Ribosomes, RNA Types, and mRNA Lifetimes</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson31" href="app/lessons/lesson31.html"><div class="num">Homework 31</div><div class="ttl">Translation, mRNA lifetimes and the RNA zoo</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 32</div><div class="ttl">Somitogenesis, Mutations, and Reverse Transcription</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson32" href="app/lessons/lesson32.html"><div class="num">Homework 32</div><div class="ttl">Somites, mutation types, and reverse transcription</div></a></div>
+  <h2 class="ch"><span>Chapter 16</span> Gene Expression</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 33</div><div class="ttl">Lac Operon, Histone Modification, and the RNA Zoo</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson33" href="app/lessons/lesson33.html"><div class="num">Homework 33</div><div class="ttl">Switching genes: lac operon, histones, introns</div></a></div>
+  <h2 class="ch"><span>Chapter 17</span> Biotechnology and Genomics</h2>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 34</div><div class="ttl">Gels, Blots, Restriction Enzymes, and PCR</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson34" href="app/lessons/lesson34.html"><div class="num">Homework 34</div><div class="ttl">Gels, blots, restriction enzymes, recombinant DNA and PCR</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 35</div><div class="ttl">Sequencing, Genomics, and GWAS</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson35" href="app/lessons/lesson35.html"><div class="num">Homework 35</div><div class="ttl">Reading genomes: Sanger, GWAS and pharmacogenomics</div></a></div>
+  <div class="row"><div class="card lec none"><div class="num">Lecture 36</div><div class="ttl">Omics, CRISPR, and Therapeutic Editing</div><div class="sub">deck not built yet</div></div><a class="card hw" data-lock="lesson36" href="app/lessons/lesson36.html"><div class="num">Homework 36</div><div class="ttl">Omics and CRISPR editing</div></a></div>
 </main>
 <footer>
   <p id="lock-note" style="margin:0 0 8px; display:none;"></p>
@@ -119,59 +107,40 @@
 </footer>
 <script src="app/assets/lock.js"></script>
 <script>
-  // Apply LOCKS.txt to the cards. Each card's key is read off its href rather
-  // than duplicated into a data attribute, so adding a lesson to this page is
-  // still a one-line edit: app/lessons/lesson7.html -> "lesson7",
-  // app/scaffolds/s04_fixation_probability.html -> "s04".
-  function cardKey(href) {
-    const file = (href || "").split("/").pop().replace(/\.html?$/i, "");
-    const m = file.match(/^(s\d+)_/);
-    return m ? m[1] : file;
-  }
-
+  // Apply LOCKS.txt to the cards. Each linked card names its row in LOCKS.txt in data-lock
+  // ("lec07" for a lecture deck, "lesson7" for its homework). Adding a lecture or a lesson
+  // here is one card and one LOCKS.txt row.
   Lock.load().then(cfg => {
-    const cards = Array.from(document.querySelectorAll("main a.card"));
-    let lockedCount = 0;
-
+    const cards = Array.from(document.querySelectorAll("main a.card[data-lock]"));
+    let lec = 0, hw = 0;
     cards.forEach(card => {
-      if (!cfg.locked[cardKey(card.getAttribute("href"))]) return;
-      lockedCount++;
+      if (!cfg.locked[card.dataset.lock]) return;
+      if (card.classList.contains("lec")) lec++; else hw++;
       card.classList.add("locked");
-      // Strip the href outright. Leaving it and relying on pointer-events
-      // would still let a keyboard or a middle-click through, and would leak
-      // the target in the status bar on hover.
+      // Strip the href outright: pointer-events alone still lets a keyboard or a middle-click through.
       card.removeAttribute("href");
       card.setAttribute("aria-disabled", "true");
-      if (cfg.display === "hide") {
-        card.classList.add("gone");
-      } else {
-        const num = card.querySelector(".num");
-        if (num) num.insertAdjacentHTML("beforebegin",
-          '<span class="lockmark">opens later</span>');
-      }
+      if (cfg.display === "hide") card.classList.add("gone");
+      else { const num = card.querySelector(".num"); if (num) num.insertAdjacentHTML("beforebegin", '<span class="lockmark">opens later</span>'); }
     });
-
-    // In hide mode a section can empty out completely; its heading should not
-    // sit there over nothing.
     if (cfg.display === "hide") {
-      const heads = Array.from(document.querySelectorAll("main h2, main h3"));
-      heads.forEach(head => {
-        const between = [];
-        for (let el = head.nextElementSibling;
-             el && !/^H[23]$/.test(el.tagName);
-             el = el.nextElementSibling) between.push(el);
-        const inSection = between.filter(el => el.classList.contains("card"));
-        if (inSection.length && inSection.every(el => el.classList.contains("gone"))) {
-          head.classList.add("gone");
-          between.forEach(el => el.classList.add("gone"));
-        }
+      // A row with nothing open goes; a chapter with no rows left loses its heading too.
+      document.querySelectorAll("main .row").forEach(row => {
+        const live = Array.from(row.children).filter(c => c.tagName === "A" && !c.classList.contains("gone"));
+        if (!live.length) row.classList.add("gone");
+      });
+      document.querySelectorAll("main h2.ch").forEach(h => {
+        let any = false;
+        for (let el = h.nextElementSibling; el && el.tagName !== "H2"; el = el.nextElementSibling) if (el.classList.contains("row") && !el.classList.contains("gone")) any = true;
+        if (!any) h.classList.add("gone");
       });
     }
-
-    if (lockedCount && cfg.display !== "hide") {
+    if ((lec || hw) && cfg.display !== "hide") {
+      const parts = [];
+      if (lec) parts.push(lec + (lec === 1 ? " lecture" : " lectures"));
+      if (hw) parts.push(hw + (hw === 1 ? " homework" : " homeworks"));
       const note = document.getElementById("lock-note");
-      note.textContent = lockedCount + " " +
-        (lockedCount === 1 ? "lesson opens" : "lessons open") + " later in the term.";
+      note.textContent = parts.join(" and ") + " open later in the term.";
       note.style.display = "block";
     }
   });
