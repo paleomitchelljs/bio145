@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIO 145 — Lessons</title>
+<style>
+  :root {
+    --bg: #fafaf7;
+    --panel: #ffffff;
+    --ink: #1d1d1b;
+    --muted: #6b6b68;
+    --accent: #b23a48;
+    --accent2: #2f6b8f;
+    --rule: #e2e0d9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    padding: 48px 24px 96px;
+  }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 34px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .tag { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
+  .lede { font-size: 17px; color: var(--ink); margin: 0 0 36px; max-width: 60ch; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 32px 0 12px; font-weight: 600; }
+  h3.unit { font-size:13px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:28px 0 12px; font-weight:600; }
+  h3.unit .note { text-transform:none; font-style:italic; letter-spacing:0; }
+  .card {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: inherit;
+    margin: 0 0 10px;
+    transition: border-color 120ms;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card .num { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .card .ttl { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+  .card .sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .card.outline { opacity: 0.72; border-style: dashed; }
+  .card.outline:hover { border-color: var(--accent); }
+
+  /* Release gate. A locked card is inert: greyed, not clickable, and labelled
+     so the sequence of the term stays legible without the work being open. */
+  .card.locked {
+    opacity: 0.5;
+    background: repeating-linear-gradient(
+      -45deg, var(--panel), var(--panel) 8px, #f4f2ec 8px, #f4f2ec 16px);
+    pointer-events: none;
+    cursor: default;
+  }
+  .card.locked:hover { border-color: var(--rule); }
+  .card.locked .ttl { font-weight: 500; }
+  .card .lockmark {
+    float: right; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--rule); border-radius: 10px;
+    padding: 1px 9px; background: var(--bg);
+  }
+  /* display: hide in LOCKS.txt */
+  .card.locked.gone { display: none; }
+  /* A heading whose whole section is hidden goes with it. */
+  h2.gone, h3.gone { display: none; }
+  footer {
+    max-width: 760px; margin: 72px auto 0; padding-top: 18px;
+    border-top: 1px solid var(--rule); font-size: 13px; color: var(--muted);
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>BIO 145</h1>
+  <p class="tag">Interactive lessons · Coe College</p>
+  <h2>Lessons</h2>
+  <h3 class="unit">Unit 1 — Chemistry of life</h3>
+  <a class="card" href="app/lessons/lesson1.html"><div class="num">Lesson 1</div><div class="ttl">Scale and the levels of life</div></a>
+  <a class="card" href="app/lessons/lesson2.html"><div class="num">Lesson 2</div><div class="ttl">Greedy oxygen: who gets the electrons, and what shape does with it</div></a>
+  <a class="card" href="app/lessons/lesson3.html"><div class="num">Lesson 3</div><div class="ttl">Building molecules: functional groups and the joins between monomers</div></a>
+  <a class="card" href="app/lessons/lesson4.html"><div class="num">Lesson 4</div><div class="ttl">Downhill and uphill: free energy, the hill, and paying with ATP</div></a>
+  <a class="card" href="app/lessons/lesson5.html"><div class="num">Lesson 5</div><div class="ttl">Jiggling across a membrane: diffusion and osmosis</div></a>
+  <a class="card" href="app/lessons/lesson6.html"><div class="num">Lesson 6</div><div class="ttl">Folding a chain in water: proteins</div></a>
+  <h3 class="unit">Unit 2 — DNA to protein</h3>
+  <a class="card" href="app/lessons/lesson7.html"><div class="num">Lesson 7</div><div class="ttl">The copying relay: DNA replication, molecule by molecule</div></a>
+  <a class="card" href="app/lessons/lesson8.html"><div class="num">Lesson 8</div><div class="ttl">Heavy and light: the Meselson–Stahl experiment</div></a>
+  <a class="card" href="app/lessons/lesson9.html"><div class="num">Lesson 9</div><div class="ttl">Reading a gene: transcription, the codon wheel, and mutations</div></a>
+  <h3 class="unit">Unit 3 — Inheritance</h3>
+  <a class="card" href="app/lessons/lesson10.html"><div class="num">Lesson 10</div><div class="ttl">Parents to offspring: F1 and F2</div></a>
+  <a class="card" href="app/lessons/lesson11.html"><div class="num">Lesson 11</div><div class="ttl">Mystery crosses: dominance, blending, both at once, and test crosses</div></a>
+  <a class="card" href="app/lessons/lesson12.html"><div class="num">Lesson 12</div><div class="ttl">Hit the ratio: one gene, two genes, the X, and genes that travel together</div></a>
+</main>
+<footer>
+  <p id="lock-note" style="margin:0 0 8px; display:none;"></p>
+  Source: <a href="https://github.com/paleomitchelljs/bio145">github.com/paleomitchelljs/bio145</a>
+</footer>
+<script src="app/assets/lock.js"></script>
+<script>
+  // Apply LOCKS.txt to the cards. Each card's key is read off its href rather
+  // than duplicated into a data attribute, so adding a lesson to this page is
+  // still a one-line edit: app/lessons/lesson7.html -> "lesson7",
+  // app/scaffolds/s04_fixation_probability.html -> "s04".
+  function cardKey(href) {
+    const file = (href || "").split("/").pop().replace(/\.html?$/i, "");
+    const m = file.match(/^(s\d+)_/);
+    return m ? m[1] : file;
+  }
+
+  Lock.load().then(cfg => {
+    const cards = Array.from(document.querySelectorAll("main a.card"));
+    let lockedCount = 0;
+
+    cards.forEach(card => {
+      if (!cfg.locked[cardKey(card.getAttribute("href"))]) return;
+      lockedCount++;
+      card.classList.add("locked");
+      // Strip the href outright. Leaving it and relying on pointer-events
+      // would still let a keyboard or a middle-click through, and would leak
+      // the target in the status bar on hover.
+      card.removeAttribute("href");
+      card.setAttribute("aria-disabled", "true");
+      if (cfg.display === "hide") {
+        card.classList.add("gone");
+      } else {
+        const num = card.querySelector(".num");
+        if (num) num.insertAdjacentHTML("beforebegin",
+          '<span class="lockmark">opens later</span>');
+      }
+    });
+
+    // In hide mode a section can empty out completely; its heading should not
+    // sit there over nothing.
+    if (cfg.display === "hide") {
+      const heads = Array.from(document.querySelectorAll("main h2, main h3"));
+      heads.forEach(head => {
+        const between = [];
+        for (let el = head.nextElementSibling;
+             el && !/^H[23]$/.test(el.tagName);
+             el = el.nextElementSibling) between.push(el);
+        const inSection = between.filter(el => el.classList.contains("card"));
+        if (inSection.length && inSection.every(el => el.classList.contains("gone"))) {
+          head.classList.add("gone");
+          between.forEach(el => el.classList.add("gone"));
+        }
+      });
+    }
+
+    if (lockedCount && cfg.display !== "hide") {
+      const note = document.getElementById("lock-note");
+      note.textContent = lockedCount + " " +
+        (lockedCount === 1 ? "lesson opens" : "lessons open") + " later in the term.";
+      note.style.display = "block";
+    }
+  });
+</script>
+</body>
+</html>

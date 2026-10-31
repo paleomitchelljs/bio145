@@ -135,21 +135,14 @@ def main():
 
             # Tamper: flipping any one character of the blob must fail the tag.
             head, blob, mac = got["code"].split(".")
-            flipped = blob[:-1] + ("A" if blob[-1] != "A" else "B")
+            flipped = ("A" if blob[0] != "A" else "B") + blob[1:]   # the first character: the last one can carry only padding bits
             check(f"{tag} tamper detected",
                   decode(f"{head}.{flipped}.{mac}", salt)["ok"], False)
             # Wrong salt must fail rather than yield a plausible record.
             check(f"{tag} wrong salt rejected",
                   decode(got["code"], salt + "x")["ok"], False)
 
-        # A six-field code minted before the attention clock existed still reads,
-        # with active time reported as "not measured" rather than zero.
-        legacy = ("lesson7v2.it7fVYybpbRm-1k9PBnKkAP26W0dAK__hOS4Hv5al__tMMWwhB"
-                  "-qg-FwaLR9DSU.1c0cc8")
-        d = decode(legacy, salt)
-        check("legacy six-field code decodes", d["ok"], True)
-        check("legacy code has no active time", d.get("active_sec"), None)
-        check("legacy code keeps its wall time", d.get("elapsed_sec"), 1837)
+        # (BIO 202's legacy six-field code check is dropped here: it was minted under BIO 202's salt.)
 
     if failures:
         print(f"FAIL  {len(failures)} check(s) failed:")

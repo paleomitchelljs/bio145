@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 12</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+</head>
+<body>
+<header><h1>Lesson 12</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc">
+  <a href="#stageA" id="tocA">A</a>
+  <a href="#stageB" id="tocB" class="locked">B</a>
+  <a href="#stageC" id="tocC" class="locked">C</a>
+</nav>
+
+<!-- ========== STAGES A and B — set the parents to hit a ratio (JM: "students shown a pair of parents, try to set their alleles to
+     get a target ratio of phenotypes in F1 & F2. As it progresses we do monohybrid rounds, dihybrid rounds, sex linked rounds, and
+     recombination rounds.") One widget, two stages: peas (A), then flies (B). ========== -->
+<section class="stage stage-locked" id="stageA">
+  <h2 class="stage-h">A</h2>
+  <div class="lock-banner">Enter your name above to start.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>Every ratio Mendel counted was set by what the parents carried.</li>
+      <li>Click the parents' alleles until the offspring bars fill the red boxes.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel"><h3><span class="info" tabindex="0">The parents<span class="tip"><span>Pea plants. Y yellow seeds, y green; R round seeds, r wrinkled. Each chromosome pair carries one gene; click a copy to switch it.</span></span></span></h3><div class="parents" id="A_par"></div></div>
+      <div class="panel"><h3><span class="info" tabindex="0">Offspring<span class="tip"><span>Bars: the share of offspring with each look, worked out exactly from every combination of egg and pollen. F2: the F1 bred among themselves at random. Red boxes: the target.</span></span></span></h3><canvas id="A_bars" width="780" height="300"></canvas></div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Five targets in any order, one gene and then two.</span></span></span> <span class="pips" id="A_pips"></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="buttons"><button id="A_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="A_verdict"></div>
+      </div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksA"><li data-task="rounds">Hit five targets <span class="hint" id="A_rounds_now">0 of 5</span></li></ul><div class="solved-banner" id="solvedA">Stage B is open.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>Now fruit flies, and genes that don't sort independently: one on the X, then two on the same chromosome.</li>
+      <li>Set the parents (and, for genes on one chromosome, how far apart they sit) to fill the red boxes.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Eye colour: R red, r white, on the X chromosome; a male has one X and a Y, which carries no copy.</span><span>Body and wings: B grey, b black; V normal wings, v vestigial. In the last two targets both genes sit on one chromosome: the two copies on a chromosome travel together unless a crossover falls between them. The slider sets how often that happens.</span></span></span></h3>
+        <div class="parents" id="B_par"></div>
+        <div class="tbar" id="B_cmrow" hidden><label>distance apart <input type="range" id="B_cm" min="0" max="50" value="25"></label><b id="B_cm_v"></b></div>
+      </div>
+      <div class="panel"><h3>Offspring</h3><canvas id="B_bars" width="780" height="300"></canvas></div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Four targets in any order: two on the X, two with genes on one chromosome.</span></span></span> <span class="pips" id="B_pips"></span></h3>
+        <p class="ttext" id="B_ttext"></p>
+        <div class="buttons"><button id="B_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="B_verdict"></div>
+      </div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksB"><li data-task="rounds">Hit four targets <span class="hint" id="B_rounds_now">0 of 4</span></li></ul><div class="solved-banner" id="solvedB">Stage C is open.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE C — the drill ========== -->
+<section class="stage stage-locked" id="stageC">
+  <h2 class="stage-h">C</h2>
+  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Answer fractions like 3/16.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 12 is done.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 12. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/cross.js"></script>
+<script>
+/* bits: A 0-4, B 5-8, C 9+ */
+const LY = { dom: "Y", rec: "y", ph: ["yellow", "green"] }, LR = { dom: "R", rec: "r", ph: ["round", "wrinkled"] };
+const LX = { dom: "R", rec: "r", ph: ["red-eyed", "white-eyed"], x: true };
+const LB = { dom: "B", rec: "b", ph: ["grey", "black"] }, LV = { dom: "V", rec: "v", ph: ["normal", "vestigial"] };
+const MONO = { loci: [LY] }, DI = { loci: [LR, LY] }, XL = { loci: [LX] }, LINK = { loci: [LB, LV], linked: 0.25 };
+const q = (a, b) => a / b;
+const ROUNDS_A = [
+  { t: "F1 all yellow; F2 three yellow to one green.", spec: MONO, f1: { yellow: 1 }, f2: { yellow: q(3, 4), green: q(1, 4) } },
+  { t: "F1 half yellow, half green.", spec: MONO, f1: { yellow: q(1, 2), green: q(1, 2) } },
+  { t: "F1 all round and yellow; F2 9 : 3 : 3 : 1.", spec: DI, f1: { "round yellow": 1 }, f2: { "round yellow": q(9, 16), "round green": q(3, 16), "wrinkled yellow": q(3, 16), "wrinkled green": q(1, 16) } },
+  { t: "F1 1 : 1 : 1 : 1, all four looks.", spec: DI, f1: { "round yellow": q(1, 4), "round green": q(1, 4), "wrinkled yellow": q(1, 4), "wrinkled green": q(1, 4) } },
+  { t: "F1 3 : 3 : 1 : 1 (round yellow : round green : wrinkled yellow : wrinkled green).", spec: DI, f1: { "round yellow": q(3, 8), "round green": q(3, 8), "wrinkled yellow": q(1, 8), "wrinkled green": q(1, 8) } }
+];
+const ROUNDS_B = [
+  { t: "F1: every daughter red-eyed, every son white-eyed.", spec: XL, f1: { "red-eyed female": q(1, 2), "white-eyed male": q(1, 2) } },
+  { t: "F1: half red-eyed and half white-eyed, in daughters and sons alike.", spec: XL, f1: { "red-eyed female": q(1, 4), "white-eyed female": q(1, 4), "red-eyed male": q(1, 4), "white-eyed male": q(1, 4) } },
+  { t: "F1: 41.5% grey normal, 41.5% black vestigial, 8.5% grey vestigial, 8.5% black normal.", spec: LINK, link: true, f1: { "grey normal": 0.415, "black vestigial": 0.415, "grey vestigial": 0.085, "black normal": 0.085 } },
+  { t: "F1: 35% grey vestigial, 35% black normal, 15% grey normal, 15% black vestigial.", spec: LINK, link: true, f1: { "grey vestigial": 0.35, "black normal": 0.35, "grey normal": 0.15, "black vestigial": 0.15 } }
+];
+function startParents(spec) {   /* both parents heterozygous at every locus to start (a male hemizygous for the X) */
+  const L = spec.loci.length, het = sex => ({ sex, c: [spec.loci.map(l => l.dom), spec.loci.map(l => l.x && sex === "M" ? null : l.rec)] });
+  return [het("F"), het("M")];
+}
+function bars(cv, now, target, now2, target2) {
+  const { ctx, w, h } = hiDPI(cv), groups = [["F1", now, target]].concat(target2 ? [["F2", now2, target2]] : []);
+  const gw = (w - 20) / groups.length;
+  groups.forEach(([lab, cur, tgt], gi) => {
+    const keys = [...new Set(Object.keys(tgt).concat(Object.keys(cur)))].sort((a, b) => (tgt[b] || 0) - (tgt[a] || 0) || a.localeCompare(b));
+    const x0 = 10 + gi * gw, bw = Math.min(70, (gw - 20) / Math.max(1, keys.length)), y0 = h - 70, H = y0 - 30;
+    ctx.fillStyle = "#1d1d1b"; ctx.font = "600 13px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText(lab, x0, 16);
+    ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + keys.length * bw + 6, y0); ctx.stroke();
+    keys.forEach((k, i) => {
+      const x = x0 + 6 + i * bw, v = cur[k] || 0, t = tgt[k] || 0;
+      ctx.fillStyle = "#2f6b8f"; ctx.fillRect(x + 6, y0 - v * H, bw - 12, v * H);
+      if (t > 0) { ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 2; ctx.strokeRect(x + 3, y0 - t * H - 3, bw - 6, 6); }
+      ctx.fillStyle = "#1d1d1b"; ctx.font = "11px ui-monospace,Menlo,monospace"; ctx.textAlign = "center"; ctx.fillText(Math.round(v * 1000) / 10 + "%", x + bw / 2, y0 - v * H - 8);
+      ctx.save(); ctx.translate(x + bw / 2, y0 + 8); ctx.rotate(Math.PI / 5); ctx.textAlign = "left"; ctx.font = "11.5px -apple-system,sans-serif"; ctx.fillText(k, 0, 0); ctx.restore();
+    });
+  });
+}
+/* one widget for both stages */
+function Ratio(o) {
+  const R = { cur: 0, solved: o.rounds.map(() => false), mom: null, dad: null };
+  const spec = () => o.rounds[R.cur].spec;
+  R.dists = () => { const s = spec(), d1 = Cross.offspring(s, R.mom, R.dad); return { d1, p1: Cross.phenoDist(s, d1), p2: o.rounds[R.cur].f2 ? Cross.phenoDist(s, Cross.next(s, d1)) : null }; };
+  R.paint = () => {
+    const s = spec();
+    $(o.p + "_par").innerHTML = '<div id="' + o.p + '_mom">' + Cross.card(s, R.mom, { edit: true }) + '</div><div class="x">×</div><div id="' + o.p + '_dad">' + Cross.card(s, R.dad, { edit: true }) + "</div>" +
+      '<div class="readout">' + Cross.geno(s, R.mom) + " × " + Cross.geno(s, R.dad) + "</div>";
+    const d = R.dists(), T = o.rounds[R.cur]; bars($(o.p + "_bars"), d.p1, T.f1, d.p2, T.f2);
+  };
+  R.open = i => {
+    R.cur = i; [R.mom, R.dad] = startParents(spec());
+    if (o.rounds[i].link) { $("B_cmrow").hidden = false; $("B_cm").value = 25; LINK.linked = 0.25; $("B_cm_v").textContent = "25 map units"; } else if ($("B_cmrow")) $("B_cmrow").hidden = true;
+    $(o.p + "_ttext").textContent = o.rounds[i].t; $(o.p + "_verdict").innerHTML = R.solved[i] ? '<span class="ok">✓ Hit.</span>' : "";
+    $(o.p + "_pips").innerHTML = Pips.html(o.rounds.length, j => R.solved[j], i); R.paint();
+  };
+  $(o.p + "_par").addEventListener("click", e => {
+    const b = e.target.closest("button.al"); if (!b) return; const who = b.closest("#" + o.p + "_mom") ? R.mom : R.dad, i = +b.dataset.i, k = +b.dataset.k, l = spec().loci[i];
+    who.c[k][i] = who.c[k][i] === l.dom ? l.rec : l.dom; Lesson.bump(o.stage); if (!R.solved[R.cur]) $(o.p + "_verdict").textContent = ""; R.paint();
+  });
+  $(o.p + "_lock").addEventListener("click", () => {
+    const i = R.cur; if (R.solved[i]) return; const d = R.dists(), T = o.rounds[i];
+    const ok = Cross.same(d.p1, T.f1) && (!T.f2 || Cross.same(d.p2, T.f2));
+    Lesson.record(o.bit0 + i, ok); Lesson.bump(o.stage);
+    if (ok) { R.solved[i] = true; $(o.p + "_verdict").innerHTML = '<span class="ok">✓ Hit.</span>'; const n = R.solved.filter(Boolean).length; Lesson.tick(o.stage, "rounds", n === o.rounds.length, n + " of " + o.rounds.length); if (n === o.rounds.length) Lesson.finish(o.stage); else setTimeout(() => R.open(R.solved.indexOf(false)), 1200); }
+    else $(o.p + "_verdict").innerHTML = '<span class="off">✗ Not yet.</span>';
+    $(o.p + "_pips").innerHTML = Pips.html(o.rounds.length, j => R.solved[j], i);
+  });
+  Pips.wire($(o.p + "_pips"), R.open);
+  return R;
+}
+const RA = Ratio({ p: "A", stage: "A", rounds: ROUNDS_A, bit0: 0 });
+const RB = Ratio({ p: "B", stage: "B", rounds: ROUNDS_B, bit0: 5 });
+$("B_cm").addEventListener("input", () => { LINK.linked = +$("B_cm").value / 100; $("B_cm_v").textContent = $("B_cm").value + " map units"; Lesson.bump("B"); RB.paint(); });
+RA.open(0); RB.open(0);
+
+/* ====== C: the drill ====== */
+const frac = (a, b) => { const g = (x, y) => y ? g(y, x % y) : x, d = g(a, b) || 1; return a === 0 ? ["0"] : [a / d + "/" + b / d, String(+(a / b).toFixed(4)), String(+(100 * a / b).toFixed(2)) + "%"]; };
+const DIHY = [["round yellow", 9], ["round green", 3], ["wrinkled yellow", 3], ["wrinkled green", 1]];
+const C_CARDS = [
+  { make() { const [k, n] = pick(DIHY); return { q: "<b class='mono'>RrYy × RrYy</b>. What fraction of offspring are " + k + "?", a: frac(n, 16) }; } },
+  { make() { const [k] = pick(DIHY); return { q: "<b class='mono'>RrYy × rryy</b>. What fraction are " + k + "?", a: frac(1, 4) }; } },
+  { make() { const cm = rint(2, 40); return { q: "Two genes " + cm + " map units apart. What percent of a test cross's offspring are recombinant? (type a number)", a: [String(cm), cm + "%"] }; } },
+  { q: "A carrier mother (XᴿXʳ) and a red-eyed father (XᴿY): what fraction of their sons are white-eyed?", a: frac(1, 2) },
+  { q: "Same parents: what fraction of their daughters are white-eyed?", a: ["0", "none"] },
+  { q: "Genes on the X chromosome.", a: ["x-linked", "x linked", "sex-linked", "sex linked"] },
+  { q: "Genes close together on the same chromosome, inherited together more often than not.", a: ["linked genes", "linked"] },
+  { q: "Exchange of pieces between homologous chromosomes in meiosis (two words).", a: "crossing over" },
+  { q: "Offspring with a new combination of the parents' alleles.", a: ["recombinant", "recombinants", "recombinant offspring"] },
+  { q: "Offspring with the same combination as one parent.", a: ["parental type", "parental", "parental types"] },
+  { q: "One map unit means this percent recombination.", a: ["1", "1%"] },
+  { q: "Another name for a map unit.", a: ["centimorgan", "cm"] },
+  { q: "Alleles of different genes sorting into gametes independently (Mendel's law of…)", a: "independent assortment" },
+  { q: "A cross between two individuals heterozygous at two genes.", a: ["dihybrid cross", "dihybrid"] },
+  { q: "A male, with one copy of each X gene, is called… for those genes.", a: "hemizygous" },
+  { q: "The F2 ratio of a dihybrid cross with complete dominance (type it like a:b:c:d).", a: ["9:3:3:1", "9 3 3 1"] }
+];
+const C_BANK = ["X-linked", "linked genes", "crossing over", "recombinant", "parental type", "centimorgan", "independent assortment", "dihybrid cross", "hemizygous"];
+let C_D = null;
+function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(9 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
+
+Lesson.init({ id: "b145_lesson12", version: 1, stages: ["A", "B", "C"], required: "C", bits: 9 + C_CARDS.length,
+  onOpen: s => { if (s === "C") C_start(); if (s === "B") RB.paint(); },
+  onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
+window.addEventListener("resize", () => { RA.paint(); RB.paint(); });
+</script>
+</body>
+</html>

@@ -13,3 +13,4 @@ lesson8         o   Heavy and light: the Meselson-Stahl experiment
 lesson9         o   Reading a gene: transcription, the codon wheel, and mutations
 lesson10        o   Parents to offspring: F1 and F2
 lesson11        o   Mystery crosses: dominance, blending, both at once, and test crosses
+lesson12        o   Hit the ratio: one gene, two genes, the X, and genes that travel together
