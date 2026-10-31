@@ -422,7 +422,7 @@ const KX = Kit.extra({ before: "stageC", off: 21 + C_CARDS.length, prev: "B", ne
       { text: "Go past the useful range: under 1% left", test: S => Math.pow(0.5, S.age / 5730) < 0.01 }] }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson2", version: 1, stages: KEYS, required: "C", bits: 21 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson2", version: 2, stages: KEYS, required: "C", bits: 21 + C_CARDS.length + KX.bits,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "7 of 7"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("B", "sort", true, "10 of 10"); } });

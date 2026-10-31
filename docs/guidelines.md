@@ -75,9 +75,10 @@ One bit per first try. Bump `version` in `Lesson.init` or `Kit.run` whenever the
 
 ## Checks
 
-- `node scripts/smoke.js` needs Playwright, which is not installed on JM's machine.
-- The jsdom harness used for the October drafts lives in a scratch folder. It loads every lesson, opens every stage under the bypass, mints a code, and grid-checks every sim goal. It belongs in `scripts/` (see `todo.md`).
-- Nothing has been looked at in a real browser since the kit lessons were drafted. Drawing and dragging are untested.
+- `npm install` once, then `node scripts/check.js` (all lessons) or `node scripts/check.js 3 25`. It loads each lesson in jsdom as a student and as the instructor bypass, opens every stage, mints a code, and checks kit content: pick answers, classify bins, and every sim goal against a sweep of the controls. `--labels` prints each stage's letter and banners.
+- A sweep is a grid. A narrow goal can be missed; work it out by hand before believing a failure.
+- `node scripts/smoke.js` does the same in headless Chromium but needs Playwright, which is not installed on JM's machine.
+- Canvas is stubbed in the checks. Nothing has been looked at in a real browser since the kit lessons were drafted, so drawing and dragging are untested.
 
 ## Before editing a lesson
 

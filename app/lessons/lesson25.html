@@ -227,28 +227,30 @@ const G3 = ["PP", "Pp", "pp"];
 const frac = (a, b) => { const g = (x, y) => y ? g(y, x % y) : x, d = g(a, b) || 1; return a === 0 ? ["0"] : a === b ? ["1", "1/1", "all"] : [a / d + "/" + b / d, String(+(a / b).toFixed(4)), String(+(100 * a / b).toFixed(2)) + "%"]; };
 function crossShare(g1, g2, test) { let n = 0; for (const a of g1) for (const b of g2) if (test([a, b].sort().join(""))) n++; return n; }   /* out of 4; "Pp" sorts to "Pp" */
 const C_CARDS = [
-  { make() { const a = pick(G3), b = pick(G3); return { q: "<b class='mono'>" + a + " × " + b + "</b> (P purple, dominant). What fraction of offspring are purple?", a: frac(crossShare(a, b, g => g.includes("P")), 4) }; } },
+  { make() { const a = pick(G3), b = pick(G3); return { q: "<b class='mono'>" + a + " × " + b + "</b> (purple shows whenever P is present). What fraction of offspring are purple?", a: frac(crossShare(a, b, g => g.includes("P")), 4) }; } },
   { make() { const a = pick(G3), b = pick(G3); return { q: "<b class='mono'>" + a + " × " + b + "</b>. What fraction of offspring are Pp?", a: frac(crossShare(a, b, g => g === "Pp"), 4) }; } },
   { make() { const a = pick(G3), b = pick(G3); return { q: "<b class='mono'>" + a + " × " + b + "</b>. What fraction of offspring are white?", a: frac(crossShare(a, b, g => g === "pp"), 4) }; } },
   { q: "One version of a gene.", a: "allele" },
   { q: "Two identical alleles (like PP or pp).", a: "homozygous" },
   { q: "Two different alleles (like Pp).", a: "heterozygous" },
-  { q: "The allele that shows when only one copy is present.", a: "dominant" },
-  { q: "The allele that shows only when two copies are present.", a: "recessive" },
+  { q: "<b class='mono'>Pp</b> looks just like <b class='mono'>PP</b>. The purple phenotype is ___ to white.", a: "dominant" },
+  { q: "White shows only in <b class='mono'>pp</b>. The white phenotype is…", a: "recessive" },
+  { q: "Dominant and recessive describe phenotypes, not ___.", a: ["alleles", "allele"] },
+  { q: "The white allele is a broken copy: it adds ___ pigment. (one word)", a: ["no", "none", "zero"] },
   { q: "The alleles an individual carries (like Pp).", a: "genotype" },
   { q: "The trait an individual shows (like purple).", a: "phenotype" },
   { q: "A line that always produces offspring like itself when bred together.", a: ["true-breeding", "true breeding", "purebred"] },
   { q: "The offspring of the P generation.", a: ["f1", "f1 generation", "first filial generation"] },
   { q: "The offspring of the F1 bred together.", a: ["f2", "f2 generation", "second filial generation"] },
-  { q: "Crossing a dominant-looking individual with a recessive one to learn its genotype (two words).", a: ["test cross", "testcross"] },
+  { q: "Crossing an individual with the dominant phenotype to a recessive homozygote to learn its genotype (two words).", a: ["test cross", "testcross"] },
   { q: "Each parent's two alleles separate into different gametes (Mendel's law of…)", a: "segregation" },
   { q: "The grid used to work out a cross.", a: ["punnett square", "punnet square"] }
 ];
-const C_BANK = ["allele", "homozygous", "heterozygous", "dominant", "recessive", "genotype", "phenotype", "true-breeding", "F1", "F2", "test cross", "segregation", "Punnett square"];
+const C_BANK = ["alleles", "no", "allele", "homozygous", "heterozygous", "dominant", "recessive", "genotype", "phenotype", "true-breeding", "F1", "F2", "test cross", "segregation", "Punnett square"];
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(10 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson25", version: 1, stages: ["A", "B", "C"], required: "C", bits: 10 + C_CARDS.length,
+Lesson.init({ id: "b145_lesson25", version: 2, stages: ["A", "B", "C"], required: "C", bits: 10 + C_CARDS.length,
   onOpen: s => { if (s === "C") C_start(); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
 </script>

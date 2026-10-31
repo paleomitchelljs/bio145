@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .stock { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid #f2f0e8; font-size:13px; flex-wrap:wrap; }
   .stock:last-child { border-bottom:0; }
@@ -29,7 +30,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — mystery traits (JM: "one where students cross fixed phenotypes and the back cross and such to try and
@@ -105,8 +106,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
@@ -125,6 +126,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/cross.js"></script>
 <script>
 /* bits: A 0-5, B 6-10, C 11+ */
@@ -248,12 +250,42 @@ const C_CARDS = [
   { q: "Many genes adding up to one trait, like height.", a: ["polygenic inheritance", "polygenic"] }
 ];
 const C_BANK = ["incomplete dominance", "codominance", "complete dominance", "test cross", "backcross", "carrier", "multiple alleles", "heterozygous", "homozygous", "pleiotropy", "polygenic inheritance"];
+C_CARDS.push(
+  { q: "How much a trait changes with the environment.", a: ["plasticity", "phenotypic plasticity"] },
+  { q: "Which is more plastic: number of eyes or body weight?", a: ["body weight", "weight"] },
+  { q: "Blood type of a person who is IᴬIᴮ.", a: ["ab", "type ab"] },
+  { q: "Blood type of a person who is Iᴬi.", a: ["a", "type a"] },
+  { q: "One gene hiding what another gene does is…", a: ["epistasis", "epistatic"] },
+  { q: "A Labrador that is ee at the E gene has what coat?", a: ["yellow"] },
+  { q: "Two BbEe Labradors: the ratio of black : chocolate : yellow puppies.", a: ["9:3:4", "9 3 4", "9 : 3 : 4"] });
+C_BANK.push("plasticity", "epistasis", "yellow", "AB", "9:3:4", "body weight");
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(11 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson26", version: 1, stages: ["A", "B", "C"], required: "C", bits: 11 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+const KX = Kit.extra({ before: "stageC", off: 11 + C_CARDS.length, prev: "B", next: "F", stages: [
+  { key: "X1", label: "C", type: "classify", title: "How much does the environment move it?", tip: "Every trait is genes in an environment. Some barely move whatever the environment does; some are mostly environment.",
+    voice: ["Genes in an environment. Raise a baby in a cage on white rice and LeBron James is not LeBron James.", "North and South Korea share their genes and differ in height."],
+    solved: "Plasticity is a property of the trait, not the gene: the count of eyes barely moves, height moves some, a learned skill moves a lot.",
+    bins: ["Low plasticity", "Moderate plasticity", "High plasticity"],
+    items: [["Number of eyes", 0], ["Number of limbs", 0], ["Adult height (compare North and South Korea)", 1], ["Body weight", 1], ["Skill at basketball", 2], ["A learned language", 2], ["Which infections your immune system remembers", 2]] },
+  { key: "X2", label: "D", type: "classify", title: "Blood types", tip: "Three alleles at one gene: Iᴬ puts the A sugar on red cells, Iᴮ the B sugar, i neither. Each person carries two.",
+    voice: ["Three alleles, and AB shows both: codominance. Type O carries neither sugar, so it can be given to anyone."],
+    solved: "Iᴬ and Iᴮ are codominant: both sugars show. i adds nothing, so Iᴬi is type A and only ii is type O.",
+    bins: ["Type A", "Type B", "Type AB", "Type O"], n: 12,
+    make: () => { const al = () => pick(["Iᴬ", "Iᴬ", "Iᴮ", "i", "i", "i"]), g = [al(), al()].sort((a, b) => (a === "i") - (b === "i") || a.localeCompare(b)), A = g.includes("Iᴬ"), B = g.includes("Iᴮ");
+      return { q: "Genotype <b class='mono'>" + g.join("") + "</b>", bin: A && B ? 2 : A ? 0 : B ? 1 : 3 }; } },
+  { key: "X3", label: "E", type: "classify", title: "Labrador coats", tip: "Two genes, one pathway. B makes black pigment; bb makes brown (chocolate) instead. E deposits the pigment in the hair; an ee dog deposits none and is yellow, whatever it carries at B. The puppies here come from two black parents, both BbEe.",
+    voice: ["Gene interaction: one gene makes the pigment, another puts it in the hair.", "Sort the puppies. Watch the counts."],
+    solved: "ee hides whatever B says, so two BbEe parents give about 9 black : 3 chocolate : 4 yellow, not the 9:3:3:1 of two independent traits. That is epistasis.",
+    bins: ["Black", "Chocolate", "Yellow"], n: 32, ratio: 16,
+    make: () => { const loc = (x, X) => [pick([X, x]), pick([X, x])].sort().reverse().join(""), b = loc("b", "B"), e = loc("e", "E");
+      return { q: "Puppy <b class='mono'>" + b + " " + e + "</b>", bin: e === "ee" ? 2 : b === "bb" ? 1 : 0 }; } }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson26", version: 2, stages: KEYS, required: "C", bits: 11 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

@@ -4,13 +4,13 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 
 ## First
 
-- [ ] Bump `version` in lessons 2, 3 and 4. Their bit counts changed when isotopes, pH and polysaccharides went in, and the version did not.
+- [x] Bump `version` in lessons 2, 3 and 4. Their bit counts changed when isotopes, pH and polysaccharides went in, and the version did not.
 - [ ] Re-slot 28–30. Merge the fork (29) into 28 with Meselson–Stahl; both outlines cover the replication enzymes. Move the current 30 (codon wheel, mutation types) to 29, where lecture 29 covers "Mutation Types" and "Genetic Code". Build a new 30 on transcription and processing: cap, poly-A, splicing, alternative splicing, Pol I/II/III, promoters and enhancers, operons.
-- [ ] Lesson 25: rewrite the cards "The allele that shows when only one copy is present" (dominant) and its recessive twin. Lecture 25: "Alleles are not dominant -- Phenotypes are."
-- [ ] Lesson 11: the pump sim drives the membrane potential to −70 mV from pump cycles alone. Most resting potential comes from K⁺ leak. Fix the model or drop the potential.
-- [ ] Lesson 32: the somite sim is rate × time / 10. Model the clock and the gradient, or cut it. "About 30 somites" for a human is wrong (about 33 vertebrae, roughly 42–44 somite pairs). The frameshift questions give the answer away ("everything after shifts").
-- [ ] Build `classify` in `kit.js`, on evo lesson 17's Stage D pattern, with a counter per bin (`guidelines.md`).
-- [ ] Move the jsdom harness into `scripts/` with a `package.json`, so the checks survive the session.
+- [x] Lesson 25: rewrite the cards "The allele that shows when only one copy is present" (dominant) and its recessive twin. Lecture 25: "Alleles are not dominant -- Phenotypes are."
+- [x] Lesson 11: the pump sim drives the membrane potential to −70 mV from pump cycles alone. Most resting potential comes from K⁺ leak. Fix the model or drop the potential.
+- [x] Lesson 32: the somite sim is rate × time / 10. Model the clock and the gradient, or cut it. "About 30 somites" for a human is wrong (about 33 vertebrae, roughly 42–44 somite pairs). The frameshift questions give the answer away ("everything after shifts").
+- [x] Build `classify` in `kit.js`, on evo lesson 17's Stage D pattern, with a counter per bin (`guidelines.md`).
+- [x] Move the jsdom harness into `scripts/` with a `package.json`, so the checks survive the session.
 - [ ] Open every lesson in a real browser once. Drawing and dragging are untested.
 - [ ] Time a student run of three lessons, including 23, to set a length budget.
 
@@ -23,7 +23,7 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [ ] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
 - [ ] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.
 - [ ] 23: cut Stage E (polygenic trait under selection; already open in PLAN.md). Move or trim Stage D (dominance rules, lecture 25–26 material). Add cost of sex and when sex pays, ploidy and anisogamy, and alternation of generations.
-- [ ] 26: epistasis, with Labrador B and E loci making 9:3:4, best as a classify. Phenotypic plasticity. ABO as a stage, not just cards.
+- [x] 26: epistasis, with Labrador B and E loci making 9:3:4, best as a classify. Phenotypic plasticity. ABO as a stage, not just cards. (Three classify stages, C–E.)
 - [ ] 27: map-building from pairwise distances ("Pythagoras with fingers"). Decide on male-fly recombination (PLAN.md).
 - [ ] 28: DNA structure, damage and repair ("Repair window closes after S phase"), transitions versus transversions, telomeres.
 

@@ -25,25 +25,37 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-const pump = S => { const c = S.atp ? S.cyc : 0; return { c, naIn: Math.max(10, 100 - 1.5 * c), kIn: Math.min(135, 100 + c), vm: -Math.min(70, c * 1.2) }; };
-Kit.run({ id: "b145_lesson11", num: 11, stages: [
-  { type: "sim", title: "The sodium–potassium pump", tip: "Each cycle spends one ATP: 3 Na⁺ go out, 2 K⁺ come in. Outside the cell it is always about 145 mM Na⁺ and 5 mM K⁺. Bars show ions inside the cell.",
-    voice: ["Active transport moves things against the gradient, like spilling water into a full glass: it costs ATP.", "Three out, two in: an antiporter, and the inside goes negative."],
+/* Ion levels (mM) and the membrane potential. Outside is fixed: 145 Na+, 5 K+. With ATP the pump holds the inside at
+   12 Na+ and 140 K+ (textbook resting values). Without ATP the leaks run both gradients down with a 2-hour time constant
+   (invented, for illustration). The potential is the Goldman-Hodgkin-Katz voltage for Na+ and K+ at 37 C, with resting
+   permeabilities PK : PNa = 1 : 0.04 when every K+ leak channel is open; the slider scales PK down to 5% of that. The pump's
+   own 3-for-2 trade adds -3 mV while it runs (it is a small share of the resting potential). */
+const pump = S => {
+  const f = S.atp ? 1 : Math.exp(-S.hrs / 2), naIn = 145 - 133 * f, kIn = 5 + 135 * f, pK = 0.05 + 0.95 * S.leak / 100, pNa = 0.04;
+  const ghk = 61.5 * Math.log10((pK * 5 + pNa * 145) / (pK * kIn + pNa * naIn)), vm = ghk + (S.atp ? -3 : 0);
+  return { naIn, kIn, vm };
+};
+Kit.run({ id: "b145_lesson11", num: 11, version: 2, stages: [
+  { type: "sim", title: "What makes the inside negative", tip: "Outside the cell it is always 145 mM Na⁺ and 5 mM K⁺. The bars show the inside. The pump spends one ATP to move 3 Na⁺ out and 2 K⁺ in. K⁺ leak channels let K⁺ cross on its own, down its gradient.",
+    solved: "The pump builds the gradients; the K⁺ leaking back out through open channels makes almost all of the voltage. The pump's own 3-for-2 trade is worth about 3 mV.",
+    voice: ["Active transport moves things against the gradient, like spilling water into a full glass: it costs ATP.", "Three out, two in: an antiporter. Where does the negative inside come from?"],
     w: 620, h: 250,
-    controls: [{ id: "atp", label: "ATP available", type: "check", val: true }, { id: "cyc", label: "Pump cycles", min: 0, max: 80, step: 1, val: 0, fmt: v => v + " cycles" }],
-    readout: S => { const p = pump(S); return "Na⁺ inside <b>" + p.naIn.toFixed(0) + "</b> · K⁺ inside <b>" + p.kIn.toFixed(0) + "</b> · membrane potential <b>" + p.vm.toFixed(0) + " mV</b>" + (S.atp ? "" : ' · <span class="off">no ATP: the pump is stalled</span>'); },
+    controls: [{ id: "atp", label: "ATP available (the pump runs)", type: "check", val: true }, { id: "leak", label: "K⁺ leak channels open", min: 0, max: 100, step: 1, val: 50, fmt: v => v + "%" }, { id: "hrs", label: "Hours since ATP ran out", min: 0, max: 10, step: 0.5, val: 0, fmt: v => v + " h" }],
+    readout: S => { const p = pump(S); return "Na⁺ inside: <b>" + p.naIn.toFixed(0) + " mM</b> · K⁺ inside: <b>" + p.kIn.toFixed(0) + " mM</b> · membrane potential: <b>" + p.vm.toFixed(0) + " mV</b>" + (S.atp && S.hrs > 0 ? " · the pump is running, so time changes nothing" : ""); },
     draw(ctx, w, h, S) {
-      const p = pump(S), bars = [["Na⁺ in", p.naIn, 150, "#2e6da4"], ["Na⁺ out", 145, 150, "#9bb9d6"], ["K⁺ in", p.kIn, 150, "#b5651d"], ["K⁺ out", 5, 150, "#dcc0a4"]];
+      const p = pump(S), bars = [["Na⁺ in", p.naIn, "#2f6b8f"], ["Na⁺ out", 145, "#d0e1ed"], ["K⁺ in", p.kIn, "#b23a48"], ["K⁺ out", 5, "#f4d3d7"]];
       ctx.font = "12px sans-serif";
-      bars.forEach(([n, v, mx, col], i) => { const x = 40 + i * 120, bh = v / mx * 160; ctx.fillStyle = col; ctx.fillRect(x, 200 - bh, 70, bh); ctx.fillStyle = "#222"; ctx.fillText(n, x + 12, 220); ctx.fillText(Math.round(v), x + 26, 194 - bh); });
-      ctx.strokeStyle = "#999"; ctx.beginPath(); ctx.moveTo(30, 200); ctx.lineTo(w - 90, 200); ctx.stroke();
-      ctx.fillStyle = "#222"; ctx.font = "600 13px sans-serif"; ctx.fillText("inside is " + (p.vm < -20 ? "negative" : "near zero"), 40, 20);
+      bars.forEach(([n, v, col], i) => { const x = 30 + i * 100, bh = v / 150 * 160; ctx.fillStyle = col; ctx.fillRect(x, 200 - bh, 64, bh); ctx.fillStyle = "#1d1d1b"; ctx.fillText(n, x + 8, 220); ctx.fillText(Math.round(v), x + 20, 194 - bh); });
+      ctx.strokeStyle = "#e2e0d9"; ctx.beginPath(); ctx.moveTo(20, 200); ctx.lineTo(420, 200); ctx.stroke();
+      const cx = w - 110, cy = 150, r = 80, ang = Math.PI * (1 - Math.min(1, Math.max(0, (p.vm + 90) / 90)));
+      ctx.strokeStyle = "#6b6b68"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 0); ctx.stroke();
+      ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + r * Math.cos(ang), cy - r * Math.sin(ang)); ctx.stroke(); ctx.lineWidth = 1;
+      ctx.fillStyle = "#1d1d1b"; ctx.fillText("−90 mV", cx - r - 18, cy + 16); ctx.fillText("0", cx + r - 4, cy + 16); ctx.fillText("inside, relative to outside", cx - 70, cy + 34);
     },
     goals: [
-      { text: "Run the pump until sodium inside is below 15", test: S => pump(S).naIn < 15 },
-      { text: "Pack potassium in: 125 or more inside", test: S => pump(S).kIn >= 125 },
-      { text: "Make the inside at least 50 mV negative", test: S => pump(S).vm <= -50 },
-      { text: "Turn ATP off with 40 or more cycles asked for: nothing changes", test: S => !S.atp && S.cyc >= 40 && pump(S).naIn >= 100 }] },
+      { text: "With the pump running and most K⁺ channels open (80% or more), get the inside to −60 mV or below", test: S => S.atp && S.leak >= 80 && pump(S).vm <= -60 },
+      { text: "Keep the pump running and close every K⁺ leak channel: the inside sits within 15 mV of zero", test: S => S.atp && S.leak === 0 && pump(S).vm > -15 },
+      { text: "Take away the ATP and wait 6 hours or more: Na⁺ inside above 100 mM", test: S => !S.atp && S.hrs >= 6 && pump(S).naIn > 100 }] },
   { type: "sort", title: "Ways across", tip: "Passive moves down a gradient with no energy. Active spends ATP or uses a gradient someone else made. Bulk moves in vesicles.",
     voice: ["Simple diffusion, facilitated diffusion, active transport, vesicles. Uniporter, symporter, antiporter describe the number and direction of cargo."],
     bins: ["Simple diffusion", "Facilitated diffusion", "Active transport", "Vesicle (bulk) transport"],
@@ -61,7 +73,7 @@ Kit.run({ id: "b145_lesson11", num: 11, stages: [
       { q: "How does anchoring enzymes to a membrane speed a pathway?", ok: "It raises their encounter rate with each other and their substrates", no: ["It lowers the activation energy to zero", "It adds ATP", "It makes them nonpolar"], why: "Cristae are folded to hold more membrane (book 4.4, 7.4)." },
       { q: "Acetylcholine is released by one cell and opens a door on the next. This is…", ok: "A membrane acting as an interface between cells", no: ["Simple diffusion of a gas", "A gap junction", "Active transport against a gradient"], why: "One cell makes the key, the other cell's door opens." }] },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
-    bank: ["hypotonic", "hypertonic", "isotonic", "aquaporin", "facilitated diffusion", "active transport", "sodium-potassium pump", "antiporter", "symporter", "uniporter", "electrochemical gradient", "exocytosis", "phagocytosis", "pinocytosis", "receptor-mediated endocytosis", "tight junction", "gap junction", "desmosome", "adherens junction", "plasmodesmata", "connexin", "cadherin"],
+    bank: ["potassium", "hypotonic", "hypertonic", "isotonic", "aquaporin", "facilitated diffusion", "active transport", "sodium-potassium pump", "antiporter", "symporter", "uniporter", "electrochemical gradient", "exocytosis", "phagocytosis", "pinocytosis", "receptor-mediated endocytosis", "tight junction", "gap junction", "desmosome", "adherens junction", "plasmodesmata", "connexin", "cadherin"],
     cards: [
       C("A solution with a lower solute concentration than the cell.", "hypotonic"), C("A solution with a higher solute concentration than the cell.", "hypertonic"),
       C("No net water movement: the solution is…", "isotonic"),
@@ -73,6 +85,7 @@ Kit.run({ id: "b145_lesson11", num: 11, stages: [
       C("A transporter that moves two things in the same direction.", ["symporter", "symport"]),
       C("A transporter that moves one thing.", ["uniporter", "uniport"]),
       C("A combined gradient of concentration and charge.", ["electrochemical gradient", "electrochemical"]),
+      C("The ion whose leak out through open channels makes most of the negative resting potential.", ["potassium", "k+", "k⁺", "k"]),
       C("Bulk release of vesicle contents out of the cell.", "exocytosis"),
       C("Engulfing a large particle such as a bacterium.", "phagocytosis"), C("Taking in fluid in small vesicles.", "pinocytosis"),
       C("Endocytosis that begins when cargo binds a receptor.", ["receptor-mediated endocytosis", "receptor mediated endocytosis"]),

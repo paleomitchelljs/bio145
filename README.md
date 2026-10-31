@@ -52,6 +52,7 @@ docs/PLAN.md               the first drafts: idea list -> lessons, measured numb
 ## Checks
 
 ```
+npm install && node scripts/check.js   # every lesson in jsdom: no errors, every stage opens, a code is minted; kit content checked
 node scripts/smoke.js            # every lesson: no errors as a student; every stage opens and a code is minted under the bypass
 node scripts/smoke.js lesson29   # one lesson
 python3 scripts/test_codec.py    # Python decoder agrees with score.js

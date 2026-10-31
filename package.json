@@ -1,0 +1,7 @@
+{
+  "name": "bio145-lessons",
+  "private": true,
+  "description": "BIO 145 lessons; the dev dependency is only for scripts/check.js",
+  "scripts": { "check": "node scripts/check.js" },
+  "devDependencies": { "jsdom": "^29.1.1" }
+}

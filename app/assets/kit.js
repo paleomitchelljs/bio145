@@ -8,10 +8,15 @@
        { type: "sim",   title, voice, w, h, controls: [ {id,label,min,max,step,val,fmt?} | {id,label,type:"check",val} |
                         {id,label,type:"select",opts:[[value,label],...],val} ], draw(ctx,w,h,S), readout?(S) -> html,
                         goals: [ {text, test(S) -> bool} ] },
+       { type: "classify", title, voice, bins: ["a","b"], items: [["text", 0], { q: "html", draw, w, h, bin: 1 }, ...] }
+                        or make: () => ({ q, draw?, w?, h?, bin }), n: how many to place right; ratio: true shows the counts relative to the smallest,
+                        a number (4, 16) scales them to that total
        { type: "drill", title, voice, cards: [...], bank: [...] }                         cards as in drill.js
      ] });
+   Any stage may carry `solved`: a sentence shown in its solved banner once it is beaten (the finding, held back until then).
 
-   Scoring: one first-try bit per sorted item / ordered slot / pick question / drill card; a sim goal scores when first met.
+   Scoring: one first-try bit per sorted item / ordered slot / pick question / classified card / drill card; a sim goal
+   scores when first met.
    Instructor bypass and Study Mode come from stage.js as in the other lessons. */
 const Kit = (function () {
   const LET = "ABCDEFGH";
@@ -28,7 +33,7 @@ const Kit = (function () {
       '<div class="stage-body grid"><div class="col"><div class="panel"><h3>' + tipH(st.title || "", st.tip) + '</h3><div id="' + st.k + '_main"></div></div></div>' +
       '<div class="col">' + (st.type === "drill" ? '<div class="panel"><h3>Word bank</h3><div id="' + st.k + '_bank"></div></div>' : "") +
       '<div class="panel"><h3>To finish</h3><ul class="tasks" id="tasks' + st.k + '"></ul><div class="solved-banner" id="solved' + st.k + '">' +
-      (next ? "Stage " + next + " is open." : "Lesson " + num + " is done.") + "</div></div></div></div></section>";
+      (st.solved ? st.solved + " " : "") + (next ? "Stage " + next + " is open." : "Lesson " + num + " is done.") + "</div></div></div></div></section>";
   }
 
   const T = {};
@@ -63,6 +68,76 @@ const Kit = (function () {
     };
 
     /* ---------- order: drag steps into numbered slots ---------- */
+    /* ---------- classify: one card at a time, dragged (or clicked) into a bin; after evo lesson 17, Stage D ----------
+       A fixed list: every card must go in right once; a miss is recorded, shown, and the card comes back at the end.
+       Generated cards (make): place n right; the first n cards shown are the scored ones. Each bin counts the cards that
+       belong in it as they are placed, so where the cards are offspring or cells the counts are the data. */
+    T.classify = function (st) {
+      const fixed = !st.make, items = fixed ? st.items.map(it => Array.isArray(it) ? { q: esc(it[0]), bin: typeof it[1] === "number" ? it[1] : st.bins.indexOf(it[1]) } : Object.assign({}, it, { bin: typeof it.bin === "number" ? it.bin : st.bins.indexOf(it.bin) })) : null;
+      if (fixed) items.forEach(it => { if (it.bin < 0) throw new Error("bad bin in classify " + st.k); });
+      const n = fixed ? items.length : st.n || 20; st.bits = n;
+      const m = $(st.k + "_main"), counts = st.bins.map(() => 0);
+      let queue = fixed ? shuffle(items.map((_, i) => i)) : [], cur = null, shown = 0, right = 0, done = false; const dots = [], tried = new Set();
+      m.innerHTML = '<div class="kit-cwrap"><div class="kit-card" id="' + st.k + '_card"></div></div><div class="kit-dots" id="' + st.k + '_dots"></div>' +
+        '<div class="kit-cbins">' + st.bins.map((b, i) => '<div class="kit-cbin" data-bin="' + i + '"><div class="kit-binh">' + b + '</div><div class="kit-cnt">0</div></div>').join("") + "</div>" +
+        '<div class="kit-ratio" id="' + st.k + '_ratio"></div><div class="verdict" id="' + st.k + '_v"></div>';
+      task(st, "m", fixed ? "Place every card right" : "Place " + n + " right");
+      const card = $(st.k + "_card"), binEls = [...m.querySelectorAll(".kit-cbin")];
+      function paintCounts() {
+        binEls.forEach((el, i) => el.querySelector(".kit-cnt").textContent = counts[i]);
+        if (st.ratio) {
+          const tot = counts.reduce((x, y) => x + y, 0), nz = counts.filter(c => c > 0), lo = nz.length ? Math.min(...nz) : 0;
+          $(st.k + "_ratio").innerHTML = !tot ? "" : typeof st.ratio === "number"
+            ? "counts " + counts.join(" : ") + " &nbsp;≈&nbsp; " + counts.map(c => (c / tot * st.ratio).toFixed(1)).join(" : ") + " out of " + st.ratio
+            : "counts " + counts.join(" : ") + " &nbsp;≈&nbsp; " + counts.map(c => (c / lo).toFixed(1)).join(" : ");
+        }
+        $(st.k + "_dots").innerHTML = dots.map(d => '<span class="' + (d ? "r" : "w") + '"></span>').join("") + (done ? "" : '<span class="cur"></span>');
+      }
+      function next() {
+        if (done) return;
+        if (fixed) { if (!queue.length) { finish(); return; } cur = { i: queue.shift() }; Object.assign(cur, items[cur.i]); }
+        else { cur = Object.assign({ i: shown }, st.make()); }
+        card.innerHTML = '<div class="kit-cq">' + (cur.q || "") + "</div>";
+        if (cur.draw) { const c = document.createElement("canvas"); c.width = cur.w || 300; c.height = cur.h || 140; card.appendChild(c); const g = hiDPI(c); cur.draw(g.ctx, g.w, g.h); }
+        card.classList.remove("gone"); paintCounts();
+      }
+      function finish() { done = true; card.innerHTML = '<div class="kit-cq"><b>Done.</b></div>'; card.classList.add("gone"); paintCounts(); Lesson.tick(st.k, "m", true, fixed ? items.length + " of " + items.length : right + " of " + n); Lesson.finish(st.k); }
+      function place(b) {
+        if (done || !cur) return;
+        const ok = b === cur.bin; Lesson.bump(st.k);
+        const key = fixed ? cur.i : shown;
+        if (!tried.has(key) && key < n) { tried.add(key); Lesson.record(st.off + key, ok); }
+        dots.push(ok); if (ok || !fixed) counts[cur.bin]++;
+        if (ok) right++; else if (fixed) queue.push(cur.i);
+        $(st.k + "_v").innerHTML = ok ? '<span class="ok">✓ Correct.</span>' : '<span class="off">✗ Incorrect.</span> It goes in <b>' + st.bins[cur.bin] + "</b>" + (fixed ? "; it will come back." : ".");
+        const fb = binEls[cur.bin]; fb.classList.add("flash"); setTimeout(() => fb.classList.remove("flash"), 450);
+        shown++;
+        Lesson.tick(st.k, "m", false, right + " of " + n);
+        if (!fixed && right >= n) { finish(); return; }
+        if (fixed && !queue.length) { finish(); return; }
+        next();
+      }
+      m.querySelector(".kit-cbins").addEventListener("click", e => { const b = e.target.closest(".kit-cbin"); if (b) place(+b.dataset.bin); });
+      let ghost = null, over = -1;
+      card.addEventListener("pointerdown", e => {
+        if (done) return; e.preventDefault();
+        ghost = card.cloneNode(true); ghost.classList.add("kit-ghost"); Object.assign(ghost.style, { position: "fixed", pointerEvents: "none", zIndex: 60, width: card.offsetWidth + "px", left: e.clientX - card.offsetWidth / 2 + "px", top: e.clientY - 20 + "px" });
+        const cv = card.querySelector("canvas"), gcv = ghost.querySelector("canvas"); if (cv && gcv) { gcv.getContext("2d").drawImage(cv, 0, 0); }
+        document.body.appendChild(ghost); card.classList.add("lift");
+      });
+      window.addEventListener("pointermove", e => {
+        if (!ghost) return; ghost.style.left = e.clientX - ghost.offsetWidth / 2 + "px"; ghost.style.top = e.clientY - 20 + "px";
+        const u = document.elementFromPoint(e.clientX, e.clientY), b = u && u.closest(".kit-cbin"); over = b && m.contains(b) ? +b.dataset.bin : -1;
+        binEls.forEach((el, i) => el.classList.toggle("over", i === over));
+      });
+      window.addEventListener("pointerup", () => {
+        if (!ghost) return; ghost.remove(); ghost = null; card.classList.remove("lift"); binEls.forEach(el => el.classList.remove("over"));
+        if (over >= 0) { const b = over; over = -1; place(b); }
+      });
+      st.start = () => { if (!cur && !done) next(); };
+      st.reveal = () => { if (!done) { done = true; card.innerHTML = '<div class="kit-cq"><b>Done.</b></div>'; } Lesson.tick(st.k, "m", true, "done"); };
+    };
+
     T.order = function (st) {
       const n = st.items.length; st.bits = n;
       const m = $(st.k + "_main"), seen = new Set();
@@ -181,6 +256,7 @@ const Kit = (function () {
      neighbouring stages, for the banners). Returns { keys, bits, open(s), reveal(), resize() } for the lesson's own Lesson.init. */
   function extra(opts) {
     const S = opts.stages; let off = opts.off; S.forEach(st => { st.k = st.key || st.k; });
+    (window.__kitExtras = window.__kitExtras || []).push(S);
     const before = $(opts.before), tocBefore = $("toc" + opts.before.slice(5));
     S.forEach((st, i) => {
       st.i = i; before.insertAdjacentHTML("beforebegin", sectionHtml(st, i ? S[i - 1].label || S[i - 1].k : opts.prev, i < S.length - 1 ? S[i + 1].label || S[i + 1].k : opts.next, 0));

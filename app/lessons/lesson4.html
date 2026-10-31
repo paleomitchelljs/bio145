@@ -465,7 +465,7 @@ const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", ne
       { q: "Which polysaccharide is the most highly branched?", ok: "Glycogen", no: ["Cellulose", "Chitin", "Amylose"], why: "More ends means faster release of glucose." }] }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson4", version: 1, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson4", version: 2, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "8 of 8"); Lesson.tick("B", "rounds", true, "6 of 6"); } });
