@@ -37,8 +37,8 @@ matches the 2026 outlines). `o` marks a slot that has a lesson now; a dash is an
 | 26 | Beyond Simple Dominance: Plasticity, Epistasis, Pleiotropy | 12, 13 | [26: Mystery crosses: dominance, blending, both at once, and test crosses](../app/lessons/lesson26.html) | test crosses are lecture 27 material |
 | 27 | Morgan, Fly Genetics, and Linkage | 13 | [27: Hit the ratio: one gene, two genes, the X, and genes that travel together](../app/lessons/lesson27.html) |  |
 | 28 | DNA Structure, Replication, and Mutation | 14 | [28: Heavy and light: the Meselson–Stahl experiment](../app/lessons/lesson28.html) | Meselson-Stahl is lecture 28's topic 4 |
-| 29 | Replication Completion and the Central Dogma | 14, 15 | [29: The copying relay: DNA replication, molecule by molecule](../app/lessons/lesson29.html) | fork enzymes are lecture 29's topic 1; the mutation half of lesson 30 is also lecture 29 |
-| 30 | Transcription and mRNA Processing | 15 | [30: Reading a gene: transcription, the codon wheel, and mutations](../app/lessons/lesson30.html) | the codon wheel and mutation types are also lecture 29; decoding is lecture 31 |
+| 29 | Replication Completion and the Central Dogma | 14, 15 | [29: The copying relay: DNA replication, molecule by molecule](../app/lessons/lesson29.html) | fork enzymes, bacteria vs eukaryotes, and the genetic code (lecture 29 topics 1, 5, 6) |
+| 30 | Transcription and mRNA Processing | 15 | [30: Reading a gene: transcription, the codon wheel, and mutations](../app/lessons/lesson30.html) | polymerases, bacteria vs eukaryotes, processing and splicing; the codon wheel is the translation preview |
 | 31 | Translation, Ribosomes, RNA Types, and mRNA Lifetimes | 15 | [31: Translation, mRNA lifetimes and the RNA zoo](../app/lessons/lesson31.html) |  |
 | 32 | Somitogenesis, Mutations, and Reverse Transcription | 15 | [32: Somites, mutation types, and reverse transcription](../app/lessons/lesson32.html) |  |
 | 33 | Lac Operon, Histone Modification, and the RNA Zoo | 16 | [33: Switching genes: lac operon, histones, introns](../app/lessons/lesson33.html) |  |

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .seq { font:600 17px ui-monospace,Menlo,monospace; letter-spacing:1px; display:flex; flex-wrap:wrap; align-items:center; gap:0; margin:4px 0; }
   .seq .b { display:inline-block; width:18px; text-align:center; padding:2px 0; border-radius:2px; cursor:default; }
@@ -29,7 +30,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — read a gene (JM: "Codon decoding") ========== -->
@@ -111,8 +112,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Codon cards come back with new codons. Amino acids: type the three-letter name (Met) or the full name. Two right in a row masters a card.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div><div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div></div>
@@ -131,6 +132,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/code.js"></script>
 <script>
 /* bits: A 0-3 mRNA right first try, 4-7 start and every codon right first try; B 8-12; C 13+ */
@@ -275,6 +277,17 @@ const C_CARDS = [
   { q: "RNA uses this base in place of thymine.", a: ["uracil", "u"] }
 ];
 const C_BANK = ["transcription", "translation", "codon", "anticodon", "tRNA", "mRNA", "ribosome", "RNA polymerase", "promoter", "silent", "missense", "nonsense", "frameshift", "uracil"];
+C_CARDS.push(
+  { q: "The polymerase that makes mRNA.", a: ["pol ii", "polymerase ii", "rna polymerase ii", "pol 2", "2"] },
+  { q: "The protective cap goes on which end of the mRNA?", a: ["5'", "5′", "5", "5 prime"] },
+  { q: "Segments cut out of a pre-mRNA.", a: ["introns", "intron"] },
+  { q: "Segments kept in the mature mRNA.", a: ["exons", "exon"] },
+  { q: "The machine that removes introns.", a: ["spliceosome"] },
+  { q: "One gene, several proteins, by joining different exons.", a: ["alternative splicing"] },
+  { q: "A bacterial mRNA that carries several genes is…", a: ["polycistronic"] },
+  { q: "A DNA site far from the gene that boosts its transcription.", a: ["enhancer", "an enhancer"] },
+  { q: "An RNA that acts as an enzyme.", a: ["ribozyme", "a ribozyme"] });
+C_BANK.push("Pol II", "5'", "introns", "exons", "spliceosome", "alternative splicing", "polycistronic", "enhancer", "ribozyme");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -283,10 +296,33 @@ function C_start() {
   C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(13 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") });
 }
 
-Lesson.init({ id: "b145_lesson30", version: 1, stages: ["A", "B", "C"], required: "C", bits: 13 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") wheelInto($("B_wheel")); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "4 of 4"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+const KX = Kit.extra({ before: "stageC", off: 13 + C_CARDS.length, prev: "B", next: "F", stages: [
+  { key: "X1", label: "C", type: "classify", title: "Three RNA polymerases", tip: "Eukaryotes have three. Each makes one kind of RNA.",
+    voice: ["Pol I, Pol II, Pol III. Uracil in place of thymine."],
+    solved: "Pol I makes rRNA, Pol II makes mRNA, Pol III makes tRNA: every protein-coding gene goes through Pol II.",
+    bins: ["Pol I", "Pol II", "Pol III"],
+    items: [["Makes the RNA at the ribosome's core (rRNA)", 0], ["Transcribes the genes for ribosomal RNA in the nucleolus", 0], ["Makes the mRNA for insulin", 1], ["Transcribes every protein-coding gene", 1], ["Makes the adapters that carry amino acids (tRNA)", 2], ["Makes the small RNAs with an anticodon loop", 2]] },
+  { key: "X2", label: "D", type: "classify", title: "Bacteria or eukaryotes?", tip: "Bacteria: efficient, inflexible. Eukaryotes: slower, and every step is a place to regulate.",
+    voice: ["No nucleus means the ribosome can start before the polymerase finishes. Cheap, fast, good: choose two."],
+    solved: "Bacteria transcribe and translate at once, several genes to one mRNA. Eukaryotes cap, tail and splice first: slower, but each step is a dial.",
+    bins: ["Bacteria only", "Eukaryotes only", "Both"],
+    items: [["Operons: several genes under one promoter", 0], ["Polycistronic mRNA: several proteins from one mRNA", 0], ["Translation starts before transcription ends", 0], ["A 5′ cap", 1], ["A poly-A tail", 1], ["Introns spliced out", 1], ["Alternative splicing", 1], ["Enhancers that loop DNA, sometimes inside introns", 1], ["A promoter where the polymerase starts", 2], ["Uracil in place of thymine", 2]] },
+  { key: "X3", label: "E", type: "pick", title: "Processing the message", tip: "A pre-mRNA has exons (kept, expressed) and introns (removed). The spliceosome cuts the introns out and joins the exons. Cap on the 5′ end, poly-A tail on the 3′ end.",
+    voice: ["Exons are expressed; introns are in between. The naming is confusing; that is how to keep it straight.", "Promoters are a big target because the start codon is only three bases."],
+    qs: [
+      { q: "Exons 1 to 4 (coloured) with introns between (grey). Which is the mature mRNA?", ok: "cap – E1 E2 E3 E4 – AAAA", no: ["cap – E1 i E2 i E3 i E4 – AAAA", "E1 E2 E3 E4 (no cap, no tail)", "cap – i i i – AAAA"], w: 380, h: 70,
+        draw(ctx, w, h) { let x = 10; [["E1", 1], ["i", 0], ["E2", 1], ["i", 0], ["E3", 1], ["i", 0], ["E4", 1]].forEach(([n, e]) => { const ww = e ? 52 : 34; ctx.fillStyle = e ? "#2f6b8f" : "#d0d0cc"; ctx.fillRect(x, 20, ww, 26); ctx.fillStyle = e ? "#fff" : "#6b6b68"; ctx.font = "12px sans-serif"; ctx.fillText(n, x + ww / 2 - 7, 38); x += ww + 2; }); } },
+      { q: "Exons 1 and 4 are always kept; exons 2 and 3 can each be kept or skipped. How many different mature mRNAs can one gene make?", ok: "4", no: ["2", "3", "8"], why: "2 × 2: E1E2E3E4, E1E2E4, E1E3E4, E1E4." },
+      { q: "Why is a promoter much bigger than a start codon?", ok: "A three-base target is too small to find; a large protein-covered promoter is easy to hit", no: ["The promoter codes for the first amino acids", "Ribosomes need the extra length", "It stores the poly-A tail"], why: "The small-target problem; the archery analogy." },
+      { q: "An enhancer thousands of bases away still switches a gene on. How?", ok: "The DNA loops so proteins on the enhancer touch the promoter", no: ["The enhancer is copied into the mRNA", "RNA polymerase starts at the enhancer", "It works only in bacteria"], why: "Proteins binding proteins." },
+      { q: "A self-copying RNA enzyme 45 nucleotides long has been made in the lab. Why does that matter?", ok: "RNA can carry information and act as an enzyme, so early life may have used RNA alone", no: ["It proves DNA came first", "It shows RNA is more stable than DNA", "It means proteins are unnecessary today"], why: "The RNA world idea." }] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson30", version: 2, stages: KEYS, required: "C", bits: 13 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") wheelInto($("B_wheel")); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "4 of 4"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
 window.addEventListener("resize", () => { wheelInto($("A_wheel")); wheelInto($("B_wheel")); });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

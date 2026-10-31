@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .enz { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; margin-top:6px; }
   .enz button { background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:7px 8px; font-size:13px; cursor:pointer; text-align:left; }
@@ -21,7 +22,7 @@
 <div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
-  <a href="#stageB" id="tocB" class="locked">B</a>
+  <a href="#stageB" id="tocB" class="locked">D</a>
 </nav>
 
 <!-- ========== STAGE A — run the fork (JM: "DNA replication, with students selecting the appropriate enzymes in each step to go all
@@ -66,8 +67,8 @@
 <!-- ========== STAGE B — the cards (JM: "Then they get a series of flash cards where they see a step and type out the next molecule,
      or determine what molecule is broken. A bunch of these to drill the terms and process into their brains.") ========== -->
 <section class="stage stage-locked" id="stageB">
-  <h2 class="stage-h">B</h2>
-  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <h2 class="stage-h">D</h2>
+  <div class="lock-banner">Finish Stage C to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Each picture is a fork partway through, or one that finished with a molecule missing. Type the molecule. Two right in a row masters a card.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="B_drill"></div></div></div>
@@ -86,6 +87,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/fork.js"></script>
 <script>
 /* bits: A 0-8 (first pick at each step of pass 1), 9 (pass 2 clean), 10 (pass 3 clean); B 11+ */
@@ -143,13 +145,37 @@ const B_CARDS = nextCards.concat(missCards, [
   { q: "The enzyme that extends the ends of chromosomes in, for example, stem cells.", a: "telomerase" }
 ]);
 const B_BANK = ["topoisomerase", "helicase", "single-strand binding protein", "primase", "DNA polymerase III", "DNA polymerase I", "DNA ligase", "leading strand", "lagging strand", "Okazaki fragments", "RNA", "replication fork", "origin of replication", "template", "semiconservative", "telomerase"];
+B_CARDS.push(
+  { q: "Bacteria copy their circular chromosome from how many origins?", a: ["1", "one"] },
+  { q: "How many codons in the genetic code?", a: ["64", "sixty-four"] },
+  { q: "The codon position where most synonymous changes sit (first, second or third).", a: ["third", "3rd", "3"] },
+  { q: "DNA to RNA to protein: the central…", a: ["dogma", "central dogma"] });
+B_BANK.push("64", "third", "dogma", "1");
 let B_D = null;
 function B_start() { if (B_D) return; B_D = Drill.make({ mount: $("B_drill"), bankMount: $("B_bank"), bank: B_BANK, cards: B_CARDS, onFirst: (i, ok) => Lesson.record(11 + i, ok), onProgress: (k, n) => Lesson.tick("B", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("B") }); }
 
-Lesson.init({ id: "b145_lesson29", version: 1, stages: ["A", "B"], required: "B", bits: 11 + B_CARDS.length,
-  onOpen: s => { if (s === "B") B_start(); },
-  onReveal: () => { B_start(); B_D.reveal(); ["A", "B"].forEach(Lesson.finish); Lesson.tick("A", "passes", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); } });
+const KX = Kit.extra({ before: "stageB", off: 11 + B_CARDS.length, prev: "A", next: "D", stages: [
+  { key: "X1", label: "B", type: "classify", title: "Bacteria and us", tip: "The same relay runs in both. What differs is the chromosome it runs on.",
+    voice: ["Circular versus linear. One origin versus many. Different polymerases, different speeds."],
+    solved: "A bacterium copies one circle from one origin, fast. We copy long linear chromosomes from thousands of origins, slower, and the ends need telomeres.",
+    bins: ["Prokaryotes", "Eukaryotes", "Both"],
+    items: [["One circular chromosome", 0], ["One origin of replication", 0], ["About 1,000 nucleotides added a second", 0], ["Linear chromosomes with telomeres at the ends", 1], ["Many origins on each chromosome", 1], ["About 50 nucleotides added a second", 1], ["Telomerase in the germline and stem cells", 1], ["Primase lays down an RNA primer", 2], ["Okazaki fragments on the lagging strand", 2], ["Ligase seals the gaps", 2]] },
+  { key: "X2", label: "C", type: "pick", title: "From the copy to the code", tip: "DNA to RNA to protein. A codon is three mRNA bases; 64 codons name 20 amino acids and stop.",
+    voice: ["The recipe analogy: DNA is the server, the mRNA is the recipe page you print, you are the tRNA, the dish is the protein.", "The code is arbitrary but frozen: changing it now would break everything at once."],
+    qs: [
+      { q: "How many different codons are there?", ok: "64", no: ["20", "61", "4"], why: "4 × 4 × 4. 61 name amino acids and 3 are stops." },
+      { q: "64 codons and only 20 amino acids. Where is most of the redundancy?", ok: "In the third base of the codon", no: ["In the first base", "In the second base", "Spread evenly over all three"], why: "GCU, GCC, GCA and GCG are all alanine." },
+      { q: "A jellyfish gene for GFP makes glowing E. coli. What does that show?", ok: "Bacteria and jellyfish read the same code", no: ["Bacteria can splice jellyfish introns", "E. coli makes its own GFP", "The code differs but GFP is lucky"], why: "The code is nearly universal." },
+      { q: "A human gene copied straight from a chromosome makes a broken protein in E. coli. Why?", ok: "It has introns, and bacteria cannot remove them", no: ["E. coli uses a different code", "Human genes have no start codon", "Bacteria lack ribosomes"], why: "The fix is cDNA, made from mature mRNA (lesson 34)." },
+      { q: "In the recipe analogy, the tRNA is…", ok: "The cook, who reads the page and fetches each ingredient", no: ["The recipe page", "The server the recipe is stored on", "The finished dish"], why: "mRNA is the printed page; the protein is the dish." },
+      { q: "Why can't the genetic code change now?", ok: "Every protein in the cell would change at once", no: ["Codons are chemically fixed to their amino acids", "There are no more codons", "Ribosomes forbid it"], why: "Arbitrary, but frozen." }] }
+] });
+const KEYS = ["A"].concat(KX.keys, ["B"]);
+Lesson.init({ id: "b145_lesson29", version: 2, stages: KEYS, required: "B", bits: 11 + B_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "B") B_start(); },
+  onReveal: () => { B_start(); B_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "passes", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); } });
 window.addEventListener("resize", A_paint);
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

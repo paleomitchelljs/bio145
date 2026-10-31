@@ -22,7 +22,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">F</a>
+  <a href="#stageC" id="tocC" class="locked">G</a>
 </nav>
 
 <!-- ========== STAGE A — the tug of war over a shared pair (JM: "Electronegativity interactive to show how oxygen is greedy";
@@ -106,8 +106,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">F</h2>
-  <div class="lock-banner">Finish Stage E to unlock this section.</div>
+  <h2 class="stage-h">G</h2>
+  <div class="lock-banner">Finish Stage F to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul><li>Type each name until it is automatic. Two right in a row masters a card.</li></ul></div>
   </div>
@@ -369,6 +369,13 @@ const C_CARDS = [
 ];
 const C_BANK = ["electronegativity", "oxygen", "nitrogen", "carbon", "hydrogen", "chlorine", "sodium", "potassium", "nonpolar covalent", "polar covalent", "ionic bond", "covalent bond", "partial negative", "partial positive", "hydrogen bond", "hydrophilic", "hydrophobic", "polar", "nonpolar", "ionic"];
 C_CARDS.push(
+  { q: "Losing electrons.", a: ["oxidation", "oxidized"] },
+  { q: "Gaining electrons.", a: ["reduction", "reduced"] },
+  { q: "NAD⁺ picks up electrons and becomes NADH. NAD⁺ has been…", a: ["reduced", "reduction"] },
+  { q: "How many covalent bonds does carbon usually make?", a: ["4", "four"] },
+  { q: "How many covalent bonds does oxygen usually make?", a: ["2", "two"] },
+  { q: "How many covalent bonds does nitrogen usually make?", a: ["3", "three"] },
+  { q: "Hydrogen, oxygen, nitrogen and which other element make up about 96% of the body?", a: ["carbon", "c"] },
   { q: "The number of protons in an atom is its ___ number.", a: ["atomic", "atomic number"] },
   { q: "Protons plus neutrons is the ___ number.", a: ["mass", "mass number"] },
   { q: "Atoms of one element with different numbers of neutrons.", a: ["isotopes", "isotope"] },
@@ -379,7 +386,7 @@ C_CARDS.push(
   { q: "The time for half of a radioactive sample to decay.", a: ["half-life", "half life"] },
   { q: "Carbon-14 has a half-life of about how many years?", a: ["5730", "5,730", "5700"] },
   { make() { const n = rint(2, 4); return { q: "A sample has 1/" + Math.pow(2, n) + " of its original radioactive atoms. How many half-lives have passed?", a: String(n) }; } });
-C_BANK.push("atomic number", "mass number", "isotope", "ion", "neutron", "electron", "proton", "radioactive", "half-life");
+C_BANK.push("oxidation", "reduction", "carbon", "4", "2", "atomic number", "mass number", "isotope", "ion", "neutron", "electron", "proton", "radioactive", "half-life");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -389,7 +396,7 @@ function C_start() {
     onDone: () => Lesson.finish("C") });
 }
 
-const KX = Kit.extra({ before: "stageC", off: 21 + C_CARDS.length, prev: "B", next: "F", stages: [
+const KX = Kit.extra({ before: "stageC", off: 21 + C_CARDS.length, prev: "B", next: "G", stages: [
   { key: "X1", label: "C", type: "sort", title: "Inside the atom", tip: "Protons define the element. Neutrons add mass. Electrons make the chemistry.",
     voice: ["Protons set the element (the atomic number). Neutrons add mass and change from isotope to isotope. Electrons are what bonds are made of."],
     bins: ["Proton", "Neutron", "Electron"],
@@ -419,10 +426,15 @@ const KX = Kit.extra({ before: "stageC", off: 21 + C_CARDS.length, prev: "B", ne
       { text: "Find one half-life: half the carbon-14 is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.47 && f < 0.53; } },
       { text: "Find the age at which a quarter is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.23 && f < 0.27; } },
       { text: "Find the age at which about 5% is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.04 && f < 0.06; } },
-      { text: "Go past the useful range: under 1% left", test: S => Math.pow(0.5, S.age / 5730) < 0.01 }] }
+      { text: "Go past the useful range: under 1% left", test: S => Math.pow(0.5, S.age / 5730) < 0.01 }] },
+  { key: "X4", label: "F", type: "classify", title: "Who lost the electrons?", tip: "OIL RIG: oxidation is loss, reduction is gain, of electrons. They always come in pairs: whatever loses electrons hands them to something that gains them.",
+    voice: ["Oxidation is loss, reduction is gain. The names are backwards because early electricity assumed the positive charges moved; it is the electrons that move.", "Photosynthesis, respiration, every electron transport chain this term: electrons moving from one molecule to another."],
+    solved: "Losing electrons (or hydrogens with their electrons) is oxidation; gaining them is reduction. Glucose is oxidized to CO₂ and oxygen is reduced to water: that is respiration.",
+    bins: ["Oxidized (lost electrons)", "Reduced (gained electrons)"],
+    items: [["Na → Na⁺ + e⁻", 0], ["Cl + e⁻ → Cl⁻", 1], ["Fe²⁺ → Fe³⁺ + e⁻", 0], ["NAD⁺ + 2e⁻ + H⁺ → NADH", 1], ["Glucose → CO₂ (its hydrogens, and their electrons, are taken away)", 0], ["O₂ → H₂O (it picks up electrons and hydrogens)", 1], ["NADH → NAD⁺ at the electron transport chain", 0], ["CO₂ → sugar in photosynthesis", 1]] }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson2", version: 2, stages: KEYS, required: "C", bits: 21 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson2", version: 3, stages: KEYS, required: "C", bits: 21 + C_CARDS.length + KX.bits,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "7 of 7"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("B", "sort", true, "10 of 10"); } });

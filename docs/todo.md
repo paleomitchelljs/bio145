@@ -5,7 +5,7 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 ## First
 
 - [x] Bump `version` in lessons 2, 3 and 4. Their bit counts changed when isotopes, pH and polysaccharides went in, and the version did not.
-- [ ] Re-slot 28–30. Merge the fork (29) into 28 with Meselson–Stahl; both outlines cover the replication enzymes. Move the current 30 (codon wheel, mutation types) to 29, where lecture 29 covers "Mutation Types" and "Genetic Code". Build a new 30 on transcription and processing: cap, poly-A, splicing, alternative splicing, Pol I/II/III, promoters and enhancers, operons.
+- [x] Re-slot 28–30. Done another way, without moving files: 29 gained bacteria-vs-eukaryote replication and the genetic code (central dogma, 64 codons, universality, introns in bacteria); 30 gained the three polymerases, bacteria vs eukaryotes, and processing (exons, alternative splicing, promoters, enhancers, RNA world). 30's codon wheel stays as lecture 30's translation preview. Revisit if 30 runs long.
 - [x] Lesson 25: rewrite the cards "The allele that shows when only one copy is present" (dominant) and its recessive twin. Lecture 25: "Alleles are not dominant -- Phenotypes are."
 - [x] Lesson 11: the pump sim drives the membrane potential to −70 mV from pump cycles alone. Most resting potential comes from K⁺ leak. Fix the model or drop the potential.
 - [x] Lesson 32: the somite sim is rate × time / 10. Model the clock and the gradient, or cut it. "About 30 somites" for a human is wrong (about 33 vertebrae, roughly 42–44 somite pairs). The frameshift questions give the answer away ("everything after shifts").
@@ -16,9 +16,9 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 
 ## Outline sections missing from the hand-built lessons
 
-- [ ] 2: redox, which the outline calls the "Semester throughline". Valence counts ("H 1, O 2, N 3, C 4"). The elements of life.
+- [x] 2: redox, which the outline calls the "Semester throughline". Valence counts ("H 1, O 2, N 3, C 4"). The elements of life.
 - [ ] 4: the lipid half. Phospholipid bilayer self-assembly, saturation, HDL and LDL. Enzyme naming ("cellulase", "lactase", lactose intolerance). The new polysaccharide stages are text only.
-- [ ] 6: the second half of lecture 6. Nucleotides, ribose versus deoxyribose, purines and pyrimidines ("Cut pie"), pairing geometry, tRNA's "Frozen accident", ATP and cAMP.
+- [x] 6: the second half of lecture 6. Nucleotides, ribose versus deoxyribose, purines and pyrimidines ("Cut pie"), pairing geometry, tRNA's "Frozen accident", ATP and cAMP.
 - [ ] 7: surface area to volume ("Area squared, volume cubed"), with a cube slider. Large-cell exceptions. Prokaryote versus eukaryote. Endosymbiosis evidence, as a classify. Move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7).
 - [ ] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
 - [ ] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.

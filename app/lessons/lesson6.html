@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style> #A_grid { touch-action:none; cursor:crosshair; } </style>
 </head>
 <body>
@@ -15,7 +16,7 @@
 <div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
-  <a href="#stageB" id="tocB" class="locked">B</a>
+  <a href="#stageB" id="tocB" class="locked">D</a>
 </nav>
 
 <!-- ========== STAGE A — fold a chain on a grid (JM: "Something with protein folding"; "hydrogen bonding as the other widget with
@@ -56,8 +57,8 @@
 
 <!-- ========== STAGE B — the drill: levels of structure, the bonds behind each, side chains ========== -->
 <section class="stage stage-locked" id="stageB">
-  <h2 class="stage-h">B</h2>
-  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <h2 class="stage-h">D</h2>
+  <div class="lock-banner">Finish Stage C to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Name the level, the bond, the side chain. Two right in a row masters a card.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="B_drill"></div></div></div>
@@ -76,6 +77,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/atoms.js"></script>
 <script>
 /* bits: A 0-5, B 6+ */
@@ -218,13 +220,42 @@ const B_CARDS = [
   { q: "In Part A, chain 6 had one polar residue swapped for a nonpolar one. In sickle-cell hemoglobin, which level is changed first?", a: ["primary structure", "primary"] }
 ];
 const B_BANK = ["nonpolar", "polar", "charged", "inside", "surface", "primary structure", "secondary structure", "tertiary structure", "quaternary structure", "peptide bond", "hydrogen bond", "alpha helix", "beta pleated sheet", "hydrophobic interactions", "disulfide bridge", "ionic bond", "denaturation", "chaperonin"];
+B_CARDS.push(
+  { q: "The two-ring bases (A and G).", a: ["purines", "purine"] },
+  { q: "The one-ring bases (C, T and U).", a: ["pyrimidines", "pyrimidine"] },
+  { q: "The sugar in DNA.", a: ["deoxyribose"] },
+  { q: "The sugar in RNA.", a: ["ribose"] },
+  { q: "The base RNA uses in place of thymine.", a: ["uracil", "u"] },
+  { q: "The bond joining one nucleotide's phosphate to the next one's sugar.", a: ["phosphodiester", "phosphodiester bond", "phosphodiester linkage"] },
+  { q: "Guanine pairs with…", a: ["cytosine", "c"] });
+B_BANK.push("purines", "pyrimidines", "deoxyribose", "ribose", "uracil", "phosphodiester", "cytosine");
 let B_D = null;
 function B_start() { if (B_D) return; B_D = Drill.make({ mount: $("B_drill"), bankMount: $("B_bank"), bank: B_BANK, cards: B_CARDS, onFirst: (i, ok) => Lesson.record(6 + i, ok), onProgress: (k, n) => Lesson.tick("B", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("B") }); }
 
-Lesson.init({ id: "b145_lesson6", version: 1, stages: ["A", "B"], required: "B", bits: 6 + B_CARDS.length,
-  onOpen: s => { if (s === "B") B_start(); },
-  onReveal: () => { AX.solved.fill(true); A_open(0); B_start(); B_D.reveal(); ["A", "B"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); } });
+const KX = Kit.extra({ before: "stageB", off: 6 + B_CARDS.length, prev: "A", next: "D", stages: [
+  { key: "X1", label: "B", type: "classify", title: "One ring or two", tip: "Every nucleotide is a phosphate, a sugar and a base. The bases come in two shapes: purines have two fused rings, pyrimidines one.",
+    voice: ["Purines are A and G, two rings. Pyrimidines are C, T and U, one ring: 'cut pie'.", "A pairs with T (U in RNA), G with C. That is geometry, not chemistry: a two-ring base across from a one-ring base keeps the helix the same width all the way along."],
+    solved: "A and G are purines (two rings); C, T and U are pyrimidines (one ring). Every pair is one of each, so the helix keeps one width.",
+    bins: ["Purine (two rings)", "Pyrimidine (one ring)"],
+    items: [["Adenine", 0], ["Guanine", 0], ["Cytosine", 1], ["Thymine", 1], ["Uracil", 1],
+      { q: "This base", bin: 0, w: 180, h: 90, draw(ctx, w, h) { const r = 20, cx = 70, cy = 46; ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2; const poly = (x, y, n, rr, rot) => { ctx.beginPath(); for (let i = 0; i < n; i++) { const a = rot + i * 2 * Math.PI / n; i ? ctx.lineTo(x + rr * Math.cos(a), y + rr * Math.sin(a)) : ctx.moveTo(x + rr * Math.cos(a), y + rr * Math.sin(a)); } ctx.closePath(); ctx.stroke(); }; poly(cx, cy, 6, r, 0); poly(cx + r * 1.62, cy, 5, r * 0.85, Math.PI); } },
+      { q: "This base", bin: 1, w: 180, h: 90, draw(ctx, w, h) { const r = 20, cx = 90, cy = 46; ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3; i ? ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a)) : ctx.moveTo(cx + r * Math.cos(a), cy + r * Math.sin(a)); } ctx.closePath(); ctx.stroke(); } }] },
+  { key: "X2", label: "C", type: "pick", title: "Nucleotides and what they carry", tip: "A nucleotide: phosphate, sugar, base. Joined phosphate to sugar by phosphodiester bonds, they make the backbone of DNA and RNA.",
+    voice: ["Ribose versus deoxyribose: one oxygen. That one oxygen is the difference between RNA and DNA.", "The tRNA is where the code lives: swap the amino acids on the anticodons and every protein changes. A frozen accident."],
+    qs: [
+      { q: "The three parts of every nucleotide are…", ok: "A phosphate, a sugar and a base", no: ["An amino group, a carboxyl group and a side chain", "Glycerol and two fatty acids", "A sugar, a base and a hydroxyl group"], why: "Amino groups and side chains belong to amino acids (lesson 5)." },
+      { q: "Ribose and deoxyribose differ by…", ok: "One oxygen", no: ["One carbon", "A whole phosphate", "The base they carry"], why: "Deoxy-: an oxygen missing at the 2′ carbon. Ribose for RNA, deoxyribose for DNA." },
+      { q: "A two-ring base always pairs with a one-ring base. Why?", ok: "So the helix keeps one width all the way along", no: ["Two-ring bases repel each other chemically", "One-ring bases cannot form hydrogen bonds with each other", "It is a rule with no reason"], why: "Geometry, not chemistry." },
+      { q: "In RNA, adenine pairs with…", ok: "Uracil", no: ["Thymine", "Guanine", "Cytosine"], why: "RNA uses U where DNA uses T." },
+      { q: "If you swapped which amino acid each tRNA carries, what would happen?", ok: "Every protein would change: the code is set by the tRNAs", no: ["Nothing: the DNA would correct it", "Only one protein would change", "The ribosome would refuse the tRNAs"], why: "DNA stores information only because the tRNAs read it the same way every time." },
+      { q: "ATP and cyclic AMP are both…", ok: "Nucleotides", no: ["Amino acids", "Lipids", "Polysaccharides"], why: "ATP pays for reactions (lesson 13); cAMP carries signals (lesson 12)." }] }
+] });
+const KEYS = ["A"].concat(KX.keys, ["B"]);
+Lesson.init({ id: "b145_lesson6", version: 2, stages: KEYS, required: "B", bits: 6 + B_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "B") B_start(); },
+  onReveal: () => { AX.solved.fill(true); A_open(0); B_start(); B_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); } });
 window.addEventListener("resize", A_paint);
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>
