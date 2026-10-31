@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .ladder .slot { justify-content:space-between; }
   .ladder .slot .rank { font:11px ui-monospace,Menlo,monospace; color:#b0ada0; min-width:18px; }
@@ -21,7 +22,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — stack the levels of life (JM: "something with scale & the hierarchy of life") ========== -->
@@ -98,8 +99,8 @@
 
 <!-- ========== STAGE C — the drill: type the level, the unit, the instrument ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul>
       <li>These names come back all term. Type each one until it is automatic.</li>
@@ -129,6 +130,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script>
 /* bits: A 0-3 (first lock-in of each ladder), B 4-13 (first placement of each thing), C 14-33 (first answer to each card) */
 const LEVELS = ["atom", "molecule", "organelle", "cell", "tissue", "organ", "organ system", "organism", "population", "community", "ecosystem", "biosphere"];
@@ -258,6 +260,14 @@ const C_CARDS = [
   { make() { const i = rint(0, THINGS.length - 3), j = i + rint(2, 3); return { q: "About how many times longer is " + THINGS[j][0].replace(/^an? /, "a ") + " than " + THINGS[i][0] + "? (1, 10, 100, 1000, 10000…)", a: String(Math.pow(10, Math.round(Math.log10(THINGS[j][1] / THINGS[i][1])))) }; } }
 ];
 const C_BANK = LEVELS.concat(["light microscope", "electron microscope"]);
+C_CARDS.push(
+  { q: "Surface area grows with a cell's length squared. Volume grows with its length…", a: ["cubed", "to the third power", "3"] },
+  { q: "A cube 2 µm on a side has surface per volume 3 per µm. A cube 20 µm on a side has…", a: ["0.3", ".3", "0.3 per µm"] },
+  { q: "The idea that mitochondria and chloroplasts began as engulfed bacteria.", a: ["endosymbiosis", "endosymbiotic theory", "endosymbiont theory"] },
+  { q: "The scientist who argued for endosymbiosis.", a: ["margulis", "lynn margulis"] },
+  { q: "Cells with no nucleus.", a: ["prokaryotes", "prokaryotic", "prokaryote"] },
+  { q: "Where a prokaryote keeps its DNA.", a: ["nucleoid", "nucleoid region"] });
+C_BANK.push("cubed", "0.3", "endosymbiosis", "Margulis", "prokaryotes", "nucleoid");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -267,10 +277,56 @@ function C_start() {
     onDone: () => Lesson.finish("C") });
 }
 
-Lesson.init({ id: "b145_lesson7", version: 1, stages: ["A", "B", "C"], required: "C", bits: 14 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); },
-  onReveal: () => { AX.solved = AX.solved.map(() => true); BX.solved = BX.solved.map(() => true); A_open(0); B_open(0); C_start(); C_D.reveal(); Lesson.tick("A","rounds",true,"4 of 4"); Lesson.tick("B","rounds",true,"10 of 10"); ["A", "B", "C"].forEach(Lesson.finish); } });
+/* surface per volume (per µm) for the stage-C shapes; the size slider is logarithmic */
+const sz = S => Math.round(Math.pow(10, S.lx));
+function sav(S) {
+  S = Object.assign({}, S, { size: sz(S) });
+  if (S.shape === "rod") { const r = 1, L = S.size; return { sv: (2 * Math.PI * r * L + 2 * Math.PI * r * r) / (Math.PI * r * r * L) }; }
+  if (S.shape === "sheet") { const t = 2, W = S.size; return { sv: (2 * W * W + 4 * W * t) / (W * W * t) }; }
+  return { sv: 6 / (S.size / S.k) };
+}
+const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", next: "F", stages: [
+  { key: "X1", label: "C", type: "sim", title: "Surface and volume", tip: "Food and oxygen come in through the surface; every bit of volume needs them. A cell here is fed when it has at least 0.3 µm² of surface for every µm³ of volume (an illustrative threshold). A cube's surface grows with its side squared, its volume with the side cubed.",
+    voice: ["Area squared, volume cubed. Food enters by the surface; needs scale with the volume.", "A blue whale is not one giant cell. Crushed ice melts faster than one big cube."],
+    solved: "A cube's surface per volume is 6 ÷ its side, so big cells starve: split the same volume into many small cells, or stay long and thin, or flat.",
+    w: 640, h: 230,
+    controls: [{ id: "shape", label: "Cell shape", type: "select", opts: [["cube", "Cube"], ["rod", "Long and thin (2 µm across)"], ["sheet", "Flat (2 µm thick)"]], val: "cube" },
+      { id: "lx", label: "Size (cube side, or the long dimension)", min: 0, max: 3.3, step: 0.01, val: 1, fmt: v => Math.round(Math.pow(10, v)) + " µm" },
+      { id: "k", label: "Cut the cube into pieces, each side cut", min: 1, max: 10, step: 1, val: 1, fmt: v => v + (v === 1 ? " (one cell)" : " ways: " + v * v * v + " cells") }],
+    readout: S => { const r = sav(S); return "surface per volume: <b>" + r.sv.toFixed(2) + " per µm</b> · " + (r.sv >= 0.3 ? '<span class="ok">fed</span>' : '<span class="off">starving</span>') + (S.shape === "cube" && S.k > 1 ? " · " + S.k * S.k * S.k + " cells, each " + (sz(S) / S.k).toFixed(1) + " µm" : ""); },
+    draw(ctx, w, h, S) {
+      const r = sav(S); ctx.font = "12px sans-serif"; ctx.fillStyle = "#1d1d1b";
+      if (S.shape === "cube") { const n = Math.min(S.k, 10), side = 150, cell = side / n; ctx.strokeStyle = "#2f6b8f"; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) ctx.strokeRect(30 + i * cell, 40 + j * cell, cell, cell); ctx.fillText("front face of the cube", 30, 210); }
+      else if (S.shape === "rod") { ctx.fillStyle = "#d0e1ed"; ctx.fillRect(20, 110, 280, 8); ctx.fillStyle = "#1d1d1b"; ctx.fillText("2 µm across, " + sz(S) + " µm long (not to scale)", 20, 140); }
+      else { ctx.fillStyle = "#d0e1ed"; ctx.fillRect(30, 60, 220, 110); ctx.fillStyle = "#1d1d1b"; ctx.fillText("2 µm thick, " + sz(S) + " µm across (seen from above)", 30, 190); }
+      const bx = 380, sup = Math.min(1, r.sv / 1.2), dem = 0.3 / 1.2;
+      ctx.fillStyle = "#e2e0d9"; ctx.fillRect(bx, 30, 40, 170); ctx.fillRect(bx + 90, 30, 40, 170);
+      ctx.fillStyle = r.sv >= 0.3 ? "#4a7a2a" : "#a8331a"; ctx.fillRect(bx, 200 - 170 * sup, 40, 170 * sup);
+      ctx.fillStyle = "#6b6b68"; ctx.fillRect(bx + 90, 200 - 170 * dem, 40, 170 * dem);
+      ctx.fillStyle = "#1d1d1b"; ctx.fillText("supply", bx + 2, 218); ctx.fillText("need", bx + 96, 218);
+    },
+    goals: [
+      { text: "Find the biggest single cube that is still fed (side within 2 µm of the limit)", test: S => S.shape === "cube" && S.k === 1 && sz(S) >= 18 && sz(S) <= 20 },
+      { text: "Keep a 100 µm cube's volume but feed it, with as few cells as possible", test: S => S.shape === "cube" && sz(S) === 100 && S.k === 5 },
+      { text: "Make a cell longer than 1 mm that is still fed (like a nerve cell)", test: S => S.shape === "rod" && sz(S) >= 1000 && sav(S).sv >= 0.3 },
+      { text: "Make a cell wider than 1 mm that is still fed (like the alga Valonia)", test: S => S.shape === "sheet" && sz(S) >= 1000 && sav(S).sv >= 0.3 }] },
+  { key: "X2", label: "D", type: "classify", title: "Bacteria inside", tip: "Lynn Margulis: mitochondria and chloroplasts began as bacteria engulfed by another cell. Sort each feature of a mitochondrion: does it look like a bacterium, or like the cell it lives in?",
+    voice: ["Dismissed as crazy, proven right. Prokaryotes with delusions of grandeur."],
+    solved: "Own circular DNA, binary fission, bacterial ribosomes and membranes: a mitochondrion is a bacterium that moved in. Most of its genes have since moved to the host's nucleus.",
+    bins: ["Like a bacterium", "Like its host cell"],
+    items: [["Its own circular DNA", 0], ["Divides by binary fission", 0], ["Ribosomes like a bacterium's", 0], ["An inner membrane like a bacterium's", 0], ["About the size of a bacterium", 0], ["Most of the genes it needs now sit in the nucleus", 1], ["Many of its proteins are made outside it and imported", 1], ["Its outer membrane came from the host's engulfing membrane", 1]] },
+  { key: "X3", label: "E", type: "classify", title: "Tent or house", tip: "Karyo: nucleus. Prokaryotes have no nucleus and no inner membranes: a tent. Eukaryotes have rooms: a house, with walls that cost something.",
+    voice: ["Small is not one thing. A virus to an animal cell is a person to a cruise ship; a bacterium to an animal cell is a person to a van."],
+    solved: "Both have a membrane, DNA and ribosomes. Only eukaryotes have a nucleus and membrane-bound organelles.",
+    bins: ["Prokaryotes only", "Eukaryotes only", "Both"],
+    items: [["DNA in a nucleoid region, no nucleus", 0], ["No internal membranes", 0], ["A nucleus", 1], ["Membrane-bound organelles", 1], ["Mitochondria", 1], ["Ribosomes", 2], ["A plasma membrane", 2], ["DNA", 2]] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson7", version: 2, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") B_paint(); },
+  onReveal: () => { AX.solved = AX.solved.map(() => true); BX.solved = BX.solved.map(() => true); A_open(0); B_open(0); C_start(); C_D.reveal(); Lesson.tick("A","rounds",true,"4 of 4"); Lesson.tick("B","rounds",true,"10 of 10"); KX.reveal(); KEYS.forEach(Lesson.finish); } });
 window.addEventListener("resize", () => B_paint());
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

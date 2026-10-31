@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .enz { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; margin-top:6px; }
   .enz button { background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:7px 8px; font-size:13px; cursor:pointer; text-align:left; }
@@ -22,7 +23,7 @@
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
   <a href="#stageC" id="tocC" class="locked">C</a>
-  <a href="#stageD" id="tocD" class="locked">D</a>
+  <a href="#stageD" id="tocD" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — walk a kinesin (JM: "Electronegativity as an organizing principle ... build to use it as the mechanism for
@@ -140,8 +141,8 @@
 
 <!-- ========== STAGE D — the drill ========== -->
 <section class="stage stage-locked" id="stageD">
-  <h2 class="stage-h">D</h2>
-  <div class="lock-banner">Finish Stage C to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Walker cards come back at a new point in the cycle.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="D_drill"></div></div></div>
@@ -160,6 +161,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script>
 /* bits: A 0-3 (first pick at each event of trip 1), 4 (trip 2 clean), 5 (trip 3 clean); B 6-9; C 10-12; D 13+ */
 
@@ -351,13 +353,36 @@ const D_CARDS = EV.map((e, k) => ({ q: "What happens next? One word: ATP (binds)
   { q: "The motor protein that walks toward the minus end of microtubules, the other way from most kinesins.", a: "dynein" }
 ]);
 const D_BANK = ["ATP", "swing", "grip", "split", "kinesin", "microtubule", "myosin", "actin", "sarcomere", "calcium", "rigor mortis", "power stroke", "oxygen", "hydrolysis", "dynein"];
+D_CARDS.push(
+  { q: "The protein that microtubules are built from.", a: ["tubulin"] },
+  { q: "The protein of microfilaments.", a: ["actin"] },
+  { q: "The intermediate filament protein of skin and hair.", a: ["keratin"] },
+  { q: "The arrangement of microtubules in a cilium (number + number).", a: ["9+2", "9 + 2", "9 2"] },
+  { q: "The membrane proteins that link the extracellular matrix to actin inside the cell.", a: ["integrins", "integrin"] },
+  { q: "A sticky matrix protein that integrins grip.", a: ["fibronectin"] },
+  { q: "The sugary coat on the outside of an animal cell.", a: ["glycocalyx"] },
+  { q: "The jelly-like layer that glues plant cells together.", a: ["middle lamella", "pectin"] });
+D_BANK.push("tubulin", "actin", "keratin", "9+2", "integrins", "fibronectin", "glycocalyx", "middle lamella");
 let D_D = null;
 function D_start() { if (D_D) return; D_D = Drill.make({ mount: $("D_drill"), bankMount: $("D_bank"), bank: D_BANK, cards: D_CARDS, onFirst: (i, ok) => Lesson.record(13 + i, ok), onProgress: (k, n) => Lesson.tick("D", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("D") }); }
 
-Lesson.init({ id: "b145_lesson9", version: 1, stages: ["A", "B", "C", "D"], required: "D", bits: 13 + D_CARDS.length,
-  onOpen: s => { if (s === "D") D_start(); if (s === "B") B_paint(); if (s === "C") C_paint(); },
-  onReveal: () => { BX.solved.fill(true); CX.solved.fill(true); B_open(0); C_open(0); D_start(); D_D.reveal(); ["A", "B", "C", "D"].forEach(Lesson.finish); Lesson.tick("A", "trips", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("C", "rounds", true, "3 of 3"); } });
+const KX = Kit.extra({ before: "stageD", off: 13 + D_CARDS.length, prev: "C", next: "F", stages: [
+  { key: "X1", label: "D", type: "classify", title: "Three kinds of filament", tip: "Microtubules: hollow tubes of tubulin, about 25 nm across, the biggest. Microfilaments: two twisted strands of actin, about 7 nm, the thinnest. Intermediate filaments: in between, and different in different cell types.",
+    voice: ["Dynamic, not a skeleton. The naming is backwards: microtubules are the big ones. A tubule is hollow; a filament is solid."],
+    solved: "Motors and cilia run on microtubules; crawling, streaming and muscle run on actin; intermediate filaments hold against tension and differ by cell type (keratin in skin).",
+    bins: ["Microtubules", "Microfilaments (actin)", "Intermediate filaments"],
+    items: [["Hollow, 13 protofilaments of α and β tubulin", 0], ["Kinesin and dynein walk on them", 0], ["The 9+2 core of cilia and flagella", 0], ["The spindle that moves chromosomes", 0], ["Myosin pulls on them in muscle", 1], ["A crawling cell grows them at its leading edge", 1], ["Cytoplasmic streaming in plant cells", 1], ["The ring that pinches an animal cell in two", 1], ["Keratin in skin, hair and scales", 2], ["Neurofilaments in nerve axons", 2], ["Different proteins in different cell types", 2]] },
+  { key: "X2", label: "E", type: "order", title: "A plant cell wall, from the inside out", tip: "The primary wall is laid down while the cell grows and stays flexible; the secondary wall goes on inside it once growth stops, stiffened with lignin. Pectin glues neighbours together.",
+    voice: ["Like a growing bone: flexible while it grows, rigid once it stops. Plasmodesmata run through all of it."],
+    solved: "Membrane, then the rigid secondary wall laid down last on the inside, then the flexible primary wall, then the pectin of the middle lamella shared with the neighbour.",
+    items: ["Cytoplasm", "Plasma membrane", "Secondary wall (rigid, with lignin)", "Primary wall (flexible, growing)", "Middle lamella (pectin, shared)", "The neighbour's primary wall"] }
+] });
+const KEYS = ["A", "B", "C"].concat(KX.keys, ["D"]);
+Lesson.init({ id: "b145_lesson9", version: 2, stages: KEYS, required: "D", bits: 13 + D_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "D") D_start(); if (s === "B") B_paint(); if (s === "C") C_paint(); },
+  onReveal: () => { BX.solved.fill(true); CX.solved.fill(true); B_open(0); C_open(0); D_start(); D_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "trips", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("C", "rounds", true, "3 of 3"); } });
 window.addEventListener("resize", () => { A_paint(); B_paint(); C_paint(); });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>
