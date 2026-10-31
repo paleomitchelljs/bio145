@@ -7,3 +7,5 @@ lesson2         o   Greedy oxygen: who gets the electrons, and what shape does w
 lesson3         o   Building molecules: functional groups and the joins between monomers
 lesson4         o   Downhill and uphill: free energy, the hill, and paying with ATP
 lesson5         o   Jiggling across a membrane: diffusion and osmosis
+lesson6         o   Folding a chain in water: proteins
+lesson7         o   The copying relay: DNA replication, molecule by molecule

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 6</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<style> #A_grid { touch-action:none; cursor:crosshair; } </style>
+</head>
+<body>
+<header><h1>Lesson 6</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc">
+  <a href="#stageA" id="tocA">A</a>
+  <a href="#stageB" id="tocB" class="locked">B</a>
+</nav>
+
+<!-- ========== STAGE A — fold a chain on a grid (JM: "Something with protein folding"; "hydrogen bonding as the other widget with
+     proteins folding"). A lattice chain of nonpolar (H) and polar (P) residues in water; the best fold is computed by trying them
+     all, so the target is exact. ========== -->
+<section class="stage stage-locked" id="stageA">
+  <h2 class="stage-h">A</h2>
+  <div class="lock-banner">Enter your name above to start.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>A protein is a chain floating in water. Water is polar, and some of the chain is not.</li>
+      <li>Trace the chain through the grid, one residue per square. Fold each chain as well as it can be folded.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The chain<span class="tip"><span>Tan: a nonpolar residue (its side chain is mostly C–H). Blue with δ±: a polar one. Squares around the chain: water.</span><span>Press on the last residue placed and drag through empty neighbouring squares to lay down the next ones in order. Drag back over the previous one to take a residue off. <b>Start over</b> clears all but the first.</span><span>Dashed lines: two nonpolar residues side by side that are not neighbours on the chain. Every nonpolar edge left touching water is marked with a small red tick.</span></span></span></h3>
+        <canvas id="A_grid" width="780" height="460"></canvas>
+        <div class="readout">placed: <b id="A_n"></b> · nonpolar contacts: <b id="A_hh"></b> · nonpolar edges touching water: <b id="A_wet"></b></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Chain<span class="tip"><span>Six chains in any order. <b>Lock in</b> once every residue is placed. The best fold is the one with the most nonpolar contacts any fold of that chain can reach (found by trying every fold).</span></span></span> <span class="pips" id="A_pips"></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="buttons"><button id="A_lock" class="accent">Lock in</button><button id="A_reset" class="ghost">Start over</button></div>
+        <div class="verdict" id="A_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksA"><li data-task="rounds">Fold six chains as well as they fold <span class="hint" id="A_rounds_now">0 of 6</span></li></ul>
+        <div class="solved-banner" id="solvedA">Stage B is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE B — the drill: levels of structure, the bonds behind each, side chains ========== -->
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Name the level, the bond, the side chain. Two right in a row masters a card.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="B_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="B_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksB"><li data-task="m">Master every card <span class="hint" id="B_m_now"></span></li></ul><div class="solved-banner" id="solvedB">Lesson 6 is done.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 6. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/atoms.js"></script>
+<script>
+/* bits: A 0-5, B 6+ */
+/* ====== A: the HP lattice. Chain 6 is chain 5 with one polar residue made nonpolar (the sickle-cell kind of change). Measured by
+   trying every fold: best contacts 3, 3, 4, 3, 5, 5. No single polar-to-nonpolar swap in chain 5 raises its best above 5 (the
+   square grid only lets residues an odd number apart touch), so chain 6's point is the extra nonpolar surface, not more contacts. ====== */
+const CHAINS = [
+  { s: "HPPHHPPH", t: "Eight residues." },
+  { s: "HPHPPHPH", t: "Eight residues, spaced differently." },
+  { s: "HHPPHPHPHH", t: "Ten residues." },
+  { s: "PHPHHPHPPH", t: "Ten residues, starting polar." },
+  { s: "HPHHPPHPHPPH", t: "Twelve residues." },
+  { s: "HPHHPPHHHPPH", t: "Chain 5 again, with residue 8 swapped from polar to nonpolar. Watch the edges touching water." }
+];
+const COLS = 15, ROWS = 11, DIR4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+/* the most nonpolar contacts any fold reaches: every self-avoiding walk, first step fixed to the right */
+function contacts(seq, path) {
+  const at = new Map(path.map((p, i) => [p[0] + "," + p[1], i])); let n = 0;
+  path.forEach((p, i) => { if (seq[i] !== "H") return; for (const [dx, dy] of DIR4) { const j = at.get((p[0] + dx) + "," + (p[1] + dy)); if (j != null && j > i + 1 && seq[j] === "H") n++; } });
+  return n;
+}
+function bestFold(seq) {
+  let best = 0; const path = [[0, 0], [1, 0]], used = new Set(["0,0", "1,0"]);
+  (function go() {
+    if (path.length === seq.length) { best = Math.max(best, contacts(seq, path)); return; }
+    const [x, y] = path[path.length - 1];
+    for (const [dx, dy] of DIR4) { const k = (x + dx) + "," + (y + dy); if (used.has(k)) continue; used.add(k); path.push([x + dx, y + dy]); go(); path.pop(); used.delete(k); }
+  })();
+  return best;
+}
+CHAINS.forEach(c => c.best = bestFold(c.s));
+const AX = { cur: 0, solved: Array(6).fill(false), path: [], drag: false, kept: {} };
+const cell = () => { const cv = $("A_grid"), w = cv.clientWidth || 780; return Math.min((w - 20) / COLS, (+cv.dataset.h - 40) / ROWS); };
+function wetEdges(seq, path) {
+  const at = new Set(path.map(p => p[0] + "," + p[1])), out = [];
+  path.forEach((p, i) => { if (seq[i] !== "H") return; for (const [dx, dy] of DIR4) if (!at.has((p[0] + dx) + "," + (p[1] + dy))) out.push([p, dx, dy]); });
+  return out;
+}
+function A_paint() {
+  const { ctx, w, h } = hiDPI($("A_grid")), c = cell(), ox = (w - c * COLS) / 2, oy = 8, seq = CHAINS[AX.cur].s, P = AX.path;
+  const X = x => ox + (x + 0.5) * c, Y = y => oy + (y + 0.5) * c;
+  ctx.fillStyle = "#eef3f7"; ctx.fillRect(ox, oy, c * COLS, c * ROWS);
+  ctx.strokeStyle = "#dbe5ec"; ctx.lineWidth = 1; for (let i = 0; i <= COLS; i++) { ctx.beginPath(); ctx.moveTo(ox + i * c, oy); ctx.lineTo(ox + i * c, oy + ROWS * c); ctx.stroke(); }
+  for (let j = 0; j <= ROWS; j++) { ctx.beginPath(); ctx.moveTo(ox, oy + j * c); ctx.lineTo(ox + COLS * c, oy + j * c); ctx.stroke(); }
+  ctx.fillStyle = "#8fb8d3"; ctx.font = "10px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText("water", ox + 24, oy + 12);
+  const at = new Map(P.map((p, i) => [p[0] + "," + p[1], i]));
+  ctx.setLineDash([4, 3]); ctx.strokeStyle = "#b07a1c"; ctx.lineWidth = 2.5;
+  P.forEach((p, i) => { if (seq[i] !== "H") return; for (const [dx, dy] of DIR4) { const j = at.get((p[0] + dx) + "," + (p[1] + dy)); if (j != null && j > i + 1 && seq[j] === "H") { ctx.beginPath(); ctx.moveTo(X(p[0]), Y(p[1])); ctx.lineTo(X(P[j][0]), Y(P[j][1])); ctx.stroke(); } } });
+  ctx.setLineDash([]);
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 4; ctx.beginPath(); P.forEach((p, i) => ctx[i ? "lineTo" : "moveTo"](X(p[0]), Y(p[1]))); ctx.stroke();
+  for (const [p, dx, dy] of wetEdges(seq, P)) { ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 2; const mx = X(p[0]) + dx * c * 0.38, my = Y(p[1]) + dy * c * 0.38; ctx.beginPath(); ctx.moveTo(mx - dy * 5, my - dx * 5); ctx.lineTo(mx + dy * 5, my + dx * 5); ctx.stroke(); }
+  P.forEach((p, i) => {
+    const r = c * 0.3; ctx.fillStyle = seq[i] === "H" ? "#e2c48a" : "#5b8db0"; ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), r, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = seq[i] === "H" ? "#1d1d1b" : "#fff"; ctx.font = "600 " + Math.round(r * 0.8) + "px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(i + 1, X(p[0]), Y(p[1]) + 1);
+    if (seq[i] === "P") { ctx.fillStyle = "#b23a48"; ctx.font = "600 10px -apple-system,sans-serif"; ctx.fillText("δ±", X(p[0]) + r, Y(p[1]) - r); }
+  });
+  ctx.textBaseline = "alphabetic";
+  /* what is still to place */
+  const rest = seq.slice(P.length); ctx.textAlign = "left"; ctx.font = "12px -apple-system,sans-serif"; ctx.fillStyle = "#6b6b68";
+  ctx.fillText(rest.length ? "still to place: " : "every residue placed", ox, oy + ROWS * c + 15);
+  [...rest].forEach((ch, k) => { ctx.fillStyle = ch === "H" ? "#e2c48a" : "#5b8db0"; ctx.beginPath(); ctx.arc(ox + 96 + k * 16, oy + ROWS * c + 11, 6, 0, 7); ctx.fill(); });
+  $("A_n").textContent = P.length + " of " + seq.length; $("A_hh").textContent = contacts(seq, P); $("A_wet").textContent = wetEdges(seq, P).length;
+}
+function A_cellAt(e) { const cv = $("A_grid"), p = canvasXY(cv, e), c = cell(), w = cv.clientWidth, h = +cv.dataset.h, ox = (w - c * COLS) / 2, oy = 8; return [Math.floor((p.x - ox) / c), Math.floor((p.y - oy) / c)]; }
+function A_try(g) {
+  const P = AX.path, seq = CHAINS[AX.cur].s, last = P[P.length - 1];
+  if (g[0] < 0 || g[1] < 0 || g[0] >= COLS || g[1] >= ROWS) return;
+  if (P.length > 1 && g[0] === P[P.length - 2][0] && g[1] === P[P.length - 2][1]) { P.pop(); A_paint(); return; }
+  if (P.length >= seq.length || Math.abs(g[0] - last[0]) + Math.abs(g[1] - last[1]) !== 1 || P.some(p => p[0] === g[0] && p[1] === g[1])) return;
+  P.push(g); A_paint();
+}
+(function () {
+  const cv = $("A_grid");
+  cv.addEventListener("pointerdown", e => {
+    const g = A_cellAt(e), last = AX.path[AX.path.length - 1];
+    if (g[0] === last[0] && g[1] === last[1] || Math.abs(g[0] - last[0]) + Math.abs(g[1] - last[1]) === 1) { AX.drag = true; cv.setPointerCapture(e.pointerId); A_try(g); }
+  });
+  cv.addEventListener("pointermove", e => { if (AX.drag) A_try(A_cellAt(e)); });
+  cv.addEventListener("pointerup", () => { if (AX.drag) Lesson.bump("A"); AX.drag = false; });
+})();
+function A_open(i) {
+  AX.cur = i; AX.path = AX.kept[i] ? AX.kept[i].map(p => p.slice()) : [[Math.floor(COLS / 2) - 2, Math.floor(ROWS / 2)]];
+  $("A_ttext").textContent = "Chain " + (i + 1) + ": " + CHAINS[i].t; $("A_verdict").innerHTML = AX.solved[i] ? '<span class="ok">✓ As well as it folds.</span>' : "";
+  $("A_pips").innerHTML = Pips.html(6, j => AX.solved[j], i); A_paint();
+}
+function A_lock() {
+  const i = AX.cur, seq = CHAINS[i].s; if (AX.solved[i]) return;
+  if (AX.path.length < seq.length) { $("A_verdict").textContent = "Place every residue first."; return; }
+  const n = contacts(seq, AX.path), ok = n === CHAINS[i].best;
+  Lesson.record(i, ok); Lesson.bump("A");
+  if (ok) {
+    AX.solved[i] = true; AX.kept[i] = AX.path.map(p => p.slice()); $("A_verdict").innerHTML = '<span class="ok">✓ As well as it folds.</span>' + (i === 5 ? " Nonpolar edges still touching water: " + wetEdges(seq, AX.path).length + "." : "");
+    const k = AX.solved.filter(Boolean).length; Lesson.tick("A", "rounds", k === 6, k + " of 6");
+    if (k === 6) Lesson.finish("A"); else setTimeout(() => A_open(AX.solved.indexOf(false)), 1200);
+  } else $("A_verdict").innerHTML = '<span class="off">✗ Not yet.</span> A fold with more nonpolar contacts exists.';
+  $("A_pips").innerHTML = Pips.html(6, j => AX.solved[j], i);
+}
+$("A_lock").addEventListener("click", A_lock);
+$("A_reset").addEventListener("click", () => { AX.path = AX.path.slice(0, 1); A_paint(); });
+Pips.wire($("A_pips"), A_open);
+A_open(0);
+
+/* ====== B: the drill. Side chains drawn with the Lesson 2 widget; the backbone carbon is the grey C at the top ====== */
+const SIDE = {
+  alanine:   { k: "nonpolar", atoms: [["C", 0, 0], ["C", 0, 1], ["H", -0.8, 1.4], ["H", 0.8, 1.4], ["H", 0, 1.9]], bonds: [[0, 1], [1, 2], [1, 3], [1, 4]] },
+  valine:    { k: "nonpolar", atoms: [["C", 0, 0], ["C", 0, 1], ["C", -0.9, 1.6], ["C", 0.9, 1.6], ["H", -1.6, 1.1], ["H", 1.6, 1.1], ["H", -0.9, 2.5], ["H", 0.9, 2.5]], bonds: [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [2, 6], [3, 7]] },
+  serine:    { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["O", 0, 2], ["H", 0.8, 2.4]], bonds: [[0, 1], [1, 2], [2, 3]] },
+  threonine: { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["O", -0.9, 1.5], ["H", -1.6, 1.1], ["C", 0.9, 1.6], ["H", 1.6, 1.2], ["H", 0.9, 2.5]], bonds: [[0, 1], [1, 2], [2, 3], [1, 4], [4, 5], [4, 6]] },
+  cysteine:  { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["S", 0, 2.1], ["H", 0.85, 2.5]], bonds: [[0, 1], [1, 2], [2, 3]] },
+  "aspartic acid": { k: "charged", atoms: [["C", 0, 0], ["C", 0, 1], ["C", 0, 2], ["O", -0.85, 2.5], ["O", 0.85, 2.5]], bonds: [[0, 1], [1, 2], [2, 3, 2], [2, 4]], lab: "−" },
+  lysine:    { k: "charged", atoms: [["C", 0, 0], ["C", 0, 1], ["C", 0, 2], ["N", 0, 3], ["H", -0.8, 3.4], ["H", 0.8, 3.4], ["H", 0, 3.9]], bonds: [[0, 1], [1, 2], [2, 3], [3, 4], [3, 5], [3, 6]], lab: "+" }
+};
+function drawSide(name) {
+  const d = SIDE[name];
+  return (ctx, w, h) => {
+    const mol = { atoms: d.atoms.map(([el, x, y]) => ({ el, x, y })), bonds: d.bonds.map(b => [b[0], b[1], b[2] || 1]) };
+    ctx.strokeStyle = "#c9c5b8"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(w / 2 - 90, 24); ctx.lineTo(w / 2 + 90, 24); ctx.stroke();
+    ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText("backbone", w / 2 + 96, 28);
+    Atoms.drawMol(ctx, mol, { scale: 34, ox: w / 2, oy: 24, charges: true });
+    if (d.lab) { ctx.fillStyle = d.lab === "+" ? "#2f6b8f" : "#b23a48"; ctx.font = "600 20px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText(d.lab, w / 2 + 50, h - 24); }
+  };
+}
+const B_CARDS = [
+  { make() { const n = pick(Object.keys(SIDE)); return { q: "This side chain is nonpolar, polar, or charged?", a: SIDE[n].k, w: 340, h: 190, draw: drawSide(n) }; } },
+  { make() { const n = pick(Object.keys(SIDE)); return { q: "In a folded protein in water, is this side chain more likely buried inside or on the surface? (inside / surface)", a: SIDE[n].k === "nonpolar" ? "inside" : "surface", w: 340, h: 190, draw: drawSide(n) }; } },
+  { q: "The order of amino acids in a chain (level of structure).", a: ["primary structure", "primary"] },
+  { q: "Helices and sheets held by hydrogen bonds between backbone atoms (level).", a: ["secondary structure", "secondary"] },
+  { q: "The whole chain's 3-D shape, set by side chains interacting (level).", a: ["tertiary structure", "tertiary"] },
+  { q: "Two or more chains fitted together, as in hemoglobin (level).", a: ["quaternary structure", "quaternary"] },
+  { q: "The bond that holds primary structure together.", a: ["peptide bond", "peptide bonds"] },
+  { q: "The bond holding a helix or sheet together.", a: ["hydrogen bond", "hydrogen bonds"] },
+  { q: "A coil held by hydrogen bonds every fourth amino acid.", a: ["alpha helix", "α helix", "a helix"] },
+  { q: "Stretches of chain lying side by side, joined by hydrogen bonds.", a: ["beta pleated sheet", "beta sheet", "β pleated sheet", "β sheet", "pleated sheet"] },
+  { q: "Nonpolar side chains clustering away from water.", a: ["hydrophobic interactions", "hydrophobic interaction"] },
+  { q: "A covalent bond between the sulfurs of two cysteines.", a: ["disulfide bridge", "disulfide bond", "disulfide bridges"] },
+  { q: "An attraction between a + side chain and a − side chain.", a: ["ionic bond", "ionic bonds", "ionic interaction"] },
+  { q: "A protein losing its shape (from heat, pH or salt) and so its function.", a: ["denaturation", "denatured"] },
+  { q: "A protein that helps another protein fold properly.", a: ["chaperonin", "chaperone", "chaperone protein"] },
+  { q: "In Part A, chain 6 had one polar residue swapped for a nonpolar one. In sickle-cell hemoglobin, which level is changed first?", a: ["primary structure", "primary"] }
+];
+const B_BANK = ["nonpolar", "polar", "charged", "inside", "surface", "primary structure", "secondary structure", "tertiary structure", "quaternary structure", "peptide bond", "hydrogen bond", "alpha helix", "beta pleated sheet", "hydrophobic interactions", "disulfide bridge", "ionic bond", "denaturation", "chaperonin"];
+let B_D = null;
+function B_start() { if (B_D) return; B_D = Drill.make({ mount: $("B_drill"), bankMount: $("B_bank"), bank: B_BANK, cards: B_CARDS, onFirst: (i, ok) => Lesson.record(6 + i, ok), onProgress: (k, n) => Lesson.tick("B", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("B") }); }
+
+Lesson.init({ id: "b145_lesson6", version: 1, stages: ["A", "B"], required: "B", bits: 6 + B_CARDS.length,
+  onOpen: s => { if (s === "B") B_start(); },
+  onReveal: () => { AX.solved.fill(true); A_open(0); B_start(); B_D.reveal(); ["A", "B"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); } });
+window.addEventListener("resize", A_paint);
+</script>
+</body>
+</html>

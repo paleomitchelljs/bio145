@@ -20,7 +20,7 @@
 const Drill = (function () {
   function norm(s) {
     return String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
-      .replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/\s*-\s*|\s+/g, " ").replace(/^(a|an|the) /, "").replace(/[.!?,;:]+$/g, "").trim();
+      .replace(/[’‘`′]/g, "'").replace(/[–—]/g, "-").replace(/\s*-\s*|\s+/g, " ").replace(/^(a|an|the) /, "").replace(/[.!?,;:]+$/g, "").trim();
   }
   function lev(a, b) {
     const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, (_, i) => [i]);
