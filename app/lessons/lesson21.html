@@ -26,7 +26,20 @@
 <script>
 const C = (q, a) => ({ q, a });
 const chromo = (n, dup) => (ctx, w, h) => { ctx.strokeStyle = "#222"; ctx.lineWidth = 3; for (let i = 0; i < n; i++) { const x = w / 2 - (n - 1) * 30 + i * 60; const arm = (dx) => { ctx.beginPath(); ctx.moveTo(x + dx, 22); ctx.lineTo(x + dx, 118); ctx.stroke(); }; if (dup) { arm(-5); arm(5); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 8, 66, 16, 8); } else { arm(0); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 5, 66, 10, 8); } } };
-Kit.run({ id: "b145_lesson21", num: 21, stages: [
+/* a root-tip cell in phase ph: 0 interphase, 1 prophase, 2 metaphase, 3 anaphase, 4 telophase */
+function cellDraw(ctx, w, h, ph) {
+  const cx = w / 2, cy = h / 2, W = 120, H = 90; ctx.strokeStyle = "#6b6b68"; ctx.lineWidth = 1.5;
+  if (ph === 4) { ctx.strokeRect(cx - W / 2, cy - H / 2, W / 2 - 2, H); ctx.strokeRect(cx + 2, cy - H / 2, W / 2 - 2, H); } else ctx.strokeRect(cx - W / 2, cy - H / 2, W, H);
+  ctx.fillStyle = "#b23a48"; ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 3;
+  const chrom = (x, y, a) => { ctx.beginPath(); ctx.moveTo(x - 7 * Math.cos(a), y - 7 * Math.sin(a)); ctx.lineTo(x + 7 * Math.cos(a), y + 7 * Math.sin(a)); ctx.stroke(); };
+  if (ph === 0) { ctx.fillStyle = "#f4d3d7"; ctx.beginPath(); ctx.arc(cx, cy, 22, 0, 7); ctx.fill(); ctx.fillStyle = "#b23a48"; for (let i = 0; i < 18; i++) { ctx.fillRect(cx - 15 + (i * 7) % 30, cy - 14 + Math.floor(i / 5) * 8, 2, 2); } }
+  if (ph === 1) { ctx.lineWidth = 1; ctx.strokeStyle = "#6b6b68"; ctx.beginPath(); ctx.arc(cx, cy, 24, 0, 7); ctx.stroke(); ctx.lineWidth = 3; ctx.strokeStyle = "#b23a48"; [[-10, -8, 0.4], [6, -10, 1.6], [-4, 6, 2.6], [10, 8, 0.9], [-12, 10, 1.2]].forEach(([dx, dy, a]) => chrom(cx + dx, cy + dy, a)); }
+  if (ph === 2) { for (let i = -2; i <= 2; i++) chrom(cx, cy + i * 12, 0); ctx.lineWidth = 0.6; ctx.strokeStyle = "#6b6b68"; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(cx - 50, cy); ctx.lineTo(cx - 7, cy + i * 12); ctx.moveTo(cx + 50, cy); ctx.lineTo(cx + 7, cy + i * 12); ctx.stroke(); } }
+  if (ph === 3) { for (let i = -2; i <= 2; i++) { chrom(cx - 26, cy + i * 9, 0.3 * i); chrom(cx + 26, cy + i * 9, -0.3 * i); } }
+  if (ph === 4) { ctx.fillStyle = "#f4d3d7"; [cx - W / 4, cx + W / 4].forEach(x => { ctx.beginPath(); ctx.arc(x, cy, 15, 0, 7); ctx.fill(); }); }
+  ctx.lineWidth = 1;
+}
+Kit.run({ id: "b145_lesson21", num: 21, version: 2, stages: [
   { type: "order", title: "Packing two meters of DNA", tip: "Largest scale last: each level is a tighter coil.",
     voice: ["Two meters of DNA per cell, fitted into a nucleus. Histones are the spools; open chromatin has genes on, closed has them off."],
     items: ["Double helix of DNA", "DNA wrapped around a histone core: a nucleosome", "Beads on a string: nucleosomes in a row", "A coiled, looped chromatin fiber", "A condensed chromosome at mitosis"] },
@@ -42,9 +55,17 @@ Kit.run({ id: "b145_lesson21", num: 21, stages: [
   { type: "order", title: "The cell cycle", tip: "Interphase is not rest.",
     voice: ["A daughter cell starts half-size: it must grow, duplicate DNA, grow again, then divide.", "Skeletal muscle does mitosis without cytokinesis."],
     items: ["G1: the cell grows", "S: DNA is duplicated", "G2: the cell grows again and prepares", "M: mitosis separates the sister chromatids", "Cytokinesis divides the cytoplasm"] },
-  { type: "order", title: "Mitosis", tip: "Kinetochores are velcro: the cell has no eyes or hands, chemistry does the sorting.",
-    voice: ["Prophase, prometaphase, metaphase, anaphase, telophase, then cytokinesis."],
-    items: ["Prophase: chromosomes condense; kinetochores assemble", "Prometaphase: spindle fibers attach to kinetochores", "Metaphase: chromosomes line up at the equatorial plate", "Anaphase: sister chromatids separate", "Telophase: nuclei re-form", "Cytokinesis: the cell pinches or builds a wall"] },
+  { type: "classify", title: "Count the phases", tip: "A field of dividing root-tip cells, one at a time. Interphase: a round nucleus, chromatin spread out. Prophase: chromosomes condensed inside the nucleus. Metaphase: chromosomes lined up across the middle. Anaphase: two groups pulling apart. Telophase: two new nuclei, the cell pinching or walling in two.",
+    voice: ["Interphase is not rest. A cell spends most of its life there.", "Count enough cells and the counts tell you how long each phase takes: a phase twice as long shows up in twice as many cells."],
+    solved: "Most cells are in interphase. The share of cells in a phase is the share of the cycle spent in it: in a 24-hour cycle, 3% of cells in metaphase means about 43 minutes of metaphase.",
+    bins: ["Interphase", "Prophase", "Metaphase", "Anaphase", "Telophase"], n: 40, ratio: 100,
+    make: () => { const r = Math.random(), ph = r < 0.82 ? 0 : r < 0.89 ? 1 : r < 0.93 ? 2 : r < 0.96 ? 3 : 4; return { q: "", bin: ph, w: 170, h: 120, draw: (ctx, w, h) => cellDraw(ctx, w, h, ph) }; } },
+  { type: "pick", title: "From counts to hours", tip: "If cells are dividing steadily and out of step with each other, the share caught in a phase equals the share of time spent in it.",
+    voice: ["The counts are the data."],
+    qs: [
+      { q: "A root tip's cells divide every 24 hours. Of 200 cells, 6 are in metaphase. How long is metaphase?", ok: "About 43 minutes", no: ["About 6 hours", "About 3 minutes", "About 6 minutes"], why: "6/200 = 3% of 24 hours = 0.72 h." },
+      { q: "Of 200 cells, 170 are in interphase. What share of the cycle is interphase?", ok: "85%", no: ["17%", "50%", "100%"], why: "170/200." },
+      { q: "A drug stops cells at metaphase. After a few hours, the count of metaphase cells…", ok: "Rises, as cells pile up there", no: ["Falls to zero", "Stays the same", "Rises in interphase only"], why: "This is how chemotherapy that blocks spindles shows up under the microscope." }] },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
     bank: ["histone", "chromatin", "nucleosome", "chromosome", "chromatid", "centromere", "kinetochore", "karyotype", "trisomy", "interphase", "G1", "S", "G2", "prophase", "metaphase", "anaphase", "telophase", "cytokinesis", "spindle"],
     cards: [

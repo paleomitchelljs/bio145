@@ -43,7 +43,7 @@ Kit.run({ id: "b145_lesson19", num: 19, stages: [
       bars.forEach(([n, v, c], i) => { const x = 60 + i * 170; ctx.fillStyle = "#eee"; ctx.fillRect(x, 30, 90, 170); ctx.fillStyle = c; ctx.fillRect(x, 200 - 170 * Math.min(1, v), 90, 170 * Math.min(1, v)); ctx.fillStyle = "#222"; ctx.fillText(n, x + 4, 220); });
     },
     goals: [
-      { text: "C3 plant in severe drought: photorespiration eats more than half of what it could fix", test: S => S.type === "c3" && S.dry >= 70 && plant(S).loss > plant(S).net },
+      { text: "C3 plant in severe drought on a hot day (heat 40% or more): photorespiration eats more than half of what it could fix", test: S => S.type === "c3" && S.dry >= 70 && S.hot >= 40 && plant(S).loss > plant(S).net },
       { text: "C4 plant in the same drought: still fixing over 40", test: S => S.type === "c4" && S.dry >= 70 && plant(S).net > 0.4 },
       { text: "CAM plant in drought: loses under 20 of the water an open C3 plant would", test: S => S.type === "cam" && S.dry >= 70 && plant(S).water < 0.2 },
       { text: "Well-watered, cool C3: net fixation over 60", test: S => S.type === "c3" && S.dry <= 10 && S.hot <= 40 && plant(S).net > 0.6 }] },

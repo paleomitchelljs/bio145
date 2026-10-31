@@ -25,7 +25,7 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson15", num: 15, stages: [
+Kit.run({ id: "b145_lesson15", num: 15, version: 2, stages: [
   { type: "sort", title: "Four steps of aerobic respiration", tip: "Glycolysis in the cytoplasm; pyruvate oxidation and the citric acid cycle in the matrix; the electron transport chain on the inner membrane.",
     voice: ["Respiration is a controlled fire: same reaction, energy captured stepwise, like a bucket lowered down stairs."],
     bins: ["Glycolysis", "Pyruvate to acetyl-CoA", "Citric acid cycle", "Electron transport chain"],
@@ -34,6 +34,11 @@ Kit.run({ id: "b145_lesson15", num: 15, stages: [
     voice: ["Cyanide: one enzyme stops everything. Penicillin: the bacterial cell wall. Aspirin and ibuprofen: COX and prostaglandins. ACE inhibitors: blood pressure. Grapefruit juice: liver enzymes. Gila monster venom: Ozempic."],
     bins: ["Cytochrome oxidase (respiration)", "COX (prostaglandins, inflammation)", "ACE (blood pressure)", "Cell wall enzyme of bacteria", "Liver enzymes that clear drugs", "GLP-1 receptor (appetite)"],
     items: [["Cyanide", 0], ["Aspirin", 1], ["Ibuprofen", 1], ["Lisinopril and other ACE inhibitors", 2], ["Penicillin", 3], ["Grapefruit juice", 4], ["Exendin-4, from Gila monster venom, and Ozempic", 5]] },
+  { type: "classify", title: "Glycolysis's ledger", tip: "Glycolysis runs in the cytoplasm and turns one six-carbon glucose into two three-carbon pyruvates. Sort each step by what it does to the cell's account.",
+    voice: ["Investment phase, then payoff phase. You spend money to make money."],
+    solved: "Spend 2 ATP, split the sugar in two, and each half pays back 2 ATP and 1 NADH: net 2 ATP and 2 NADH per glucose.",
+    bins: ["Investment: spends ATP", "Rearranges or splits: no ATP", "Payoff: makes ATP or NADH"],
+    items: [["Hexokinase puts a phosphate from ATP on glucose", 0], ["PFK puts a second phosphate from ATP on the sugar", 0], ["Glucose 6-phosphate is rearranged into fructose 6-phosphate", 1], ["The six-carbon sugar splits into two three-carbon G3P", 1], ["Each G3P is oxidized, turning NAD⁺ into NADH", 2], ["Each three-carbon molecule hands two phosphates to ADP", 2]] },
   { type: "pick", title: "Glycolysis and its control", tip: "Phosphofructokinase (PFK) is the control point of glycolysis.",
     voice: ["Spend 2 ATP, make 4: net 2 ATP and 2 NADH. ATP inhibits PFK; AMP activates it. Insulin raises cAMP, which activates PFK and draws glucose from the blood.", "Type 2 diabetes breaks this loop."],
     qs: [

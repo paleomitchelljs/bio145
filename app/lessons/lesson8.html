@@ -25,7 +25,7 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson8", num: 8, stages: [
+Kit.run({ id: "b145_lesson8", num: 8, version: 2, stages: [
   { type: "order", title: "A protein's trip out of the cell", tip: "A secreted protein is made on the rough ER and leaves the cell by vesicle. Put the trip in order.",
     voice: ["DNA to mRNA to protein. Generic ribosomes, specific mRNA: blueprint into tool.", "Then membrane delivery: ER, vesicle, Golgi (cis to trans), vesicle, out."],
     items: ["The gene is transcribed into mRNA in the nucleus", "The mRNA leaves through a nuclear pore", "A ribosome on the rough ER translates it into the ER lumen", "A vesicle buds off the ER", "The vesicle fuses with the cis face of the Golgi", "The Golgi modifies the protein and reads its sugar tag", "A vesicle leaves the trans face", "The vesicle fuses with the plasma membrane and the protein is secreted"] },
@@ -44,6 +44,7 @@ Kit.run({ id: "b145_lesson8", num: 8, stages: [
       { q: "A cell lacking catalase would suffer from a build-up of…", ok: "Hydrogen peroxide", no: ["Glucose", "Lipids", "Ribosomes"], why: "Catalase splits H₂O₂ into water and oxygen." },
       { q: "A damaged mitochondrion is wrapped in membrane and digested. What is this called?", ok: "Autophagy", no: ["Phagocytosis", "Exocytosis", "Endosymbiosis"], why: "The lysosome recycles it." },
       { q: "In the cell's money story, the mitochondrion is the…", ok: "Exchange that turns glucose (gold) into ATP (dollars)", no: ["Mine that makes glucose", "Bank vault for DNA", "Post office"], why: "The chloroplast is the mine." },
+      { q: "The Golgi reads a protein's sugar tag and ships it. Which is NOT one of its three destinations?", ok: "The nucleus", no: ["Out of the cell (secretion)", "The plasma membrane", "A lysosome"], why: "Secretion, the membrane, or a lysosome: proteins for the nucleus are made on free ribosomes and go in through pores." },
       { q: "A liver cell detoxifies drugs. Which organelle will it have lots of?", ok: "Smooth ER", no: ["Rough ER", "Central vacuole", "Chloroplast"], why: "Smooth ER: lipids and detox." }] },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
     bank: ["ribosome", "rough ER", "smooth ER", "Golgi apparatus", "lysosome", "central vacuole", "tonoplast", "peroxisome", "catalase", "mitochondrion", "chloroplast", "nucleus", "autophagy", "turgor pressure", "cis", "trans", "vesicle", "centriole"],

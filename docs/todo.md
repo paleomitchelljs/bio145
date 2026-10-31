@@ -31,21 +31,21 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 
 ## Kit lessons
 
-- [ ] 3: cut the functional-group sort (giveaway bins, a garbled item, duplicates lesson 4). Add the "Correction: Ionic Bonds" point. Seven stages is too many.
+- [x] 3: cut the functional-group sort (giveaway bins, a garbled item, duplicates lesson 4). Add the "Correction: Ionic Bonds" point. Seven stages is too many.
 - [ ] 5: draw the side chains with `atoms.js` instead of naming them. Drop the levels sort or make lesson 6 the only home for it.
-- [ ] 8: add the Golgi's three destinations. The organelle sort is near one-to-one matching.
+- [x] 8: add the Golgi's three destinations. The organelle sort is near one-to-one matching.
 - [ ] 11: tonicity questions repeat lesson 10's Stage B.
-- [ ] 12: Hedgehog's chain of inhibitors (Patched, Smoothened, Gli) as a predict-the-output stage.
-- [ ] 15: a hands-on glycolysis ledger (investment, payoff). The drug sort is near one-to-one.
+- [x] 12: Hedgehog's chain of inhibitors (Patched, Smoothened, Gli) as a predict-the-output stage.
+- [x] 15: a hands-on glycolysis ledger (investment, payoff). The drug sort is near one-to-one.
 - [x] 16: predict first, then run the ETC sim.
 - [ ] 17: six stages; trim. The absorption sim overlaps 18.
 - [ ] 18: the electron's energy path (Z-scheme) as a manipulation, reusing lesson 13's hill.
-- [ ] 19: goal 1 silently needs heat above about 38%. Say so or change the test.
-- [ ] 21: replace the mitosis order (duplicates 23 Stage M) with a mitotic-index classify.
+- [x] 19: goal 1 silently needs heat above about 38%. Say so or change the test.
+- [x] 21: replace the mitosis order (duplicates 23 Stage M) with a mitotic-index classify.
 - [x] 22: the spindle photobleaching experiment as a prediction. A cyclin-level trace.
 - [ ] 31: the RNA zoo sort duplicates 33.
 - [x] 33: predict all four lac conditions before toggling. Add a repressor-mutant or operator-mutant puzzle.
-- [ ] 35: make "read top to bottom" one of the Sanger distractors.
+- [x] 35: make "read top to bottom" one of the Sanger distractors.
 - [x] 36: the editing sim is two checkboxes. Predict first.
 - [ ] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases.
 

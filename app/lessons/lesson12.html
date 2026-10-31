@@ -25,7 +25,21 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson12", num: 12, stages: [
+/* Hedgehog: Patched blocks Smoothened; Hedgehog blocks Patched; Smoothened switches Gli on, and Gli the target genes */
+function hh(c) { const ptc = !c.ptcBroken && !c.hh, smo = !!c.smoStuck || (!c.smoBroken && !ptc), genes = smo && !c.gliBroken; return { ptc, smo, genes }; }
+const hhWord = s => "Patched " + (s.ptc ? "on" : "off") + " · Smoothened " + (s.smo ? "on" : "off") + " · genes " + (s.genes ? "on" : "off");
+const hhDraw = (c, reveal) => (ctx, w, h) => {
+  const s = hh(c), nodes = [["Hedgehog", !!c.hh, 20], ["Patched", s.ptc, 135], ["Smoothened", s.smo, 250], ["Gli", s.smo && !c.gliBroken, 365], ["target genes", s.genes, 480]];
+  ctx.font = "12px sans-serif";
+  nodes.forEach(([n, on, x], i) => { const known = i === 0 || reveal; ctx.fillStyle = !known ? "#efeee8" : on ? "#d0e1ed" : "#e2e0d9"; ctx.fillRect(x, 40, 95, 34); ctx.strokeStyle = "#6b6b68"; ctx.strokeRect(x, 40, 95, 34);
+    ctx.fillStyle = "#1d1d1b"; ctx.fillText(n, x + 8, 56); ctx.fillStyle = "#6b6b68"; ctx.fillText(!known ? "?" : on ? "on" : "off", x + 8, 70); });
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2; [[115, 135, true], [230, 250, true], [345, 365, false], [460, 480, false]].forEach(([a, b, bar]) => { ctx.beginPath(); ctx.moveTo(a, 57); ctx.lineTo(b - 2, 57); ctx.stroke(); ctx.beginPath(); if (bar) { ctx.moveTo(b - 2, 49); ctx.lineTo(b - 2, 65); } else { ctx.moveTo(b - 8, 52); ctx.lineTo(b - 2, 57); ctx.lineTo(b - 8, 62); } ctx.stroke(); });
+  ctx.lineWidth = 1; ctx.fillStyle = "#6b6b68"; ctx.fillText("⊣ blocks   → switches on", 20, 100);
+  const muts = [c.ptcBroken && "Patched broken", c.smoBroken && "Smoothened broken", c.smoStuck && "Smoothened stuck on", c.gliBroken && "Gli broken"].filter(Boolean);
+  if (muts.length) { ctx.fillStyle = "#a8331a"; ctx.fillText("mutant: " + muts.join(", "), 20, 20); }
+};
+const ALLHH = []; for (const a of [true, false]) for (const b of [true, false]) for (const g of [true, false]) ALLHH.push(hhWord({ ptc: a, smo: b, genes: g }));
+Kit.run({ id: "b145_lesson12", num: 12, version: 2, stages: [
   { type: "order", title: "A signaling pathway", tip: "The text-message analogy: write, send, read, act, finish.",
     voice: ["Six steps: synthesis, transport, reception, transduction, response, termination.", "Why transduction? The receptor is stuck in the membrane; the intermediates are water-soluble and can reach the machinery. A work order to the physical plant."],
     items: ["Synthesis: a cell makes the signal", "Transport: the signal travels to its target", "Reception: the signal binds its receptor", "Transduction: intermediate molecules pass the message inside", "Response: gene expression, enzyme activity, or membrane permeability changes", "Termination: the signal is removed and the pathway switches off"] },
@@ -45,8 +59,15 @@ Kit.run({ id: "b145_lesson12", num: 12, stages: [
       { q: "Bacteria release a signal and respond only when it is concentrated. This is…", ok: "Quorum sensing", no: ["Apoptosis", "Endocrine signaling", "Autocrine signaling"], why: "It tells the cell how many neighbors there are." },
       { q: "A cell with severe DNA damage activates a signal for orderly self-destruction. This is…", ok: "Apoptosis", no: ["Mitosis", "Phagocytosis", "Quorum sensing"], why: "Programmed cell death; it is also how webbing between fingers disappears." },
       { q: "Wnt in a wound, in an embryo and in a tumor can do different things. Why?", ok: "The response depends on the cell's context", no: ["Wnt is three different molecules", "Receptors do not matter", "Only the dose matters"], why: "Same signal, different cell, different outcome." }] },
+  { type: "pick", title: "A chain of blocks", tip: "In the Hedgehog pathway, Patched blocks Smoothened. Hedgehog, when it arrives, blocks Patched. Smoothened, when free, switches on Gli, and Gli switches on the target genes.",
+    voice: ["Sequential inhibition: a block on a block. The signal works by switching off the thing that was switching something else off.", "Why so many steps? Every step is a place for a different cell to read the same signal differently."],
+    solved: "Two blocks in a row make a switch: Hedgehog on means genes on. Break Patched and the genes come on with no signal at all, which is how some skin cancers start.",
+    qs: [
+      [{ hh: false }, "No Hedgehog."], [{ hh: true }, "Hedgehog arrives."], [{ hh: false, ptcBroken: true }, "No Hedgehog, and Patched is broken."],
+      [{ hh: true, smoBroken: true }, "Hedgehog arrives, but Smoothened is broken."], [{ hh: false, smoStuck: true }, "No Hedgehog, but Smoothened is stuck on."], [{ hh: true, gliBroken: true }, "Hedgehog arrives, but Gli is broken."]
+    ].map(([c, txt]) => { const ok = hhWord(hh(c)); return { q: txt + " Which is on?", ok, no: shuffle(ALLHH.filter(x => x !== ok)).slice(0, 3), w: 600, h: 110, draw: hhDraw(c, false), after: hhDraw(c, true) }; }) },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
-    bank: ["autocrine", "paracrine", "endocrine", "ligand", "receptor", "transduction", "second messenger", "cAMP", "G protein", "kinase", "phosphorylation", "negative feedback", "apoptosis", "quorum sensing", "Wnt", "Hedgehog", "ion channel", "GTP"],
+    bank: ["Patched", "Smoothened", "autocrine", "paracrine", "endocrine", "ligand", "receptor", "transduction", "second messenger", "cAMP", "G protein", "kinase", "phosphorylation", "negative feedback", "apoptosis", "quorum sensing", "Wnt", "Hedgehog", "ion channel", "GTP"],
     cards: [
       C("Signaling to the same cell that made the signal.", "autocrine"), C("Signaling to nearby cells.", "paracrine"), C("Signaling through the bloodstream to distant cells.", "endocrine"),
       C("A molecule that binds a receptor.", ["ligand", "a ligand"]), C("The protein that detects a signal.", ["receptor", "a receptor"]),
@@ -62,6 +83,8 @@ Kit.run({ id: "b145_lesson12", num: 12, stages: [
       C("Steroid hormones cross the membrane because they are…", ["lipid soluble", "lipid-soluble", "nonpolar", "hydrophobic"]),
       C("The developmental signal in the Frizzled pathway.", "Wnt"),
       C("The signal that acts through Patched and Smoothened.", ["hedgehog", "hh"]),
+      C("Hedgehog switches its genes on by blocking which protein?", ["patched"]),
+      C("The protein Patched holds off until Hedgehog arrives.", ["smoothened"]),
       C("Which receptor type opens a pore on binding? (ion-linked or enzyme-linked)", ["ion-linked", "ion linked", "ligand-gated"])] }
 ] });
 
