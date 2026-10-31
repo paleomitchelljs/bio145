@@ -3,10 +3,15 @@
 Every image here comes from OpenStax, _Biology 2e_ (Clark, Douglas and Choi, 2018; updated printing), licensed
 under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Access for free at
 https://openstax.org/details/books/biology-2e. They were extracted from the book's PDF (`refs/book/Biology2e-WEB.pdf`)
-with `pdfimages`; three are single panels cropped out of multi-panel figures. The decks show a short credit under each.
+with `pdfimages`; three are single panels cropped out of multi-panel figures. The Woese tree (1.17) is the same image the
+chapter 1 PowerPoint used. The decks show a short credit under each.
 
 | File | Figure | Original credit (from the book) | Used in |
 |---|---|---|---|
+| os-1-05-bacon.jpg | 1.5 | Paul van Somer | lecture 1 |
+| os-1-12-kittens.jpg | 1.12 | Rocky Mountain Feline Rescue | lecture 1 |
+| os-1-13-polar-bear.jpg | 1.13 | "longhorndave"/Flickr | lecture 1 |
+| os-1-17-woese-tree.jpg | 1.17 | Eric Gaba; NASA Astrobiology Institute | lecture 1 |
 | os-2-18-water-strider.jpg | 2.18 | Tim Vickers | lecture 3 |
 | os-33-22b-evaporation.jpg | 33.22, panel b (cropped) | modification of work by "Kullez"/Flickr | lecture 3 |
 | os-3-11-chitin-bee.jpg | 3.11 | Louise Docker | lecture 4 |

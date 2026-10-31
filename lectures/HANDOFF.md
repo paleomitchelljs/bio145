@@ -7,7 +7,8 @@ for lectures 10 onward. Read this, then `lectures/README.md` (how the decks work
 
 - Nine decks, lectures 1–9 (book chapters 1–4), in `lectures/lecNN/`. All pushed to GitHub, which publishes them at
   jonsmitchell.com/bio145/.
-- **Lecture 1 is rebuilt from its transcript** (commit a56628b). It is the model for the rest.
+- **Lecture 1 is rebuilt from its transcript, then reworked so the screen illustrates what JM says instead of repeating
+  it** (2026-10-31, second pass; see "The rule"). It is the model for the rest.
 - **Lectures 2–9 are first drafts** written from the 2026 outlines and the PowerPoint text. JM on the lecture 1 first
   draft, which was written the same way: *"It's a lot of words that aren't actually my verbiage, and some of it is
   weirdly out of order (why does the fire example come after the sorting exercise?)"*. Expect the same faults in 2–9.
@@ -21,10 +22,23 @@ for lectures 10 onward. Read this, then `lectures/README.md` (how the decks work
 
 ## The rule
 
-**A deck is JM's lecture as he gave it: his words, his order, little text on screen.**
+**A deck is JM's lecture as he gave it: his order, and a screen that shows what he is talking about while he says it.**
 
-- The words come from the transcript. Each build's bottom-line prompt is one of his lines, trimmed, with
-  transcription errors fixed. Lines on the slide itself are short phrases, mostly his.
+JM on the second lecture 1 draft (2026-10-31): *"pasting a near-verbatim quote on a slide blocked off as a quote with a
+single-line summary repeating the short quote's point is redundant and unnecessary given I will be there speaking. The
+slides should complement & illustrate what I say, rather than repeat it."* His words shape the slides and the word
+choice; they are not printed back at the room. So:
+
+- **The slide shows what he would draw or point at**: the diagram he sketches, the table of numbers he writes, the
+  thing being sorted or crossed off, a photo. Not a sentence he is about to say.
+- **The prompt (the bottom line) is only a question he puts to the room**, in his words, short: "How many fires do I
+  have?", "Where does that extra mass come from?". Most builds have no prompt.
+- **No quote cards of his own lines, and nothing under a figure that restates his point.** A quote card only for a real
+  quotation that is itself the object (lecture 1: Sherlock Holmes, in Doyle's wording, attributed).
+- **Words on a slide are labels, numbers, and the few terms or definitions students should write down**, each once
+  (lecture 1: homeo/stasis; science as "a structured and organized way of figuring out what we think is true"; what
+  p means).
+- When he asks a question, the build shows the question; the next build shows the answer.
 - The order is the transcript's order. An activity (a sort, a vote, a demo) comes after the idea it tests.
 - PowerPoint material he didn't use in 2026 goes in an extra segment (`extra: true`, builds `X(n)`; shown only with X),
   not the main run.
@@ -52,10 +66,10 @@ All of these are outside git (`refs/` is gitignored; the transcripts are elsewhe
    drawn on the board, each demo, with his key line for each, verbatim.
 2. Lay the current deck beside that list. Keep the demos and figures that match a move he made; move or cut the rest.
    Cut every line that is a paraphrase where he has his own words.
-3. One segment per topic shift; one build per beat; the prompt is his line. Lecture 1 is the pattern (it went from 51
-   builds to 63 with far less text at each).
-4. Figures: redraw what he drew or described (lecture 1: one match lighting three different fires; five pots,
-   including less soil and more soil). Colors only from the tokens in `shared/lecture.css`. Never copy a publisher's
+3. One segment per topic shift; one build per beat; a prompt only where he asks the room something. Lecture 1 is the
+   pattern: 80 builds, most of them a step in a drawing, almost no sentences on screen.
+4. Figures: redraw what he drew or described (lecture 1: one match lighting four different fires beside a copier; the
+   pots as a table at times 0, 1 and 2; the suspects struck off; the gas tanks; two drugs against a control). Colors only from the tokens in `shared/lecture.css`. Never copy a publisher's
    figure. Photos only from OpenStax: see `img/CREDITS.md` for the extraction steps.
 5. Clock minutes: a segment's share of the transcript's words times the class length (about 50 minutes) is close
    enough.

@@ -4,8 +4,11 @@ Interactive presentations to replace the PowerPoints, one per lecture. Chapters 
 
 **Source of the words and the order: the recording transcripts**
 (`Dropbox/Professional/Courses/transcripts/145/transcripts/raw/2026_examNN_lecNN_transcript.txt`). A deck uses JM's
-own lines, trimmed, in the order he gave them, with sparse text on screen; activities come after the ideas they test.
-PowerPoint material the lecture skipped goes in an extra (X) segment. Lecture 1 is built this way (2026-10-31).
+order and his examples; activities come after the ideas they test. The screen shows what he would draw or point at,
+not what he says: a prompt is only a question he asks the room, there are no quote cards of his lines, and the words on
+a slide are labels, numbers and the few terms to write down (rules in `HANDOFF.md` and at the top of
+`lec01/content.js`). PowerPoint material the lecture skipped goes in an extra (X) segment. Lecture 1 is built this way
+(2026-10-31).
 Lectures 2–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild. `HANDOFF.md` has the procedure and the state of each deck for that pass.
 
 Open the course page (`index.html` at the repo root: each lecture's deck on the left, its homework on the right), or a
@@ -61,7 +64,7 @@ public site. No deck uses it now; a missing local photo shows as a dashed box wi
 
 | Lecture | Demo |
 |---|---|
-| 1 | sort: alive or not; the null hypothesis (true difference, sample size, p) |
+| 1 | the null hypothesis (true difference, sample size, p); the chapter 1 agenda, crossed off as it goes |
 | 2 | atom builder (protons, neutrons, electrons → element, isotope, ion); electronegativity tug of war |
 | 3 | pH scale (tenfold per unit); blood buffer (acid added, CO₂ from breathing) |
 | 4 | join and split monomers (water counted); packing fatty-acid tails |
@@ -71,7 +74,7 @@ public site. No deck uses it now; a missing local photo shows as a dashed box wi
 | 8 | the cell map (animal or plant; click a part) |
 | 9 | kinesin walks, one ATP a step |
 
-Every deck ends or pauses on room votes (P shows the answer).
+Lectures 2–9 end or pause on room votes (P shows the answer); keep one only where JM asked the room something.
 
 ## Checks
 
