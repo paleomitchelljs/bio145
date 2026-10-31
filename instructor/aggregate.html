@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BIO 145 — Class score aggregator</title>
+<style>
+  body { margin: 0; font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; background: #fafaf7; color: #1d1d1b; }
+  header { padding: 16px 24px; border-bottom: 1px solid #e2e0d9; background: #fff; }
+  header h1 { margin: 0 0 4px 0; font-size: 18px; }
+  header p { margin: 0; color: #6b6b68; font-size: 13px; max-width: 84ch; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .card { background: #fff; border: 1px solid #e2e0d9; border-radius: 6px; padding: 16px 18px; margin: 0 0 16px 0; }
+  .card h2 { margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b6b68; font-weight: 600; }
+  label.lbl { font-size: 13px; color: #6b6b68; display:block; margin: 8px 0 4px; }
+  input.salt { padding: 7px 10px; font: 14px ui-monospace, Menlo, monospace; border: 1px solid #e2e0d9; border-radius: 4px; background: #fafaf7; width: 320px; max-width:100%; box-sizing: border-box; }
+  textarea { width: 100%; box-sizing: border-box; min-height: 120px; padding: 8px 10px; font: 13px ui-monospace, Menlo, monospace; border: 1px solid #e2e0d9; border-radius: 4px; background: #fafaf7; resize: vertical; }
+  .actions { display: flex; gap: 8px; margin: 10px 0 0 0; flex-wrap: wrap; }
+  .actions button { padding: 7px 14px; background: #2f6b8f; color: #fff; border: 0; border-radius: 4px; cursor: pointer; font-size: 13.5px; }
+  .actions button.secondary { background: #fff; color: #6b6b68; border: 1px solid #e2e0d9; }
+  .actions button.danger { background: #fff; color: #b23a48; border: 1px solid #e7c3c8; }
+  .note { font-size: 12.5px; color: #6b6b68; margin: 8px 0 0; }
+  table.matrix { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.matrix th, table.matrix td { padding: 6px 9px; border-bottom: 1px solid #eceae3; text-align: center; white-space: nowrap; }
+  table.matrix th { font-size: 11.5px; text-transform: uppercase; color: #6b6b68; letter-spacing: 0.05em; border-bottom: 1px solid #e2e0d9; }
+  table.matrix th.name, table.matrix td.name { text-align: left; font-family: ui-monospace, Menlo, monospace; position: sticky; left: 0; background: #fff; }
+  table.matrix td.cell { font-family: ui-monospace, Menlo, monospace; }
+  .scroll { overflow-x: auto; }
+  .frac { font-weight: 600; }
+  .time { color: #6b6b68; }
+  .bad { color: #b23a48; }
+  .muted { color: #b9b7b0; }
+  .badlist { font-size: 12.5px; color: #b23a48; font-family: ui-monospace, Menlo, monospace; white-space: pre-wrap; margin: 8px 0 0; }
+  .summ { font-size: 13px; color: #6b6b68; margin: 0 0 8px; max-width: 84ch; }
+  .modblock { margin: 0 0 20px; }
+  .modblock h3 { margin: 0 0 6px; font-size: 14px; font-family: ui-monospace, Menlo, monospace; }
+  .modblock h3 span { font-weight: 400; color: #6b6b68; font-size: 12.5px; font-family: inherit; }
+  .itemrow { display: grid; grid-template-columns: 108px 1fr 78px; gap: 10px; align-items: center; margin: 3px 0; font-size: 12.5px; }
+  .itemrow .lbl { color: #6b6b68; text-align: right; }
+  .itemrow .n { color: #6b6b68; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .bar { height: 14px; background: #eceae3; border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: #2f6b8f; }
+  .bar i.low { background: #b23a48; }
+  .bar i.mid { background: #caa04a; }
+  .modfoot { font-size: 12.5px; color: #6b6b68; margin: 8px 0 0 118px; }
+  .flagpill { display:inline-block; background:#f4f0dd; border:1px solid #caa04a; color:#5c4a1c; border-radius:3px; padding:0 6px; font-size:11.5px; margin-left:4px; }
+  code.inl { font-family: ui-monospace, Menlo, monospace; background:#f1efe9; padding:1px 4px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Class score aggregator</h1>
+  <p>Instructor tool — runs entirely in the browser; the roster lives in this
+  browser's local storage and persists across sessions. Paste student codes
+  (one per line) as they email them in and press <strong>Add to roster</strong>;
+  the name × lesson matrix updates and grows. Each cell is
+  <span class="frac">correct/total</span> · <span class="time">time on task</span>;
+  hover it for the wall clock and the control-move count. Below the matrix, the
+  item analysis turns the same codes around and reads the lessons instead of the
+  students. A code that won't decode (wrong salt, edited, or not a v3 code) is
+  listed separately and never silently scored.</p>
+</header>
+
+<main>
+
+<section class="card">
+  <h2>Add codes</h2>
+  <label class="lbl" for="agg-salt">Salt (the one set in <code class="inl">Score.init</code>; same for all modules unless you set per-module salts)</label>
+  <input id="agg-salt" class="salt" type="text" placeholder="pre-filled with the project salt" autocomplete="off">
+  <label class="lbl" for="agg-codes">Student codes — one per line</label>
+  <textarea id="agg-codes" placeholder="lesson1v6.wJ27Jo30s_NXIhfV12O-y0dRwswzHq8J7N60Fxy2Ak6M.0364d4&#10;lesson2v2.3pQ....&#10;s04v1.Xy...."></textarea>
+  <div class="actions">
+    <button id="agg-add">Add to roster</button>
+    <button id="agg-csv" class="secondary">Export CSV</button>
+    <button id="agg-clear" class="danger">Clear roster</button>
+  </div>
+  <p class="note" id="agg-status"></p>
+</section>
+
+<section class="card">
+  <h2>Roster</h2>
+  <p class="summ" id="agg-summary">No codes added yet.</p>
+  <div class="scroll"><table class="matrix" id="agg-table"></table></div>
+  <div id="agg-bad"></div>
+</section>
+
+<section class="card">
+  <h2>Item analysis — how the lesson did</h2>
+  <p class="summ">The matrix above reads the students. This reads the lessons.
+  Each bar is the fraction of the class that got that one question right. A
+  checkpoint everybody clears is doing its job; one nobody clears is either the
+  hard-won move the lesson exists to teach, or a question that does not say what
+  it means — and which of those it is usually becomes obvious once you open the
+  lesson and look at the item next to the number.</p>
+  <div id="agg-items"><p class="note">Add some codes and this fills in.</p></div>
+</section>
+
+</main>
+
+<script src="../app/assets/score.js"></script>
+<script>
+  const STORE = "bio145-roster-v1";
+  // roster keys are nameToken + NUL + moduleId -- NUL cannot occur in
+  // either half, so the composite key is unambiguous.
+  let roster = load();
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORE)) || {}; }
+    catch (e) { return {}; }
+  }
+  function persist() {
+    try { localStorage.setItem(STORE, JSON.stringify(roster)); } catch (e) {}
+  }
+  const ones = (b) => (b || "").split("").filter(c => c === "1").length;
+  function fmtTime(sec) {
+    if (sec == null) return "—";
+    sec = Math.max(0, sec | 0);
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+    if (h) return h + "h" + (m < 10 ? "0" : "") + m;
+    return m + "m" + (s < 10 ? "0" : "") + s;
+  }
+  function prettyName(tok) {
+    const words = (tok || "").split("_").filter(Boolean);
+    if (!words.length) return "(no name)";
+    return words.map(w => w[0].toUpperCase() + w.slice(1)).join(" ");
+  }
+  // Codes issued before the attention clock carry no activeSec; fall back to
+  // wall clock so those rows still show something, marked as such by the title.
+  const bestTime = (r) => (r.activeSec != null ? r.activeSec : r.elapsedSec);
+  function median(arr) {
+    if (!arr.length) return null;
+    const s = arr.slice().sort((a, b) => a - b);
+    return s[Math.floor(s.length / 2)];
+  }
+  // Natural sort key: split alpha prefix from trailing number ("lesson11" > "lesson2").
+  function natKey(id) {
+    const m = String(id).match(/^([a-z_]*?)(\d*)$/i) || [id, id, ""];
+    return [m[1], m[2] ? parseInt(m[2], 10) : -1];
+  }
+  function cmpId(a, b) {
+    const ka = natKey(a), kb = natKey(b);
+    return ka[0] < kb[0] ? -1 : ka[0] > kb[0] ? 1 : ka[1] - kb[1];
+  }
+
+  async function addCodes() {
+    const salt = document.getElementById("agg-salt").value.trim();
+    const lines = document.getElementById("agg-codes").value.split("\n").map(s => s.trim()).filter(Boolean);
+    const status = document.getElementById("agg-status");
+    if (!lines.length) { status.textContent = "Paste at least one code."; return; }
+    let added = 0, bad = 0;
+    const badLines = [];
+    for (const line of lines) {
+      const d = await Score.decodeCode(line, salt);
+      if (!d || !d.macOk || d.nameToken === undefined) { bad++; badLines.push(line); continue; }
+      const total = (d.pretestBits.length + d.scaffoldBits.length + d.posttestBits.length);
+      const correct = ones(d.pretestBits) + ones(d.scaffoldBits) + ones(d.posttestBits);
+      const manipTotal = Object.values(d.manipulations || {}).reduce((a, b) => a + (b | 0), 0);
+      roster[d.nameToken + "\u0000" + d.moduleId] = {
+        name: d.nameToken, moduleId: d.moduleId, version: d.version,
+        correct, total, elapsedSec: d.elapsedSec, activeSec: d.activeSec, manipTotal,
+        valid: d.ok,
+        // All three bit strings are kept, not only the checkpoints: the item
+        // analysis needs them, and pretest-versus-posttest is the one movement
+        // signal a code carries.
+        pretest: d.pretestBits, scaffold: d.scaffoldBits, posttest: d.posttestBits,
+        manipulations: d.manipulations || {},
+        notes: d.notes || {}
+      };
+      added++;
+    }
+    persist();
+    render();
+    status.textContent = "Added/updated " + added + " code" + (added === 1 ? "" : "s") +
+      (bad ? ("; " + bad + " could not be decoded (see below).") : ".");
+    renderBad(badLines);
+    if (added) document.getElementById("agg-codes").value = "";
+  }
+
+  function render() {
+    const table = document.getElementById("agg-table");
+    const recs = Object.values(roster);
+    const summary = document.getElementById("agg-summary");
+    if (!recs.length) {
+      table.innerHTML = "";
+      summary.textContent = "No codes added yet.";
+      renderItems([]);
+      return;
+    }
+    const names = [...new Set(recs.map(r => r.name))].sort();
+    const mods = [...new Set(recs.map(r => r.moduleId))].sort(cmpId);
+    summary.textContent = names.length + " student" + (names.length === 1 ? "" : "s") +
+      " × " + mods.length + " module" + (mods.length === 1 ? "" : "s") +
+      " — " + recs.length + " submissions.";
+
+    const cell = {};
+    recs.forEach(r => { cell[r.name + "\u0000" + r.moduleId] = r; });
+
+    let html = "<thead><tr><th class='name'>student</th>";
+    mods.forEach(m => html += "<th>" + m + "</th>");
+    html += "</tr></thead><tbody>";
+    names.forEach(n => {
+      html += "<tr><td class='name' title='" + n + "'>" + prettyName(n) + "</td>";
+      mods.forEach(m => {
+        const r = cell[n + "\u0000" + m];
+        if (!r) { html += "<td class='cell muted'>·</td>"; return; }
+        const flag = r.valid ? "" : " <span class='bad' title='tamper tag failed'>!</span>";
+        const tip = r.correct + "/" + r.total + " correct · " +
+          (r.activeSec != null ? fmtTime(r.activeSec) + " attention, " : "") +
+          fmtTime(r.elapsedSec) + " wall clock · " + r.manipTotal + " control moves";
+        html += "<td class='cell' title='" + tip + "'>" +
+          "<span class='frac'>" + r.correct + "/" + r.total + "</span> " +
+          "<span class='time'>" + fmtTime(bestTime(r)) + "</span>" + flag + "</td>";
+      });
+      html += "</tr>";
+    });
+    html += "</tbody>";
+    table.innerHTML = html;
+    renderItems(recs);
+  }
+
+  // ---- Item analysis --------------------------------------------------------
+  // Per-question pass rates across whoever has submitted so far. Only codes
+  // whose tamper tag checked out are counted; an edited code should not get to
+  // shape the read on a lesson.
+  function renderItems(recs) {
+    const mount = document.getElementById("agg-items");
+    const good = recs.filter(r => r.valid);
+    if (!good.length) { mount.innerHTML = "<p class='note'>Add some codes and this fills in.</p>"; return; }
+
+    const byMod = {};
+    good.forEach(r => { (byMod[r.moduleId] = byMod[r.moduleId] || []).push(r); });
+
+    let html = "";
+    Object.keys(byMod).sort(cmpId).forEach(mod => {
+      const rs = byMod[mod];
+      const n = rs.length;
+      html += "<div class='modblock'><h3>" + mod +
+        " <span>· " + n + " submission" + (n === 1 ? "" : "s") + "</span></h3>";
+
+      let any = false;
+      [["pretest", "pretest"], ["scaffold", "checkpoint"], ["posttest", "posttest"]].forEach(pair => {
+        const key = pair[0], label = pair[1];
+        const width = rs.reduce((w, r) => Math.max(w, (r[key] || "").length), 0);
+        for (let i = 0; i < width; i++) {
+          const got = rs.filter(r => (r[key] || "").length > i).map(r => r[key][i]);
+          if (!got.length) continue;
+          any = true;
+          const hits = got.filter(c => c === "1").length;
+          const pct = Math.round(100 * hits / got.length);
+          const cls = pct < 40 ? "low" : pct < 70 ? "mid" : "";
+          html += "<div class='itemrow'>" +
+            "<span class='lbl'>" + label + " " + (i + 1) + "</span>" +
+            "<span class='bar'><i class='" + cls + "' style='width:" + pct + "%'></i></span>" +
+            "<span class='n'>" + pct + "%  " + hits + "/" + got.length + "</span></div>";
+        }
+      });
+      if (!any) html += "<p class='note'>No scored questions in this module.</p>";
+
+      // Movement, when the module bookends with a pretest and a posttest.
+      const preW = rs.reduce((w, r) => Math.max(w, (r.pretest || "").length), 0);
+      const postW = rs.reduce((w, r) => Math.max(w, (r.posttest || "").length), 0);
+      const foot = [];
+      if (preW && postW) {
+        const preRate = rs.reduce((a, r) => a + ones(r.pretest), 0) / (preW * n);
+        const postRate = rs.reduce((a, r) => a + ones(r.posttest), 0) / (postW * n);
+        const delta = Math.round(100 * (postRate - preRate));
+        foot.push("pretest " + Math.round(100 * preRate) + "% → posttest " +
+          Math.round(100 * postRate) + "% (" + (delta >= 0 ? "+" : "") + delta + " points)");
+      }
+      const moves = rs.map(r => r.manipTotal | 0);
+      foot.push("control moves: median " + median(moves) + ", range " +
+        Math.min.apply(null, moves) + "–" + Math.max.apply(null, moves));
+      const act = rs.filter(r => r.activeSec != null).map(r => r.activeSec);
+      if (act.length) {
+        foot.push("attention: median " + fmtTime(median(act)) +
+          ", range " + fmtTime(Math.min.apply(null, act)) + "–" + fmtTime(Math.max.apply(null, act)));
+      }
+      const dead = rs.filter(r => (r.manipTotal | 0) === 0).length;
+      const pills = dead ? "<span class='flagpill'>" + dead + " never moved a control</span>" : "";
+      html += "<p class='modfoot'>" + foot.join(" · ") + pills + "</p></div>";
+    });
+    mount.innerHTML = html;
+  }
+
+  function renderBad(badLines) {
+    const box = document.getElementById("agg-bad");
+    if (!badLines || !badLines.length) { box.innerHTML = ""; return; }
+    box.innerHTML = "<div class='badlist'>Could not decode (wrong salt, edited, or not a v3 code):\n  " +
+      badLines.map(s => s.length > 60 ? s.slice(0, 57) + "…" : s).join("\n  ") + "</div>";
+  }
+
+  function exportCsv() {
+    const recs = Object.values(roster);
+    if (!recs.length) { document.getElementById("agg-status").textContent = "Roster is empty."; return; }
+    // Long format, one row per submission: the shape that reads straight into
+    // R or a pivot table. Column names match scripts/decode_codes.py --csv so
+    // the two tools' output can be stacked.
+    const header = "name_token,name,module,version,correct,out_of,percent," +
+      "pretest_bits,checkpoint_bits,posttest_bits,active_sec,elapsed_sec," +
+      "moves_total,moves_by_stage,tamper_ok,notes";
+    const rows = recs
+      .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : cmpId(a.moduleId, b.moduleId))
+      .map(r => [
+        r.name, prettyName(r.name), r.moduleId, r.version,
+        r.correct, r.total, r.total ? Math.round(100 * r.correct / r.total) : "",
+        r.pretest || "", r.scaffold || "", r.posttest || "",
+        r.activeSec != null ? r.activeSec : "", r.elapsedSec,
+        r.manipTotal,
+        Object.keys(r.manipulations || {}).sort().map(k => k + r.manipulations[k]).join(" "),
+        r.valid ? 1 : 0,
+        /* the lesson's unscored values (lesson 15's top scores), as decode_codes.py's notes column starts */
+        Object.keys(r.notes || {}).sort().map(k => k + "=" + r.notes[k]).join(" ")
+      ].join(","));
+    const csv = header + "\n" + rows.join("\n");
+    navigator.clipboard.writeText(csv).then(
+      () => { document.getElementById("agg-status").textContent = "Copied " + recs.length + " rows to clipboard as CSV (long format)."; },
+      () => {
+        // Fallback: offer a download.
+        const blob = new Blob([csv], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob); a.download = "bio145_roster.csv"; a.click();
+      }
+    );
+  }
+
+  // Pre-fill the salt with the project default so most codes decode with no setup.
+  document.getElementById("agg-salt").value = (window.Score && Score.DEFAULT_SALT) || "";
+  document.getElementById("agg-add").addEventListener("click", addCodes);
+  document.getElementById("agg-csv").addEventListener("click", exportCsv);
+  document.getElementById("agg-clear").addEventListener("click", () => {
+    if (!confirm("Clear the entire roster from this browser?")) return;
+    roster = {}; persist(); render(); renderBad([]);
+    document.getElementById("agg-status").textContent = "Roster cleared.";
+  });
+
+  render();
+</script>
+
+</body>
+</html>

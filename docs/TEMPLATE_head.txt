@@ -1,0 +1,26 @@
+<!-- not a page: the shared head and tail every lesson copies (kept here so a new lesson starts from one place)
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson N</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+</head>
+<body>
+<header><h1>Lesson N</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"><a href="#stageA" id="tocA">A</a> <a href="#stageB" id="tocB" class="locked">B</a></nav>
+  ... stages ...
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson N. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+-->

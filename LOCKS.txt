@@ -1,0 +1,7 @@
+# BIO 145 — release gate
+# One row per page.  o = open   x = locked.  Change a letter, commit, push.
+# Add ?preview=1 to a URL to see a locked page. Same mechanics as BIO 202's LOCKS.txt (see that file's header).
+display: dim
+lesson1         o   Scale and the levels of life
+lesson2         o   Greedy oxygen: who gets the electrons, and what shape does with it
+lesson3         o   Building molecules: functional groups and the joins between monomers
