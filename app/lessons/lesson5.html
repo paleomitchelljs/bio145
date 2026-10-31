@@ -23,20 +23,42 @@
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
 <script src="../assets/kit.js"></script>
+<script src="../assets/atoms.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
 /* steroid core drawn: three six-rings and a five-ring */
 function ring(ctx, cx, cy, r, n, rot) { ctx.beginPath(); for (let i = 0; i < n; i++) { const a = rot + i * 2 * Math.PI / n; const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); ctx.stroke(); }
 function steroid(ctx, w, h) { ctx.strokeStyle = "#222"; ctx.lineWidth = 2; const r = 26, dx = r * Math.sqrt(3), cx = w / 2 - dx, cy = h / 2 + 12; ring(ctx, cx, cy, r, 6, Math.PI / 6); ring(ctx, cx + dx, cy - r * 1.5, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx, cy, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx + dx * 0.95, cy - r * 1.95, r * 0.88, 5, Math.PI / 10); }
-Kit.run({ id: "b145_lesson5", num: 5, stages: [
+/* side chains, drawn with the atoms widget (copied from lesson 6) */
+const SIDE = {
+  alanine:   { k: "nonpolar", atoms: [["C", 0, 0], ["C", 0, 1], ["H", -0.8, 1.4], ["H", 0.8, 1.4], ["H", 0, 1.9]], bonds: [[0, 1], [1, 2], [1, 3], [1, 4]] },
+  valine:    { k: "nonpolar", atoms: [["C", 0, 0], ["C", 0, 1], ["C", -0.9, 1.6], ["C", 0.9, 1.6], ["H", -1.6, 1.1], ["H", 1.6, 1.1], ["H", -0.9, 2.5], ["H", 0.9, 2.5]], bonds: [[0, 1], [1, 2], [1, 3], [2, 4], [3, 5], [2, 6], [3, 7]] },
+  serine:    { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["O", 0, 2], ["H", 0.8, 2.4]], bonds: [[0, 1], [1, 2], [2, 3]] },
+  threonine: { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["O", -0.9, 1.5], ["H", -1.6, 1.1], ["C", 0.9, 1.6], ["H", 1.6, 1.2], ["H", 0.9, 2.5]], bonds: [[0, 1], [1, 2], [2, 3], [1, 4], [4, 5], [4, 6]] },
+  cysteine:  { k: "polar", atoms: [["C", 0, 0], ["C", 0, 1], ["S", 0, 2.1], ["H", 0.85, 2.5]], bonds: [[0, 1], [1, 2], [2, 3]] },
+  "aspartic acid": { k: "charged", atoms: [["C", 0, 0], ["C", 0, 1], ["C", 0, 2], ["O", -0.85, 2.5], ["O", 0.85, 2.5]], bonds: [[0, 1], [1, 2], [2, 3, 2], [2, 4]], lab: "−" },
+  lysine:    { k: "charged", atoms: [["C", 0, 0], ["C", 0, 1], ["C", 0, 2], ["N", 0, 3], ["H", -0.8, 3.4], ["H", 0.8, 3.4], ["H", 0, 3.9]], bonds: [[0, 1], [1, 2], [2, 3], [3, 4], [3, 5], [3, 6]], lab: "+" }
+};
+function drawSide(name) {
+  const d = SIDE[name];
+  return (ctx, w, h) => {
+    const mol = { atoms: d.atoms.map(([el, x, y]) => ({ el, x, y })), bonds: d.bonds.map(b => [b[0], b[1], b[2] || 1]) };
+    ctx.strokeStyle = "#c9c5b8"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(w / 2 - 90, 24); ctx.lineTo(w / 2 + 90, 24); ctx.stroke();
+    ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText("backbone", w / 2 + 96, 28);
+    Atoms.drawMol(ctx, mol, { scale: 34, ox: w / 2, oy: 24, charges: true });
+    if (d.lab) { ctx.fillStyle = d.lab === "+" ? "#2f6b8f" : "#b23a48"; ctx.font = "600 20px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText(d.lab, w / 2 + 50, h - 24); }
+  };
+}
+Kit.run({ id: "b145_lesson5", num: 5, version: 2, stages: [
   { type: "sort", title: "What proteins do", tip: "A verb in the cell needs a protein noun.",
     voice: ["Proteins do stuff. Whenever the cell does something, a protein is doing it."],
     bins: ["Enzyme", "Transport", "Motility", "Regulation", "Defense", "Structure", "Storage"],
     items: [["Amylase breaks starch down", 0], ["A neuron's ion channel", 1], ["Hemoglobin carries oxygen", 1], ["Myosin slides along actin", 2], ["Kinesin walks along a microtubule", 2], ["Insulin tells cells to take up glucose", 3], ["An antibody binds a bacterium", 4], ["Collagen in skin", 5], ["Keratin in hair", 5], ["Albumin in egg white", 6]] },
-  { type: "sort", title: "Side chains", tip: "All twenty amino acids share a backbone; only the side chain differs. The same twenty are used in bacteria and trees.",
-    voice: ["Amino group, carboxyl group, and a variable side chain. Nonpolar, polar, or charged: that decides where it sits in the fold."],
+  { type: "classify", title: "Read the side chain", tip: "Each card is one amino acid's side chain, hanging from the backbone (grey bar). Mostly carbon and hydrogen: nonpolar. An O–H or S–H, with its partial charges: polar. A group that has gained or lost a proton and carries a full charge: charged. The same twenty amino acids are used by bacteria and trees.",
+    voice: ["Amino group, carboxyl group, and a variable side chain. Nonpolar, polar, or charged: that decides where it sits in the fold.", "Read the atoms, not the name."],
+    solved: "C–H only is nonpolar; an O–H or S–H makes it polar; a carboxylate (−) or an amine (+) makes it charged. In water, the nonpolar ones end up buried.",
     bins: ["Nonpolar", "Polar, uncharged", "Charged"],
-    items: [["Leucine", 0], ["Valine", 0], ["Alanine", 0], ["Phenylalanine", 0], ["Serine", 1], ["Threonine", 1], ["Glutamine", 1], ["Cysteine", 1], ["Lysine", 2], ["Arginine", 2], ["Aspartate", 2], ["Glutamate", 2]] },
+    items: Object.keys(SIDE).map(n => ({ q: n[0].toUpperCase() + n.slice(1), bin: ["nonpolar", "polar", "charged"].indexOf(SIDE[n].k), w: 300, h: 180, draw: drawSide(n) })) },
   { type: "sort", title: "Four levels of structure", tip: "Primary is the sequence; secondary is local backbone shapes; tertiary is the whole chain's fold; quaternary is several chains together.",
     voice: ["Sequence, then local shapes, then the fold, then the team of chains."],
     bins: ["Primary", "Secondary", "Tertiary", "Quaternary"],

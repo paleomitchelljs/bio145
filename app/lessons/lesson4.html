@@ -21,7 +21,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">E</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — build the target molecule (JM: "Give students a molecule diagram & options to click bonds to change
@@ -104,8 +104,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">E</h2>
-  <div class="lock-banner">Finish Stage D to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul><li>Name the group, the join, the building block. Two right in a row masters a card; drawn cards come back with new molecules.</li></ul></div>
   </div>
@@ -429,6 +429,11 @@ const C_BANK = ["hydroxyl", "carbonyl", "carboxyl", "amino", "sulfhydryl", "phos
   "dehydration synthesis", "hydrolysis", "glycosidic linkage", "peptide bond", "ester linkage", "phosphodiester linkage", "amino acid", "nucleotide", "monosaccharide",
   "polypeptide", "triglyceride", "unsaturated", "saturated", "lipids"];
 C_CARDS.push(
+  { q: "Lipids are grouped together because they are all…", a: ["hydrophobic", "nonpolar", "water-fearing"] },
+  { q: "A lipid with a polar head and two nonpolar tails.", a: ["phospholipid", "phospholipids"] },
+  { q: "The enzyme that breaks down lactose.", a: ["lactase"] },
+  { q: "The enzyme that breaks down cellulose (made by gut microbes, not by us).", a: ["cellulase"] },
+  { q: "The enzyme in saliva that breaks down starch.", a: ["amylase"] },
   { q: "A single sugar such as glucose.", a: ["monosaccharide", "a monosaccharide"] },
   { q: "Two sugars joined, such as sucrose.", a: ["disaccharide", "a disaccharide"] },
   { q: "Many sugars joined in a chain.", a: ["polysaccharide", "a polysaccharide"] },
@@ -440,7 +445,7 @@ C_CARDS.push(
   { q: "The structural polysaccharide of fungal walls and insect exoskeletons.", a: "chitin" },
   { q: "Starch has α linkages and cellulose has ___ linkages.", a: ["beta", "β"] },
   { q: "Dietary fiber is mostly which polysaccharide?", a: "cellulose" });
-C_BANK.push("disaccharide", "polysaccharide", "fructose", "galactose", "starch", "glycogen", "cellulose", "chitin", "beta", "alpha");
+C_BANK.push("phospholipid", "lactase", "cellulase", "amylase", "disaccharide", "polysaccharide", "fructose", "galactose", "starch", "glycogen", "cellulose", "chitin", "beta", "alpha");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -448,7 +453,7 @@ function C_start() {
     onFirst: (i, ok) => Lesson.record(14 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") });
 }
 
-const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", next: "E", stages: [
+const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", next: "F", stages: [
   { key: "X1", label: "C", type: "sort", title: "Starch, glycogen, cellulose, chitin (book, chapter 3)", tip: "All four are long chains of sugar joined by glycosidic bonds. They differ in the monomer, the linkage (α or β) and the branching.",
     voice: ["Polysaccharides: storage in plants (starch), storage in animals (glycogen), structure in plants (cellulose), structure in fungi and arthropods (chitin).", "Starch and cellulose are both chains of glucose. The difference is which way each ring is turned: α or β."],
     bins: ["Starch", "Glycogen", "Cellulose", "Chitin"],
@@ -462,10 +467,15 @@ const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", ne
       { q: "Starch and cellulose are both polymers of glucose. They differ in…", ok: "The orientation of the linkage between glucoses (α or β)", no: ["The element in the monomer", "Whether they contain nitrogen", "The number of rings per glucose"], why: "Same monomer, different join." },
       { q: "Humans digest starch but not cellulose because…", ok: "Our enzymes fit the α linkage, not the β linkage", no: ["Cellulose is made of a different sugar", "Cellulose has no bonds to break", "Starch is hydrophobic"], why: "Cows and termites rely on microbes that make the right enzyme." },
       { q: "After a meal, excess glucose is stored in the liver and muscles as…", ok: "Glycogen", no: ["Starch", "Cellulose", "Chitin"], why: "Plants store starch instead." },
-      { q: "Which polysaccharide is the most highly branched?", ok: "Glycogen", no: ["Cellulose", "Chitin", "Amylose"], why: "More ends means faster release of glucose." }] }
+      { q: "Which polysaccharide is the most highly branched?", ok: "Glycogen", no: ["Cellulose", "Chitin", "Amylose"], why: "More ends means faster release of glucose." }] },
+  { key: "X3", label: "E", type: "classify", title: "Lipids: water-fearing", tip: "Lipids are defined by not mixing with water, not by a monomer. A fat (triglyceride) is glycerol with three fatty acids joined by ester bonds. Straight, saturated tails pack tight; kinked, unsaturated tails don't. A phospholipid swaps one tail for a charged phosphate head, so one end loves water and the other fears it.",
+    voice: ["Butter and lard are solid; plant oils run. Soap, bubbles, and every membrane: a polar head and nonpolar tails.", "HDL and LDL are two container trucks carrying fat through watery blood."],
+    solved: "Straight tails stack and set solid; kinks keep oils liquid. A head that loves water on tails that fear it assembles itself into a bilayer, and lipids travel in blood only packed inside protein trucks.",
+    bins: ["Saturated fat", "Unsaturated fat", "Phospholipid", "Lipoprotein (HDL, LDL)"],
+    items: [["Butter: solid at room temperature", 0], ["Lard", 0], ["Straight tails with only single C–C bonds", 0], ["Olive oil: liquid at room temperature", 1], ["Fish oil rich in omega-3 fatty acids", 1], ["Kinked tails with C=C double bonds", 1], ["A polar head and two nonpolar tails", 2], ["Assembles into a bilayer by itself in water", 2], ["Works like soap or detergent", 2], ["A protein shell carrying fat and cholesterol through the blood", 3]] }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson4", version: 2, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson4", version: 3, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "8 of 8"); Lesson.tick("B", "rounds", true, "6 of 6"); } });
