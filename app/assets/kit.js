@@ -4,7 +4,8 @@
      Kit.run({ id: "b145_lesson3", num: 3, stages: [
        { type: "sort",  title, tip, voice: ["draft bullet", ...], bins: ["a","b"], items: [["text", 0], ["text", "b"]] },
        { type: "order", title, voice, items: ["first", "second", ...] },                 correct order; shown shuffled
-       { type: "pick",  title, voice, qs: [ { q, ok: "right", no: ["wrong", ...], why, draw?, w?, h? } | { make: () => qobj } ] },
+       { type: "pick",  title, voice, qs: [ { q, ok: "right", no: ["wrong", ...], why, draw?, after?, w?, h? } | { make: () => qobj } ] },
+                        after: a drawing shown once the question is answered right (predict, then see)
        { type: "sim",   title, voice, w, h, controls: [ {id,label,min,max,step,val,fmt?} | {id,label,type:"check",val} |
                         {id,label,type:"select",opts:[[value,label],...],val} ], draw(ctx,w,h,S), readout?(S) -> html,
                         goals: [ {text, test(S) -> bool} ] },
@@ -184,6 +185,7 @@ const Kit = (function () {
         if (!missed) Lesson.record(st.off + qi, ok);
         if (!ok) { missed = true; b.classList.add("wrong"); b.disabled = true; $(st.k + "_v").innerHTML = '<span class="off">✗ Not that one.</span> Try again.'; return; }
         b.classList.add("right"); answered++;
+        if (cur.after) { const cv = $(st.k + "_cv"); cv.innerHTML = ""; const c = document.createElement("canvas"); c.width = cur.w || 380; c.height = cur.h || 150; cv.appendChild(c); const g = hiDPI(c); cur.after(g.ctx, g.w, g.h); }
         $(st.k + "_o").querySelectorAll("button").forEach(x => x.disabled = true);
         $(st.k + "_v").innerHTML = '<span class="ok">✓ ' + esc(cur.ok) + ".</span> " + (cur.why || "");
         Lesson.tick(st.k, "m", answered === n, answered + " of " + n);

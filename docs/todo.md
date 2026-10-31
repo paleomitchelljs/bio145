@@ -37,16 +37,16 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [ ] 11: tonicity questions repeat lesson 10's Stage B.
 - [ ] 12: Hedgehog's chain of inhibitors (Patched, Smoothened, Gli) as a predict-the-output stage.
 - [ ] 15: a hands-on glycolysis ledger (investment, payoff). The drug sort is near one-to-one.
-- [ ] 16: predict first, then run the ETC sim.
+- [x] 16: predict first, then run the ETC sim.
 - [ ] 17: six stages; trim. The absorption sim overlaps 18.
 - [ ] 18: the electron's energy path (Z-scheme) as a manipulation, reusing lesson 13's hill.
 - [ ] 19: goal 1 silently needs heat above about 38%. Say so or change the test.
 - [ ] 21: replace the mitosis order (duplicates 23 Stage M) with a mitotic-index classify.
-- [ ] 22: the spindle photobleaching experiment as a prediction. A cyclin-level trace.
+- [x] 22: the spindle photobleaching experiment as a prediction. A cyclin-level trace.
 - [ ] 31: the RNA zoo sort duplicates 33.
-- [ ] 33: predict all four lac conditions before toggling. Add a repressor-mutant or operator-mutant puzzle.
+- [x] 33: predict all four lac conditions before toggling. Add a repressor-mutant or operator-mutant puzzle.
 - [ ] 35: make "read top to bottom" one of the Sanger distractors.
-- [ ] 36: the editing sim is two checkboxes. Predict first.
+- [x] 36: the editing sim is two checkboxes. Predict first.
 - [ ] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases.
 
 ## Across lessons

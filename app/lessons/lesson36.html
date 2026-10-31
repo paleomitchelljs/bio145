@@ -26,25 +26,29 @@
 <script>
 const C = (q, a) => ({ q, a });
 const dna = "…ATGGCATTACGCGTTGACCGG…";
-const edit = S => !S.match ? { out: "No cut: the guide does not match the target, so Cas9 leaves the DNA alone", cut: false } : S.tmpl ? { out: "Cut, then the cell copies the template: a precise correction", cut: true, fix: true } : { out: "Cut, then sloppy end joining: small insertions or deletions, usually a frameshift knockout", cut: true, fix: false };
-Kit.run({ id: "b145_lesson36", num: 36, stages: [
+const edit = S => !S.match ? { word: "Nothing: it is not cut", out: "No match, no cut: Cas9 leaves the DNA alone, template or not.", cut: false }
+  : S.tmpl ? { word: "Precisely changed: the template's base is copied in", out: "Cut, then the cell copies the template.", cut: true, fix: true }
+  : { word: "Knocked out: a few bases lost or added, the reading frame shifts", out: "Cut, then sloppy end joining: an insertion or deletion, usually a frameshift.", cut: true, fix: false };
+const editDraw = (S, reveal) => (ctx, w, h) => {
+  const e = edit(S); ctx.font = "600 15px ui-monospace,Menlo,monospace"; ctx.fillStyle = "#1d1d1b";
+  ctx.fillText("DNA  " + (!reveal || !e.cut ? dna : e.fix ? "…ATGGCATAACGCGTTGACCGG…" : "…ATGGCATTA  GTTGACCGG…"), 20, 50);
+  ctx.fillStyle = S.match ? "#4a7a2a" : "#a8331a"; ctx.fillRect(110, 70, 220, 12); ctx.fillStyle = "#1d1d1b"; ctx.font = "12px sans-serif"; ctx.fillText("guide RNA" + (S.tmpl ? "   +   repair template" : ""), 110, 100);
+  if (reveal && e.cut) { ctx.strokeStyle = "#a8331a"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(215, 20); ctx.lineTo(235, 58); ctx.stroke(); ctx.lineWidth = 1; }
+  ctx.fillStyle = "#6b6b68"; ctx.fillText(reveal ? e.out : "", 20, 135);
+};
+Kit.run({ id: "b145_lesson36", num: 36, version: 2, stages: [
   { type: "order", title: "CRISPR in bacteria", tip: "A bacterial immune system: clustered regularly interspaced short palindromic repeats.",
     voice: ["Phage siege: surviving bacteria had defenses. Cas1 and Cas2 capture viral DNA and store it as a spacer between repeats in the CRISPR locus.", "A guide RNA has a constant part and a variable part, like an antibody. Cas9 cuts what the guide matches."],
     items: ["A phage injects its DNA", "Cas1 and Cas2 capture a piece of it", "The piece is stored as a spacer in the CRISPR locus", "The locus is transcribed into guide RNAs", "Cas9 with a guide RNA finds the matching viral DNA", "Cas9 cuts the viral DNA"] },
-  { type: "sim", title: "Editing a genome", tip: "Cas9 cuts where the 20-base guide matches (next to a PAM). The cell repairs the cut: non-homologous end joining is error-prone; given a template, repair copies it.",
-    voice: ["Make a custom guide. NHEJ gives frameshift knockouts; a template gives precise changes. The cell does the repair."],
-    w: 640, h: 170,
-    controls: [{ id: "match", label: "Guide matches the target", type: "check", val: false }, { id: "tmpl", label: "Repair template supplied", type: "check", val: false }],
-    readout: S => edit(S).out,
-    draw(ctx, w, h, S) {
-      const e = edit(S); ctx.font = "600 15px ui-monospace,Menlo,monospace"; ctx.fillStyle = "#222"; ctx.fillText("DNA  " + (e.cut ? (e.fix ? "…ATGGCATAACGCGTTGACCGG…" : "…ATGGCATTA  GTTGACCGG…") : dna), 30, 70);
-      ctx.fillStyle = S.match ? "#2e7d32" : "#c0392b"; ctx.fillRect(110, 90, 220, 14); ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; ctx.fillText("guide RNA " + (S.match ? "(matches)" : "(mismatched)"), 110, 125);
-      if (e.cut) { ctx.strokeStyle = "#c0392b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(220, 40); ctx.lineTo(240, 78); ctx.stroke(); }
-    },
-    goals: [
-      { text: "A mismatched guide: nothing is cut", test: S => !S.match && !edit(S).cut },
-      { text: "Knock a gene out: matching guide, no template", test: S => S.match && !S.tmpl && edit(S).cut && !edit(S).fix },
-      { text: "Correct a mutation precisely: matching guide and a template", test: S => S.match && S.tmpl && edit(S).fix }] },
+  { type: "pick", title: "Predict the edit", tip: "Cas9 cuts both strands where its 20-base guide RNA matches the DNA. The cell repairs the cut itself: joining the ends directly is sloppy and usually adds or loses a few bases; given a repair template with matching ends, it copies the template instead.",
+    solved: "Cas9 only cuts where the guide matches. What the gene becomes depends on the cell's repair: sloppy joining knocks it out with a frameshift; a template writes in a precise change.",
+    voice: ["Make a custom guide. The cell does the repair."],
+    qs: [
+      [{ match: false, tmpl: false }, "Cas9 with a guide that matches nothing in this gene."],
+      [{ match: true, tmpl: false }, "Cas9 with a matching guide; no template."],
+      [{ match: true, tmpl: true }, "Cas9 with a matching guide, plus a repair template carrying one changed base."],
+      [{ match: false, tmpl: true }, "A template, but a guide that matches nothing in this gene."]
+    ].map(([S, txt]) => { const e = edit(S); return { q: txt + " What happens to the gene?", ok: e.word, no: ["Nothing: it is not cut", "Knocked out: a few bases lost or added, the reading frame shifts", "Precisely changed: the template's base is copied in"].filter(x => x !== e.word), w: 640, h: 150, draw: editDraw(S, false), after: editDraw(S, true), why: e.out }; }) },
   { type: "order", title: "Casgevy for sickle cell disease", tip: "Edit the cells outside the body, then put them back.",
     voice: ["A point mutation in β-hemoglobin. The therapy reactivates fetal hemoglobin. Bone marrow out, edit ex vivo, ablate the marrow, reinfuse."],
     items: ["Stem cells are taken from the patient's bone marrow", "The cells are edited in the lab to reactivate fetal hemoglobin", "The patient's own marrow is cleared with chemotherapy", "The edited cells are infused back", "They settle in the marrow and make red cells with fetal hemoglobin"] },

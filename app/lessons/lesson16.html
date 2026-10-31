@@ -26,23 +26,22 @@
 <script>
 const C = (q, a) => ({ q, a });
 const etc = S => { const o2 = S.o2 && !S.cn; const flow = o2 ? 1 : 0, unc = S.unc / 100; const grad = flow * (1 - 0.85 * unc), atp = 2 + (o2 ? 26 * grad + 4 : 0) + 0, heat = o2 ? 0.25 + 0.7 * unc : 0.1; return { o2, grad, atp: o2 ? 2 + 2 + 28 * grad : 4, heat: Math.min(1, heat), accum: !o2 }; };
-Kit.run({ id: "b145_lesson16", num: 16, stages: [
-  { type: "sim", title: "The electron transport chain", tip: "Electrons flow down the chain pumping protons; protons flowing back through ATP synthase make ATP. Oxygen takes the electrons at the end. Cyanide blocks the last carrier. An uncoupler (brown fat's UCP1) lets protons leak back and make heat.",
+const etcDraw = S => (ctx, w, h) => {
+  const e = etc(S); ctx.font = "12px sans-serif";
+  [["proton gradient", e.grad, "#2f6b8f"], ["ATP", e.atp / 32, "#4a7a2a"], ["heat", e.heat, "#a8331a"]].forEach(([n, v, c], i) => { const x = 40 + i * 150; ctx.fillStyle = "#e2e0d9"; ctx.fillRect(x, 20, 80, 160); ctx.fillStyle = c; ctx.fillRect(x, 180 - 160 * v, 80, 160 * v); ctx.fillStyle = "#1d1d1b"; ctx.fillText(n, x + 4, 200); });
+  ctx.fillStyle = "#6b6b68"; ctx.fillText("e⁻ → chain → " + (e.o2 ? "O₂ → H₂O" : "(no acceptor)"), 40, 216);
+};
+Kit.run({ id: "b145_lesson16", num: 16, version: 2, stages: [
+  { type: "pick", title: "Predict the chain", tip: "Electrons flow down the chain, pumping protons; protons flowing back through ATP synthase make ATP. Oxygen takes the electrons at the end. Cyanide blocks the last carrier. An uncoupling protein (brown fat's UCP1) lets protons leak back without making ATP. ATP numbers are per glucose, rounded.",
     voice: ["Carriers are cakes: they can't buy anything elsewhere. They are sold for cash (ATP) at the chain.", "The dam is the proton gradient; ATP synthase is the water turbine. About 40% efficient; the rest is heat, which is sometimes the point."],
-    w: 620, h: 260,
-    controls: [{ id: "o2", label: "Oxygen present", type: "check", val: true }, { id: "cn", label: "Cyanide", type: "check", val: false }, { id: "unc", label: "Uncoupling protein (leaky membrane)", min: 0, max: 100, step: 1, val: 0, fmt: v => v + "%" }],
-    readout: S => { const e = etc(S); return "ATP per glucose ≈ <b>" + e.atp.toFixed(0) + "</b> · heat <b>" + (e.heat * 100).toFixed(0) + "%</b>" + (e.accum ? ' · <span class="off">electrons back up, NADH piles up, cell must ferment</span>' : ""); },
-    draw(ctx, w, h, S) {
-      const e = etc(S); ctx.font = "12px sans-serif";
-      const bars = [["proton gradient", e.grad, "#2e6da4"], ["ATP", e.atp / 32, "#2e7d32"], ["heat", e.heat, "#c0392b"]];
-      bars.forEach(([n, v, c], i) => { const x = 60 + i * 150; ctx.fillStyle = "#eee"; ctx.fillRect(x, 30, 80, 170); ctx.fillStyle = c; ctx.fillRect(x, 200 - 170 * v, 80, 170 * v); ctx.fillStyle = "#222"; ctx.fillText(n, x + 4, 222); });
-      ctx.fillStyle = "#555"; ctx.fillText("e⁻ → chain → " + (e.o2 ? "O₂ → H₂O" : "(no acceptor)"), 60, 248);
-    },
-    goals: [
-      { text: "Normal cell with oxygen and a tight membrane: make about 30 or more ATP", test: S => etc(S).atp >= 30 },
-      { text: "Take away the oxygen: ATP falls to the glycolysis level", test: S => !S.o2 && etc(S).atp <= 4 },
-      { text: "Add cyanide with oxygen present: the chain still stops", test: S => S.o2 && S.cn && etc(S).atp <= 4 },
-      { text: "Turn the uncoupler up (brown fat): lots of heat, little ATP", test: S => S.o2 && !S.cn && S.unc >= 80 && etc(S).heat >= 0.8 && etc(S).atp <= 12 }] },
+    solved: "No oxygen or a blocked carrier stops the chain, leaving glycolysis's few ATP. A leaky membrane keeps the chain running but turns the gradient into heat instead of ATP.",
+    qs: [
+      [{ o2: true, cn: false, unc: 0 }, "A muscle cell with plenty of oxygen."],
+      [{ o2: false, cn: false, unc: 0 }, "The same cell, out of oxygen."],
+      [{ o2: true, cn: true, unc: 0 }, "Oxygen present, but cyanide has bound the last carrier."],
+      [{ o2: true, cn: false, unc: 100 }, "A brown-fat cell, its uncoupling protein wide open."]
+    ].map(([S, txt]) => { const e = etc(S), word = e.atp >= 30 ? "About 30 ATP; little heat" : e.atp <= 4 ? "About 4 ATP (glycolysis only); the chain stops" : "About 8 ATP, and much of the rest as heat";
+      return { q: txt + " What does a glucose give?", ok: word, no: ["About 30 ATP; little heat", "About 4 ATP (glycolysis only); the chain stops", "About 8 ATP, and much of the rest as heat"].filter(x => x !== word), w: 560, h: 220, after: etcDraw(S), why: e.accum ? "Electrons back up and NADH piles up: the cell must ferment." : "" }; }) },
   { type: "pick", title: "Counting carbons and ATP", tip: "The citric acid cycle makes no oxygen-needing ATP itself; it loads carriers.",
     voice: ["Acetyl (2 carbons) joins oxaloacetate (4) to make citrate (6). Two carbons leave as CO₂ each turn; two turns per glucose.", "Weight loss is exhaled carbon: fat leaves as breath."],
     qs: [

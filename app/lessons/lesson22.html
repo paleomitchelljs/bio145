@@ -34,23 +34,39 @@ const fate = S => {
   if (S.damage || !S.attached) return { stop: null, msg: "Checkpoints gone: damaged or unbalanced cell divides anyway" };
   return { stop: null, msg: "All clear: the cell completes mitosis" };
 };
-Kit.run({ id: "b145_lesson22", num: 22, stages: [
-  { type: "sim", title: "Checkpoints", tip: "The default is stop. G1/S, G2/M and the spindle assembly checkpoint each need a green light. There is no checkpoint in S phase.",
-    voice: ["Checkpoint proteins block progress; CDKs degrade the blockers, but need their cyclin partner. Cyclin levels oscillate.", "Multicellularity requires restraint: tumor suppressors are brakes, oncogenes are stuck accelerators. Cancer needs several mutations."],
-    w: 640, h: 170,
-    controls: [{ id: "growth", label: "Growth signal present", type: "check", val: true }, { id: "damage", label: "DNA damaged", type: "check", val: false }, { id: "attached", label: "All chromosomes attached to the spindle", type: "check", val: true }, { id: "suppress", label: "Tumor suppressors working", type: "check", val: true }, { id: "onco", label: "Oncogene stuck on", type: "check", val: false }],
-    readout: S => fate(S).msg,
-    draw(ctx, w, h, S) {
-      const f = fate(S), stops = ["G1/S checkpoint", "G2/M checkpoint", "spindle checkpoint (metaphase)"], xs = [90, 270, 450]; ctx.font = "12px sans-serif";
-      ctx.strokeStyle = "#999"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(30, 70); ctx.lineTo(w - 30, 70); ctx.stroke();
-      stops.forEach((s, i) => { ctx.fillStyle = f.stop === s ? "#c0392b" : "#2e7d32"; ctx.beginPath(); ctx.arc(xs[i], 70, 14, 0, 7); ctx.fill(); ctx.fillStyle = "#222"; ctx.fillText(s.replace(" (metaphase)", ""), xs[i] - 40, 108); });
-      ctx.fillStyle = "#222"; ctx.fillText("G1 → S → G2 → M →", 30, 40);
-    },
-    goals: [
-      { text: "Hold a damaged cell at the G1/S checkpoint", test: S => S.damage && S.growth && S.suppress && !S.onco && fate(S).stop === "G1/S checkpoint" },
-      { text: "Hold a cell with an unattached chromosome at the spindle checkpoint", test: S => !S.attached && S.growth && !S.damage && S.suppress && !S.onco && fate(S).stop && fate(S).stop.indexOf("spindle") === 0 },
-      { text: "Let a damaged cell divide anyway: it needs its tumor suppressors broken", test: S => S.damage && !S.suppress && fate(S).stop === null },
-      { text: "Starve the cell of growth signal: it does not enter S", test: S => !S.growth && !S.onco && fate(S).stop === "G1/S checkpoint" }] },
+const ckDraw = (S, reveal) => (ctx, w, h) => {
+  const f = fate(S), stops = ["G1/S checkpoint", "G2/M checkpoint", "spindle checkpoint (metaphase)"], xs = [90, 250, 410]; ctx.font = "12px sans-serif";
+  ctx.strokeStyle = "#6b6b68"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(30, 60); ctx.lineTo(w - 30, 60); ctx.stroke(); ctx.lineWidth = 1;
+  stops.forEach((s, i) => { ctx.fillStyle = !reveal ? "#e2e0d9" : f.stop === s ? "#a8331a" : "#4a7a2a"; ctx.beginPath(); ctx.arc(xs[i], 60, 13, 0, 7); ctx.fill(); ctx.fillStyle = "#1d1d1b"; ctx.fillText(s.replace(" (metaphase)", ""), xs[i] - 40, 96); });
+  ctx.fillStyle = "#1d1d1b"; ctx.fillText("G1 → S → G2 → M", 30, 28); if (reveal) { ctx.fillStyle = "#6b6b68"; ctx.fillText(f.msg, 30, 122); }
+};
+function spindle(ctx, w, h, t) {
+  const pole = 40, k0 = 360, k = k0 - 170 * t, band = 230; ctx.strokeStyle = "#4a7a2a"; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(pole, 60); ctx.lineTo(k, 60); ctx.stroke(); ctx.lineWidth = 1;
+  if (band < k) { ctx.fillStyle = "#fafaf7"; ctx.fillRect(band - 8, 50, 16, 20); }
+  ctx.fillStyle = "#1d1d1b"; ctx.beginPath(); ctx.arc(pole, 60, 8, 0, 7); ctx.fill(); ctx.fillRect(k, 45, 10, 30);
+  ctx.font = "12px sans-serif"; ctx.fillText("pole", pole - 12, 95); ctx.fillText("chromosome", k - 20, 95); ctx.fillText(t ? "later in anaphase" : "just after bleaching (gap = bleached band)", 10, 115);
+}
+Kit.run({ id: "b145_lesson22", num: 22, version: 2, stages: [
+  { type: "pick", title: "Where does it stop?", tip: "The default is stop. G1/S, G2/M and the spindle assembly checkpoint each need a green light; there is no checkpoint in S phase. A growth signal raises cyclins; tumor suppressors are brakes; an oncogene is an accelerator stuck on.",
+    voice: ["Checkpoint proteins block progress; CDKs degrade the blockers, but need their cyclin partner. Cyclin levels oscillate.", "Multicellularity requires restraint. Cancer needs several mutations."],
+    solved: "A healthy cell stops at G1/S without a growth signal or with damaged DNA, and at the spindle checkpoint with an unattached chromosome. Only with the brakes gone does a damaged cell divide.",
+    qs: [
+      [{ growth: true, damage: false, attached: true, suppress: true, onco: false }, "Growth signal, healthy DNA, every chromosome attached."],
+      [{ growth: false, damage: false, attached: true, suppress: true, onco: false }, "No growth signal. Everything else healthy."],
+      [{ growth: true, damage: true, attached: true, suppress: true, onco: false }, "Growth signal, but the DNA is damaged."],
+      [{ growth: true, damage: false, attached: false, suppress: true, onco: false }, "Growth signal and healthy DNA, but one chromosome has no spindle fibre on its kinetochore."],
+      [{ growth: true, damage: true, attached: true, suppress: false, onco: false }, "Damaged DNA, and both copies of a tumor suppressor gene broken."],
+      [{ growth: false, damage: false, attached: true, suppress: false, onco: true }, "No growth signal, but an oncogene stuck on and the tumor suppressors broken."]
+    ].map(([S, txt]) => { const f = fate(S), word = f.stop ? "Stops at the " + f.stop.replace(" (metaphase)", "") : "Divides";
+      return { q: txt + " What does the cell do?", ok: word, no: ["Stops at the G1/S checkpoint", "Stops at the spindle checkpoint", "Divides"].filter(x => x !== word), w: 560, h: 130, draw: ckDraw(S, false), after: ckDraw(S, true), why: f.msg }; }) },
+  { type: "pick", title: "Watching the spindle", tip: "Tubulin tagged so it glows. A laser bleaches a dark band across the spindle fibres between a chromosome and its pole. Then anaphase: the chromosome moves toward the pole.",
+    voice: ["Microtubules grow at random and stop when they catch a kinetochore. The cell has no eyes or hands."],
+    solved: "The dark band stays where it was while the chromosome closes in on it: the fibre is taken apart at the kinetochore end, and the kinetochore walks toward the pole.",
+    qs: [
+      { q: "As the chromosome moves toward the pole, the bleached band…", ok: "Stays put, and the chromosome closes in on it", no: ["Moves toward the pole with the chromosome", "Moves away from the pole", "Spreads evenly along the fibre"], w: 460, h: 120,
+        draw: (ctx, w, h) => spindle(ctx, w, h, 0), after: (ctx, w, h) => spindle(ctx, w, h, 1), why: "So the fibre shortens at the kinetochore end: the kinetochore eats its way along." },
+      { q: "A cell's M cyclin can't be broken down. What happens?", ok: "It stays stuck in mitosis", no: ["It skips mitosis", "It divides faster forever", "Nothing: cyclins don't matter in M"], why: "CDK stays active; cyclin levels have to fall to finish." }] },
   { type: "sort", title: "Cytokinesis across life", tip: "Three ways to make two cells.",
     voice: ["Animals and fungi pinch with actin and myosin. Plants build a wall from the middle outward. Prokaryotes divide by binary fission with an FtsZ ring."],
     bins: ["Animals and fungi", "Plants", "Prokaryotes"],
