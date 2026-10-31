@@ -42,6 +42,7 @@ instructor/                verify_code.html, aggregate.html (decode student code
 scripts/
   smoke.js                 every lesson in headless Chromium, as a student and as the instructor bypass
   decode_codes.py, test_codec.py   batch decoding, codec pin (from BIO 202)
+lectures/                  interactive lecture decks (lectures 1-9 so far); see lectures/README.md
 docs/guidelines.md         how a lesson is chosen, built and checked (read first)
 docs/style.md              what goes on screen and how it is worded
 docs/todo.md               open work, from the 2026-10-31 review
