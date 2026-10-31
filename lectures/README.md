@@ -1,8 +1,12 @@
 # BIO 145 lecture decks
 
-Interactive presentations to replace the PowerPoints, one per lecture. Chapters 1–4 (lectures 1–9) are drafted. Each
-deck follows its lecture's 2026 outline (`refs/outlines/2026_lecNN_outline.tex`) for topics and order, and takes its
-slide text from the matching PowerPoint (`refs/lectures/lec_chptNN.pptx`), reworded toward the outline's phrasing.
+Interactive presentations to replace the PowerPoints, one per lecture. Chapters 1–4 (lectures 1–9) are drafted.
+
+**Source of the words and the order: the recording transcripts**
+(`Dropbox/Professional/Courses/transcripts/145/transcripts/raw/2026_examNN_lecNN_transcript.txt`). A deck uses JM's
+own lines, trimmed, in the order he gave them, with sparse text on screen; activities come after the ideas they test.
+PowerPoint material the lecture skipped goes in an extra (X) segment. Lecture 1 is built this way (2026-10-31).
+Lectures 2–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild.
 
 Open the course page (`index.html` at the repo root: each lecture's deck on the left, its homework on the right), or a
 deck's `lectures/lecNN/index.html`, straight from the file. No build step.
