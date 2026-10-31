@@ -25,7 +25,7 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson18", num: 18, version: 2, stages: [
+Kit.run({ id: "b145_lesson18", num: 18, version: 3, stages: [
   { type: "order", title: "Zoom in", tip: "Largest to smallest: the nested levels of a leaf.",
     voice: ["The leaf is a sandwich: cuticle, mesophyll, cuticle. Chloroplasts have a double membrane and their own DNA.", "Thylakoids stack into grana, like mitochondrial cristae: more membrane."],
     items: ["Leaf", "Mesophyll cell", "Chloroplast", "Granum (a stack)", "Thylakoid membrane", "Chlorophyll molecule"] },
@@ -36,6 +36,11 @@ Kit.run({ id: "b145_lesson18", num: 18, version: 2, stages: [
   { type: "order", title: "Follow one electron", solved: "Water gives up an electron, light lifts it twice, and it ends on NADPH, pumping protons for ATP on the way.", tip: "Follow one electron from water to NADPH.",
     voice: ["Photon strikes an antenna complex; the energy is passed to the reaction center. P680 in photosystem II, P700 in photosystem I: named in order of discovery, not use.", "Water splitting replaces the electron and releases oxygen."],
     items: ["A photon excites an electron in photosystem II (P680)", "The electron goes to the primary acceptor", "Water is split to replace the electron; O₂ is released", "The electron passes down the chain, pumping H⁺ into the lumen", "ATP synthase makes ATP as H⁺ flows back out", "Photosystem I (P700) re-excites the electron", "The electron reduces NADP⁺ to NADPH"] },
+  { type: "classify", title: "Up or down the Z", tip: "Draw the electron's energy as it goes: light lifts it at each photosystem; between them it runs downhill through carriers, and the drop pays for pumping protons. Water is the start, NADPH the end.",
+    voice: ["Small steps capture more energy: one big drop is one chance. Same trick as respiration."],
+    solved: "Two lifts by light and two runs downhill: the zigzag that gives the Z-scheme its name. The first descent pumps protons for ATP; the second ends on NADPH.",
+    bins: ["Uphill: light lifts the electron", "Downhill: energy released"],
+    items: [["P680 in photosystem II absorbs a photon", 0], ["P700 in photosystem I absorbs a photon", 0], ["Water hands an electron to photosystem II", 1], ["Plastoquinone carries the electron to the cytochrome complex, which pumps protons", 1], ["Plastocyanin carries the electron to photosystem I", 1], ["Ferredoxin hands the electron on to make NADPH", 1]] },
   { type: "pick", title: "Light-reaction logic", solved: "The oxygen you breathe came out of water, split to refill photosystem II.", tip: "Same machinery as the mitochondrion, run in a different direction.",
     voice: ["The oxygen comes from water, not CO₂. Small steps capture more energy: one big drop gives one chance. Per glucose: 18 ATP, 12 NADPH, 6 O₂."],
     qs: [

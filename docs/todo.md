@@ -17,13 +17,13 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 ## Outline sections missing from the hand-built lessons
 
 - [x] 2: redox, which the outline calls the "Semester throughline". Valence counts ("H 1, O 2, N 3, C 4"). The elements of life.
-- [ ] 4: the lipid half. Phospholipid bilayer self-assembly, saturation, HDL and LDL. Enzyme naming ("cellulase", "lactase", lactose intolerance). The new polysaccharide stages are text only.
+- [x] 4: the lipid half (saturated, unsaturated, phospholipid, lipoprotein classify) and enzyme naming (cards).
 - [x] 6: the second half of lecture 6. Nucleotides, ribose versus deoxyribose, purines and pyrimidines ("Cut pie"), pairing geometry, tRNA's "Frozen accident", ATP and cAMP.
 - [x] 7: surface area to volume ("Area squared, volume cubed"), with a cube slider. Large-cell exceptions. Prokaryote versus eukaryote. Endosymbiosis evidence, as a classify.
-- [ ] 7: move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7). Lesson 7 now has 5 stages before its drill.
+- [ ] 7: move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7)? Lesson 7 now has 5 stages before its drill. JM to decide; removing Stage A changes lesson 7's scoring.
 - [x] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
 - [x] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.
-- [ ] 23: cut Stage E (polygenic trait under selection; already open in PLAN.md). Move or trim Stage D (dominance rules, lecture 25–26 material). Add cost of sex and when sex pays, ploidy and anisogamy, and alternation of generations.
+- [ ] 23 (needs JM): cut Stage E (polygenic trait under selection; already open in PLAN.md). Move or trim Stage D (dominance rules, lecture 25–26 material). Add cost of sex and when sex pays, ploidy and anisogamy, and alternation of generations.
 - [x] 26: epistasis, with Labrador B and E loci making 9:3:4, best as a classify. Phenotypic plasticity. ABO as a stage, not just cards. (Three classify stages, C–E.)
 - [x] 27: map-building from pairwise distances ("Pythagoras with fingers").
 - [ ] 27: decide on male-fly recombination (PLAN.md).
@@ -32,26 +32,29 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 ## Kit lessons
 
 - [x] 3: cut the functional-group sort (giveaway bins, a garbled item, duplicates lesson 4). Add the "Correction: Ionic Bonds" point. Seven stages is too many.
-- [ ] 5: draw the side chains with `atoms.js` instead of naming them. Drop the levels sort or make lesson 6 the only home for it.
+- [x] 5: draw the side chains with `atoms.js` instead of naming them.
+- [ ] 5 and 6: protein structure levels appear in both. Keep as spacing, or cut one?
 - [x] 8: add the Golgi's three destinations. The organelle sort is near one-to-one matching.
-- [ ] 11: tonicity questions repeat lesson 10's Stage B.
+- [ ] 11: tonicity questions repeat lesson 10's Stage B. Left as spacing for now (lecture 11 is the tonicity lecture).
 - [x] 12: Hedgehog's chain of inhibitors (Patched, Smoothened, Gli) as a predict-the-output stage.
 - [x] 15: a hands-on glycolysis ledger (investment, payoff). The drug sort is near one-to-one.
 - [x] 16: predict first, then run the ETC sim.
-- [ ] 17: six stages; trim. The absorption sim overlaps 18.
-- [ ] 18: the electron's energy path (Z-scheme) as a manipulation, reusing lesson 13's hill.
+- [ ] 17: six stages; trim once a timed run says how long it takes. The absorption sim overlaps 18.
+- [x] 18: the electron's energy path as an uphill/downhill classify. (A drawn energy staircase would be better still.)
 - [x] 19: goal 1 silently needs heat above about 38%. Say so or change the test.
 - [x] 21: replace the mitosis order (duplicates 23 Stage M) with a mitotic-index classify.
 - [x] 22: the spindle photobleaching experiment as a prediction. A cyclin-level trace.
-- [ ] 31: the RNA zoo sort duplicates 33.
+- [ ] 31: the RNA zoo duplicates 33. Left as spacing for now.
 - [x] 33: predict all four lac conditions before toggling. Add a repressor-mutant or operator-mutant puzzle.
 - [x] 35: make "read top to bottom" one of the Sanger distractors.
 - [x] 36: the editing sim is two checkboxes. Predict first.
-- [ ] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases.
+- [x] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases. Every kit `sort` is now a `classify`.
+- [ ] 25: an F2 classify whose counts build 3:1 (the counts are the data).
+- [ ] 27: a recombinant-count classify that gives a map distance.
 
 ## Across lessons
 
-- [ ] Rewrite weak distractors in every `pick` stage ("Light has mass", "Plants need no water").
+- [ ] Rewrite weak distractors in every `pick` stage. Lesson 1's two named examples are fixed; the rest still need a read-through.
 - [ ] Decide which overlaps are deliberate spacing and cut the rest: tonicity (10, 11), structure levels (5, 6), functional groups (3, 4), mitosis (21, 23 M), mutation types (30, 32), RNA zoo (31, 33).
 - [ ] Spelling: one of American or British throughout (about 118 "color", 23 "colour").
 - [ ] Voice: dictation for every draft voice block.
