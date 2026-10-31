@@ -1,4 +1,5 @@
-/* BIO 145 crosses: one engine for lessons 10 (parents to F1 to F2), 11 (mystery crosses) and 12 (hit the ratio).
+/* BIO 145 crosses: one engine for lessons 11 (parents to F1 to F2), 12 (mystery crosses) and 13 (hit the ratio), built on
+   lesson 10's meiosis (BIO 202 lesson 9's bench, copied).
 
    A spec names the loci and how they show:
      { loci: [ { dom: "Y", rec: "y", ph: ["yellow", "green"], mode: "complete" | "incomplete" | "codominant",
@@ -10,7 +11,8 @@
    An individual: { sex: "F" | "M", c: [hapA, hapB] }, each hap an array with one allele per locus; a male's hapB holds null at
    X loci (his Y). Alleles are the letters themselves.
 
-     Cross.gametes(spec, ind)       [{ h, y, p }]    y: true for a Y-bearing sperm
+     Cross.meiosis(spec, ind)       the four gametes of one meiosis   Cross.oneGamete(spec, ind)  one of them at random
+     Cross.gametes(spec, ind)       [{ h, y, p }]    every gamete and its share; y: true for a Y-bearing sperm
      Cross.offspring(spec, mom, dad) Map key -> { ind, p }
      Cross.phenoDist(spec, dist)     { label: share }
      Cross.next(spec, dist)          the next generation from random mating within dist
@@ -19,28 +21,62 @@
      Cross.geno(spec, ind)           "Yy Rr", "XʳY", ...
 */
 const Cross = (function () {
-  function gametes(spec, ind) {
-    const L = spec.loci.length, out = [];
-    const isX = spec.loci.map(l => !!l.x), male = ind.sex === "M", anyX = isX.some(Boolean);
-    /* the choices: for each locus which homolog (0/1); a male with X loci sends either his X (hap 0 at X loci) or his Y */
-    const combos = [];
-    (function rec(i, pick, p) {
-      if (i === L) { combos.push({ pick: pick.slice(), p }); return; }
-      if (spec.linked != null && i === 1 && !(isX[0] !== isX[1])) {   /* locus 1 follows locus 0 unless they cross over */
-        const r = spec.linked; pick.push(pick[0]); rec(i + 1, pick, p * (1 - r)); pick.pop(); pick.push(1 - pick[0]); rec(i + 1, pick, p * r); pick.pop(); return;
-      }
-      if (male && isX[i]) {   /* every X locus rides with the same X-or-Y choice: decided at the first X locus */
-        const first = isX.indexOf(true);
-        if (i !== first) { pick.push(pick[first]); rec(i + 1, pick, p); pick.pop(); return; }
-      }
-      for (const k of [0, 1]) { pick.push(k); rec(i + 1, pick, p * 0.5); pick.pop(); }
-    })(0, [], 1);
-    for (const { pick, p } of combos) {
-      const h = pick.map((k, i) => ind.c[k][i]);
-      const y = male && anyX && pick[isX.indexOf(true)] === 1;
-      out.push({ h, y, p });
+  /* ---- meiosis, copied from BIO 202 lesson 9's bench ------------------------------------------------------------
+     A chromosome pair replicates into four chromatids, [copy A, copy A, copy B, copy B]. A crossover joins the two inner
+     chromatids (1 and 2) and swaps everything past the cut (lesson 9's chromatids()). Division I sends the homologs to
+     opposite poles, each pair choosing its side on its own (independent assortment); division II splits the sisters
+     (lesson 9's newPlan / dealOrder). Here a pair is a "group": one locus on its own, the two linked loci, or the X
+     (in a male the X and the Y, his Y carrying nothing).
+     `spec.linked` is still the recombinant share a test cross shows; a crossover between the two loci happens in a
+     meiosis with chance 2 x linked, and only two of its four chromatids come out recombinant. */
+  function groups(spec) {
+    const L = spec.loci.length, gs = [], used = new Set();
+    if (spec.linked != null) { gs.push([0, 1]); used.add(0); used.add(1); }
+    const xs = []; for (let i = 0; i < L; i++) if (!used.has(i) && spec.loci[i].x) { xs.push(i); used.add(i); }
+    if (xs.length) gs.push(xs);
+    for (let i = 0; i < L; i++) if (!used.has(i)) gs.push([i]);
+    return gs;
+  }
+  function chromatids(ind, g, cut) {   /* lesson 9: k 0,1 one copy, k 2,3 the other; a cut swaps chromatids 1 and 2 past it */
+    const cs = [0, 0, 1, 1].map(k => g.map(i => ind.c[k][i]));
+    if (cut) for (let j = 1; j < g.length; j++) { const t = cs[1][j]; cs[1][j] = cs[2][j]; cs[2][j] = t; }
+    return cs;
+  }
+  function newPlan(rng) { return { side: rng() < 0.5 ? 1 : 0, flip: [rng() < 0.5 ? 1 : 0, rng() < 0.5 ? 1 : 0] }; }
+  function dealOrder(plan) {
+    const L = plan.side ? [2, 3] : [0, 1], R = plan.side ? [0, 1] : [2, 3];
+    const l = plan.flip[0] ? [L[1], L[0]] : L, r = plan.flip[1] ? [R[1], R[0]] : R;
+    return [l[0], l[1], r[0], r[1]];
+  }
+  /* one meiosis: the four gametes it makes, each { h, y } */
+  function meiosis(spec, ind, rng) {
+    rng = rng || Math.random; const L = spec.loci.length, gs = groups(spec), out = [0, 1, 2, 3].map(() => ({ h: Array(L).fill(null), y: false }));
+    for (const g of gs) {
+      const cut = g.length > 1 && spec.linked != null && g[0] === 0 && g[1] === 1 && rng() < 2 * spec.linked;
+      const cs = chromatids(ind, g, cut), ord = dealOrder(newPlan(rng));
+      ord.forEach((k, gi) => { g.forEach((i, j) => out[gi].h[i] = cs[k][j]); if (spec.loci[g[0]].x && ind.sex === "M" && k >= 2) out[gi].y = true; });
     }
     return out;
+  }
+  const oneGamete = (spec, ind, rng) => meiosis(spec, ind, rng)[Math.floor((rng || Math.random)() * 4)];
+  /* every gamete and its share: each group's four chromatids (cut and uncut), a quarter each, groups independent.
+     The same chromatids() the bench and meiosis() use, so the exact ratios cannot say one thing while sampling does another. */
+  function gametes(spec, ind) {
+    const L = spec.loci.length, gs = groups(spec);
+    let parts = [{ h: Array(L).fill(null), y: false, p: 1 }];
+    for (const g of gs) {
+      const linked = g.length > 1 && spec.linked != null && g[0] === 0 && g[1] === 1, opts = [];
+      for (const [cut, pc] of linked ? [[false, 1 - 2 * spec.linked], [true, 2 * spec.linked]] : [[false, 1]]) {
+        if (pc <= 0) continue;
+        chromatids(ind, g, cut).forEach((c, k) => opts.push({ c, y: spec.loci[g[0]].x && ind.sex === "M" && k >= 2, p: pc / 4 }));
+      }
+      const nx = [];
+      for (const a of parts) for (const o of opts) { const h = a.h.slice(); g.forEach((i, j) => h[i] = o.c[j]); nx.push({ h, y: a.y || o.y, p: a.p * o.p }); }
+      parts = nx;
+    }
+    const m = new Map();   /* merge identical gametes */
+    for (const x of parts) { const k = x.h.join(",") + "|" + x.y; if (m.has(k)) m.get(k).p += x.p; else m.set(k, x); }
+    return [...m.values()];
   }
   function geno(spec, ind) {
     return spec.loci.map((l, i) => {
@@ -91,6 +127,15 @@ const Cross = (function () {
     }
     return out;
   }
+  /* n offspring, each from one egg and one sperm, every gamete a real meiosis (one of its four, at random) */
+  function breed(spec, mom, dad, n) {
+    const anyX = spec.loci.some(l => l.x), out = [];
+    for (let i = 0; i < n; i++) {
+      const e = oneGamete(spec, mom), sp = oneGamete(spec, dad), sex = anyX ? (sp.y ? "M" : "F") : (Math.random() < 0.5 ? "F" : "M");
+      out.push({ sex, c: [e.h.slice(), sp.h.map((a, j) => spec.loci[j].x && sex === "M" ? null : a)] });
+    }
+    return out;
+  }
   function sample(dist, n) {
     const arr = [...dist.values()], out = [];
     for (let i = 0; i < n; i++) { let u = Math.random(), j = 0; while (j < arr.length - 1 && (u -= arr[j].p) > 0) j++; out.push(JSON.parse(JSON.stringify(arr[j].ind))); }
@@ -115,5 +160,5 @@ const Cross = (function () {
     el.addEventListener("click", e => { const b = e.target.closest("button.al"); if (!b || b.disabled) return; const ind = get(), i = +b.dataset.i, k = +b.dataset.k, l = spec.loci[i];
       ind.c[k][i] = ind.c[k][i] === l.dom ? l.rec : l.dom; onChange(); });
   }
-  return { card, wireCard, gametes, offspring, phenoDist, next, sample, pheno, geno, key, same, sup };
+  return { meiosis, oneGamete, breed, card, wireCard, gametes, offspring, phenoDist, next, sample, pheno, geno, key, same, sup };
 })();

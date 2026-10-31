@@ -86,7 +86,7 @@ function codeInto(id, lines) {
       esc(body).replace(/\b([a-z_.]+)\(/g, '<span class="fn">$1</span>(') + (com ? '<span class="com">' + esc(com) + "</span>" : "") + "</span>";
   }).join("");
 }
-function hiR(id, key) { for (const l of $(id).querySelectorAll(".line")) l.classList.toggle("hi", l.dataset.line === key); }
+function hiR(id, key) { if (!$(id)) return; for (const l of $(id).querySelectorAll(".line")) l.classList.toggle("hi", l.dataset.line === key); }
 function downloadText(name, text) {
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/plain" })); a.download = name; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);

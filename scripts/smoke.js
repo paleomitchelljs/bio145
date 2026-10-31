@@ -28,9 +28,10 @@ const server = http.createServer((q, r) => {
       await page.waitForTimeout(600);
       const st = await page.evaluate(() => ({
         locked: [...document.querySelectorAll("section.stage.stage-locked")].map(s => s.id),
+        first: (document.querySelector("section.stage") || {}).id,
         code: (document.querySelector("#score-final") || {}).textContent || ""
       }));
-      const okOpen = who === "jmitchell" ? st.locked.length === 0 && /v\d+\./.test(st.code) : !st.locked.includes("stageA");
+      const okOpen = who === "jmitchell" ? st.locked.length === 0 && /v\d+\./.test(st.code) : !st.locked.includes(st.first);
       const line = f.padEnd(14) + who.padEnd(14) + (errs.length ? "ERR " + errs.slice(0, 3).join(" | ") : "ok") + (okOpen ? "" : "  STAGES " + st.locked.join(","));
       if (errs.length || !okOpen) bad++;
       console.log(line);

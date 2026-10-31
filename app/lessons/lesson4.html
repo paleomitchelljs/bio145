@@ -64,7 +64,6 @@
       </div>
     </div>
   </div>
-  <div class="stage-body tail"><details class="panel rcode"><summary>R code</summary><button id="A_dl" class="code-dl">Download .R</button><pre class="code" id="codeA"></pre></details></div>
 </section>
 
 <!-- ========== STAGE B — paying for an uphill reaction with a downhill one ========== -->
@@ -201,30 +200,13 @@ function A_open(i) { AX.cur = i; $("A_ttext").textContent = A_T[i].t; $("A_verdi
   const cv = $("A_land"); let mode = null;
   cv.addEventListener("pointerdown", e => { if (AX.run) return; const { x } = canvasXY(cv, e), w = cv.clientWidth; mode = x > w * 0.68 ? "dg" : "ea"; cv.setPointerCapture(e.pointerId); move(e); });
   const move = e => { if (!mode) return; const { y } = canvasXY(cv, e), h = +cv.dataset.h, en = 40 - (y - 40) / (h - 60) * 70;
-    if (mode === "dg") AX.dg = Math.round(en * 2) / 2; else AX.ea = Math.round(en); A_clamp(); AX.trace = []; A_paint(); A_plot(); hiR("codeA", mode); };
+    if (mode === "dg") AX.dg = Math.round(en * 2) / 2; else AX.ea = Math.round(en); A_clamp(); AX.trace = []; A_paint(); A_plot(); };
   cv.addEventListener("pointermove", move);
   cv.addEventListener("pointerup", () => { if (mode) Lesson.bump("A"); mode = null; });
 })();
-$("A_enz").addEventListener("change", () => { AX.enz = $("A_enz").checked; A_paint(); hiR("codeA", "enz"); Lesson.bump("A"); });
+$("A_enz").addEventListener("change", () => { AX.enz = $("A_enz").checked; A_paint(); Lesson.bump("A"); });
 $("A_go").addEventListener("click", A_go);
 Pips.wire($("A_pips"), i => { if (!AX.run) A_open(i); });
-codeInto("codeA", [
-  ["", "# Lesson 4, Stage A -- molecules hopping between two valleys"],
-  ["dg", "dG   <- -2.5     # products minus reactants, kJ/mol"],
-  ["ea", "hill <- 15       # top of the hill above the reactants"],
-  ["enz", "hill <- hill - 20 * enzyme   # an enzyme lowers the hill, not the valleys"],
-  ["", "RT <- 2.5; dt <- 0.05; n <- 60"],
-  ["", "kf <- exp(4) * exp(-hill / RT)          # forward hops per second"],
-  ["", "kr <- exp(4) * exp(-(hill - dG) / RT)   # backward hops: the hill is taller from the product side"],
-  ["", "state <- rep(0, n)                       # 0 reactant, 1 product"],
-  ["", "for (t in seq(dt, 30, by = dt)) {"],
-  ["", "  flip <- ifelse(state == 0, runif(n) < 1 - exp(-kf * dt), runif(n) < 1 - exp(-kr * dt))"],
-  ["", "  state <- ifelse(flip, 1 - state, state)"],
-  ["", "}"],
-  ["", "mean(state)        # share that is product after 30 s"],
-  ["", "1 / (1 + exp(dG / RT))   # where it settles, given enough time"]
-]);
-$("A_dl").addEventListener("click", () => downloadText("lesson4_stageA.R", RTEXT.codeA));
 A_reset(); A_paint(); A_open(0);
 
 /* ====== B: coupling. ΔG°' values, kJ/mol (standard textbook numbers) ====== */

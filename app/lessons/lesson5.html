@@ -63,7 +63,6 @@
       </div>
     </div>
   </div>
-  <div class="stage-body tail"><details class="panel rcode"><summary>R code</summary><button id="A_dl" class="code-dl">Download .R</button><pre class="code" id="codeA"></pre></details></div>
 </section>
 
 <!-- ========== STAGE B — water follows: a cell in a solution ========== -->
@@ -205,25 +204,10 @@ function A_go() {
     }
   }, 30);
 }
-for (const id of ["A_bl", "A_br", "A_perm", "A_rl"]) $(id).addEventListener("input", () => { A_vals(); AX.trace = []; A_seed(); A_paint(); A_plot(); hiR("codeA", id); Lesson.bump("A"); });
-$("A_ch").addEventListener("change", () => { A_paint(); hiR("codeA", "A_ch"); Lesson.bump("A"); });
+for (const id of ["A_bl", "A_br", "A_perm", "A_rl"]) $(id).addEventListener("input", () => { A_vals(); AX.trace = []; A_seed(); A_paint(); A_plot(); Lesson.bump("A"); });
+$("A_ch").addEventListener("change", () => { A_paint(); Lesson.bump("A"); });
 $("A_go").addEventListener("click", A_go);
 Pips.wire($("A_pips"), i => { if (!AX.run) A_open(i); });
-codeInto("codeA", [
-  ["", "# Lesson 5, Stage A -- random jiggling across a membrane"],
-  ["A_bl", "n_left  <- 60"], ["A_br", "n_right <- 0"],
-  ["A_perm", "perm <- 0.5        # chance a dot that bumps the membrane gets through"],
-  ["", "x <- c(runif(n_left, 0, 1), runif(n_right, 1, 2))   # membrane at x = 1"],
-  ["", "for (step in 1:600) {                                # 30 s in steps of 0.05 s"],
-  ["", "  new <- x + runif(length(x), -0.21, 0.21)          # no direction: each dot jiggles at random"],
-  ["", "  new <- pmin(pmax(new, 0), 2)                        # the outer walls"],
-  ["", "  cross <- (x < 1) != (new < 1)"],
-  ["", "  blocked <- cross & runif(length(x)) > perm"],
-  ["", "  x <- ifelse(blocked, x, new)"],
-  ["", "}"],
-  ["A_ch", "c(left = sum(x < 1), right = sum(x >= 1))"]
-]);
-$("A_dl").addEventListener("click", () => downloadText("lesson5_stageA.R", RTEXT.codeA));
 A_vals(); A_open(0);
 
 /* ====== B: osmosis. Inside: 300 mM of solute that cannot leave. Water moves until inside = outside: the size heads for

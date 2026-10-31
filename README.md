@@ -12,8 +12,11 @@ so students can read the spelling but can't copy and paste it. Pasting into the 
 *drawn*: each time a card comes back it shows a new molecule, fork, cell or cross, so students drill the idea and not one
 picture.
 
-**Status: first drafts, all twelve.** The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20.
-`docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
+**Status: first drafts, fourteen lessons.** The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20
+(lesson 10 keeps JM's BIO 202 lesson 9 voice). `docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
+
+**House rules for this repo (JM, 2026-10-31):** copy existing engines from BIO 202 wherever possible (the copies may drift;
+they are different classes); no real-data panels; no R panels.
 
 ## Layout
 
@@ -23,12 +26,14 @@ LOCKS.txt                  release gate, one row per lesson (o open / x locked),
 app/lessons/lessonN.html   the lessons
 app/assets/
   b145.css                 the BIO 202 lesson stylesheet (same palette), lifted into one shared file, plus drill/tile/cross styles
-  stage.js                 gates, task ticks, first-try bits, bypass/study mode, R panel, drag tiles (Tiles)
+  stage.js                 gates, task ticks, first-try bits, bypass/study mode, drag tiles (Tiles)
   drill.js                 the typed mastery drill and PNG word bank
   atoms.js                 electronegativity widget: bonds, partial charges, pull arrows (lessons 2, 3, 6)
   fork.js                  the replication fork at any step, with any molecule missing (lesson 7)
+  quiz.js, sim.js, paths.js, paths.css   copied from BIO 202 for lesson 10 (the meiosis bench)
   code.js                  the genetic code and a clickable codon wheel (lesson 9)
-  cross.js                 crosses: gametes, offspring, phenotype ratios, X-linkage, linkage, parent cards (lessons 10-12)
+  cross.js                 crosses on lesson 10's meiosis (BIO 202 lesson 9's chromatids / two divisions, copied): gametes,
+                           offspring, phenotype ratios, X-linkage, linkage, parent cards (lessons 11-13)
   score.js, lock.js, hover.*, pips.js, score.css   copied from BIO 202 (salt and storage keys renamed to bio145)
 instructor/                verify_code.html, aggregate.html (decode student codes)
 scripts/
