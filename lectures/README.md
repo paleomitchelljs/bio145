@@ -6,7 +6,7 @@ Interactive presentations to replace the PowerPoints, one per lecture. Chapters 
 (`Dropbox/Professional/Courses/transcripts/145/transcripts/raw/2026_examNN_lecNN_transcript.txt`). A deck uses JM's
 own lines, trimmed, in the order he gave them, with sparse text on screen; activities come after the ideas they test.
 PowerPoint material the lecture skipped goes in an extra (X) segment. Lecture 1 is built this way (2026-10-31).
-Lectures 2–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild.
+Lectures 2–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild. `HANDOFF.md` has the procedure and the state of each deck for that pass.
 
 Open the course page (`index.html` at the repo root: each lecture's deck on the left, its homework on the right), or a
 deck's `lectures/lecNN/index.html`, straight from the file. No build step.
