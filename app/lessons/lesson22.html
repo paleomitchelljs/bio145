@@ -47,7 +47,7 @@ function spindle(ctx, w, h, t) {
   ctx.fillStyle = "#1d1d1b"; ctx.beginPath(); ctx.arc(pole, 60, 8, 0, 7); ctx.fill(); ctx.fillRect(k, 45, 10, 30);
   ctx.font = "12px sans-serif"; ctx.fillText("pole", pole - 12, 95); ctx.fillText("chromosome", k - 20, 95); ctx.fillText(t ? "later in anaphase" : "just after bleaching (gap = bleached band)", 10, 115);
 }
-Kit.run({ id: "b145_lesson22", num: 22, version: 2, stages: [
+Kit.run({ id: "b145_lesson22", num: 22, version: 3, stages: [
   { type: "pick", title: "Where does it stop?", tip: "The default is stop. G1/S, G2/M and the spindle assembly checkpoint each need a green light; there is no checkpoint in S phase. A growth signal raises cyclins; tumor suppressors are brakes; an oncogene is an accelerator stuck on.",
     voice: ["Checkpoint proteins block progress; CDKs degrade the blockers, but need their cyclin partner. Cyclin levels oscillate.", "Multicellularity requires restraint. Cancer needs several mutations."],
     solved: "A healthy cell stops at G1/S without a growth signal or with damaged DNA, and at the spindle checkpoint with an unattached chromosome. Only with the brakes gone does a damaged cell divide.",
@@ -67,11 +67,11 @@ Kit.run({ id: "b145_lesson22", num: 22, version: 2, stages: [
       { q: "As the chromosome moves toward the pole, the bleached band…", ok: "Stays put, and the chromosome closes in on it", no: ["Moves toward the pole with the chromosome", "Moves away from the pole", "Spreads evenly along the fibre"], w: 460, h: 120,
         draw: (ctx, w, h) => spindle(ctx, w, h, 0), after: (ctx, w, h) => spindle(ctx, w, h, 1), why: "So the fibre shortens at the kinetochore end: the kinetochore eats its way along." },
       { q: "A cell's M cyclin can't be broken down. What happens?", ok: "It stays stuck in mitosis", no: ["It skips mitosis", "It divides faster forever", "Nothing: cyclins don't matter in M"], why: "CDK stays active; cyclin levels have to fall to finish." }] },
-  { type: "sort", title: "Cytokinesis across life", tip: "Three ways to make two cells.",
+  { type: "classify", title: "Split the cell", solved: "Animals pinch, plants build a wall from the middle out, bacteria split with an FtsZ ring.", tip: "Three ways to make two cells.",
     voice: ["Animals and fungi pinch with actin and myosin. Plants build a wall from the middle outward. Prokaryotes divide by binary fission with an FtsZ ring."],
     bins: ["Animals and fungi", "Plants", "Prokaryotes"],
     items: [["A contractile ring of actin and myosin pinches the cell", 0], ["Vesicles line up at the midline and fuse to build a new cell wall", 1], ["The cell wall is a box, so the new wall is built inside", 1], ["Binary fission", 2], ["An FtsZ ring", 2], ["A cleavage furrow", 0]] },
-  { type: "pick", title: "Control, cancer, and treatment", tip: "Cancer needs more than one mutation.",
+  { type: "pick", title: "Control, cancer, and treatment", solved: "Cancer is several brakes failing; chemotherapy hits every cell that divides fast.", tip: "Cancer needs more than one mutation.",
     voice: ["Growth hormone raises cyclins. Tumor suppressors are brakes. Chemotherapy poisons cells with cyclins: hair, stomach lining, blood.", "Asexual reproduction is mitosis that separates: hydra budding makes clones."],
     qs: [
       { q: "A CDK is active only when it has…", ok: "Its cyclin partner", no: ["ATP only", "A kinetochore", "A spindle"], why: "Cyclin levels oscillate, driving the cycle." },

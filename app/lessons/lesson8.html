@@ -25,19 +25,19 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson8", num: 8, version: 2, stages: [
-  { type: "order", title: "A protein's trip out of the cell", tip: "A secreted protein is made on the rough ER and leaves the cell by vesicle. Put the trip in order.",
+Kit.run({ id: "b145_lesson8", num: 8, version: 3, stages: [
+  { type: "order", title: "Ship a protein out", solved: "Nucleus, rough ER, vesicle, Golgi cis to trans, vesicle, membrane: a secreted protein never crosses a membrane after it enters the ER.", tip: "A secreted protein is made on the rough ER and leaves the cell by vesicle. Put the trip in order.",
     voice: ["DNA to mRNA to protein. Generic ribosomes, specific mRNA: blueprint into tool.", "Then membrane delivery: ER, vesicle, Golgi (cis to trans), vesicle, out."],
     items: ["The gene is transcribed into mRNA in the nucleus", "The mRNA leaves through a nuclear pore", "A ribosome on the rough ER translates it into the ER lumen", "A vesicle buds off the ER", "The vesicle fuses with the cis face of the Golgi", "The Golgi modifies the protein and reads its sugar tag", "A vesicle leaves the trans face", "The vesicle fuses with the plasma membrane and the protein is secreted"] },
-  { type: "sort", title: "Which organelle?", tip: "Match each job to the organelle that does it.",
+  { type: "classify", title: "Match the job to the room", solved: "Each organelle is a room with a job; a cell type with a lot of one job has a lot of that room (liver: smooth ER).", tip: "Match each job to the organelle that does it.",
     voice: ["Each organelle is a room with one job. Know the job and you know the cell types that have a lot of it (liver: smooth ER)."],
     bins: ["Rough ER", "Smooth ER", "Golgi", "Lysosome", "Vacuole", "Peroxisome", "Nucleus", "Ribosome"],
     items: [["Ribosome-studded; makes proteins to export", 0], ["Continuous with the nuclear envelope", 0], ["Makes lipids and detoxifies, abundant in liver", 1], ["Cis and trans faces; sorts and ships", 2], ["Reads sugar tags on proteins", 2], ["Hydrolytic enzymes; autophagy recycling", 3], ["Central, with a tonoplast; turgor pressure", 4], ["Catalase turns H₂O₂ into water and oxygen", 5], ["Holds the DNA; nucleolus builds ribosomes", 6], ["Small subunit binds mRNA, large forms peptide bonds", 7]] },
-  { type: "sort", title: "Animal, plant, or both?", tip: "A common student error: plants have mitochondria too. The chloroplast is a bonus.",
+  { type: "classify", title: "Animal, plant, or both?", solved: "Plants add a wall, a central vacuole, chloroplasts and plasmodesmata. Both have mitochondria.", tip: "A common student error: plants have mitochondria too. The chloroplast is a bonus.",
     voice: ["Plants add a wall, a big vacuole, chloroplasts, and plasmodesmata. Animals have lysosomes and centrioles. Both have mitochondria."],
     bins: ["Plant only", "Animal only", "Both"],
     items: [["Chloroplast", 0], ["Cell wall", 0], ["Central vacuole", 0], ["Plasmodesmata", 0], ["Lysosome", 1], ["Centriole", 1], ["Mitochondrion", 2], ["Nucleus", 2], ["Golgi apparatus", 2], ["Ribosome", 2], ["Rough ER", 2]] },
-  { type: "pick", title: "Why internal membranes help", tip: "Membranes keep jobs in separate rooms and carry goods between them.",
+  { type: "pick", title: "Why internal membranes help", solved: "Rooms keep incompatible chemistry apart and put enzymes next to their work.", tip: "Membranes keep jobs in separate rooms and carry goods between them.",
     voice: ["Delivery highways: mRNA near ribosomes, enzymes next to their substrates, error-correcting logistics."],
     qs: [
       { q: "Why are the tonoplast and the central vacuole important for a celery stalk?", ok: "Turgor pressure keeps it crisp", no: ["They make ATP", "They digest the cell wall", "They store DNA"], why: "A wilted celery stalk has lost turgor." },

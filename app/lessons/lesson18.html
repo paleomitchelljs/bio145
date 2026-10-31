@@ -25,18 +25,18 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson18", num: 18, stages: [
-  { type: "order", title: "From leaf to chlorophyll", tip: "Largest to smallest: the nested levels of a leaf.",
+Kit.run({ id: "b145_lesson18", num: 18, version: 2, stages: [
+  { type: "order", title: "Zoom in", tip: "Largest to smallest: the nested levels of a leaf.",
     voice: ["The leaf is a sandwich: cuticle, mesophyll, cuticle. Chloroplasts have a double membrane and their own DNA.", "Thylakoids stack into grana, like mitochondrial cristae: more membrane."],
     items: ["Leaf", "Mesophyll cell", "Chloroplast", "Granum (a stack)", "Thylakoid membrane", "Chlorophyll molecule"] },
-  { type: "sort", title: "Where in the leaf and chloroplast?", tip: "Structure to function.",
+  { type: "classify", title: "Place each job", solved: "Light is caught in the thylakoid membrane; sugar is built in the stroma; gas comes and goes through the stomata.", tip: "Structure to function.",
     voice: ["Palisade mesophyll catches light; spongy mesophyll exchanges gas. Stomata are mouths flanked by guard cells."],
     bins: ["Palisade mesophyll", "Spongy mesophyll", "Stomata and guard cells", "Stroma", "Thylakoid membrane"],
     items: [["Tightly packed cells under the upper surface, rich in chloroplasts", 0], ["Loose cells with air spaces for gas exchange", 1], ["Open and close to let CO₂ in and water out", 2], ["The fluid where the Calvin cycle runs", 3], ["Holds photosystems, the chain and ATP synthase", 4], ["Guard cells swell to open the pore", 2]] },
-  { type: "order", title: "The light reactions, in order", tip: "Follow one electron from water to NADPH.",
+  { type: "order", title: "Follow one electron", solved: "Water gives up an electron, light lifts it twice, and it ends on NADPH, pumping protons for ATP on the way.", tip: "Follow one electron from water to NADPH.",
     voice: ["Photon strikes an antenna complex; the energy is passed to the reaction center. P680 in photosystem II, P700 in photosystem I: named in order of discovery, not use.", "Water splitting replaces the electron and releases oxygen."],
     items: ["A photon excites an electron in photosystem II (P680)", "The electron goes to the primary acceptor", "Water is split to replace the electron; O₂ is released", "The electron passes down the chain, pumping H⁺ into the lumen", "ATP synthase makes ATP as H⁺ flows back out", "Photosystem I (P700) re-excites the electron", "The electron reduces NADP⁺ to NADPH"] },
-  { type: "pick", title: "Light-reaction logic", tip: "Same machinery as the mitochondrion, run in a different direction.",
+  { type: "pick", title: "Light-reaction logic", solved: "The oxygen you breathe came out of water, split to refill photosystem II.", tip: "Same machinery as the mitochondrion, run in a different direction.",
     voice: ["The oxygen comes from water, not CO₂. Small steps capture more energy: one big drop gives one chance. Per glucose: 18 ATP, 12 NADPH, 6 O₂."],
     qs: [
       { q: "The oxygen released by photosynthesis comes from…", ok: "Water", no: ["Carbon dioxide", "Glucose", "Chlorophyll"], why: "Photolysis of water." },

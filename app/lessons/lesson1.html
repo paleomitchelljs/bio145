@@ -27,12 +27,12 @@
 const C = (q, a) => ({ q, a });
 const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x); return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
 const pval = (d, n) => { const z = d / (6 * Math.sqrt(2 / n)); return Math.max(1e-12, 1 - erf(z / Math.SQRT2)); };
-Kit.run({ id: "b145_lesson1", num: 1, stages: [
-  { type: "sort", title: "Is it alive?", tip: "Sort each thing by the test it passes or fails. Life as used here: reproduction that passes features on (heredity), plus a metabolism that keeps the thing going.",
+Kit.run({ id: "b145_lesson1", num: 1, version: 2, stages: [
+  { type: "classify", title: "Is it alive?", solved: "Fire copies itself but passes nothing on; a photocopy passes features on but runs no chemistry of its own. Life needs both: heredity, paid for by metabolism.", tip: "Sort each thing by the test it passes or fails. Life as used here: reproduction that passes features on (heredity), plus a metabolism that keeps the thing going.",
     voice: ["Not 'made of cells' (circular) and not 'has DNA' (that describes Earth's life, it doesn't define it).", "Life is reproduction with heredity, paid for by metabolism. Take either away and you have fire or a photocopier."],
     bins: ["Alive: heredity and metabolism", "Not alive: no heredity", "Not alive: no metabolism of its own"],
     items: [["A bacterium dividing in broth", 0], ["A sperm cell", 0], ["An oak tree", 0], ["A tardigrade", 0], ["A fire spreading from match to paper", 1], ["A flame passed from candle to candle", 1], ["A photocopied page", 2], ["A virus particle outside a host cell", 2], ["A computer virus copying itself", 2]] },
-  { type: "pick", title: "A tree is made of air", tip: "A pot, weighed soil, a seed. The plant gains mass. Where did it come from?",
+  { type: "pick", title: "A tree is made of air", solved: "Weighing excluded the soil in one step. Air was left standing because every other option fell: most of a tree's mass is carbon taken from CO₂.", tip: "A pot, weighed soil, a seed. The plant gains mass. Where did it come from?",
     voice: ["Confirming is hard. Excluding is easy: weigh the soil before and after.", "A shrinking list of options, like Sherlock Holmes. Light has no mass."],
     qs: [
       { q: "The plant gained mass. The soil weighed the same before and after. What does that exclude?", ok: "The plant's mass came from the soil", no: ["The plant's mass came from the air", "The plant's mass came from water", "The plant did not grow"], why: "You only had to weigh. Soil is off the list." },
@@ -40,15 +40,15 @@ Kit.run({ id: "b145_lesson1", num: 1, stages: [
       { q: "A pot sealed in a vacuum: the plant dies. What does that suggest?", ok: "Something in the air is needed", no: ["Soil is needed and air is not", "Plants need no water", "Light has mass"], why: "A hint, not a proof: it narrows the list." },
       { q: "Which kind of evidence do scientists get more easily?", ok: "Evidence that excludes an explanation", no: ["Evidence that proves one beyond doubt", "Evidence that confirms and excludes equally", "Evidence from a single plant"], why: "That is why science is a shrinking pool of options." },
       { q: "Where does most of a tree's dry mass come from?", ok: "Carbon dioxide in the air", no: ["The soil", "Sunlight", "Water it drinks"], why: "The elephant was grass, and the grass was air." }] },
-  { type: "sort", title: "How scientists reason (book, chapter 1)", tip: "Inductive reasoning goes from many specific observations to a general rule. Deductive reasoning goes from a general rule to a specific prediction.",
+  { type: "classify", title: "Which way does the argument run? (book, ch. 1)", solved: "Induction builds a general rule from many cases; deduction takes a rule and predicts a case. A test of a hypothesis is deduction.", tip: "Inductive reasoning goes from many specific observations to a general rule. Deductive reasoning goes from a general rule to a specific prediction.",
     voice: ["Two directions of argument. Induction builds the rule; deduction tests it."],
     bins: ["Inductive: specific to general", "Deductive: general to specific"],
     items: [["Every lizard I have measured on this island is small, so the island's lizards are small.", 0], ["Twenty plants kept in the dark all yellowed, so plants need light.", 0], ["Many studies find larger males win fights, so size predicts winning.", 0], ["If plants need light, a plant in a closet will yellow. It did.", 1], ["All mammals have hair and a whale is a mammal, so a whale has hair.", 1], ["Cells come only from cells, so this new bacterium came from a bacterium.", 1]] },
-  { type: "sort", title: "Basic or applied?", tip: "Basic science asks how something works. Applied science aims at a use.",
+  { type: "classify", title: "Basic or applied?", solved: "Basic science asks how something works; applied science aims at a use. Same method, different question.", tip: "Basic science asks how something works. Applied science aims at a use.",
     voice: ["Basic science asks how. Applied science asks what it can do for us. Both use the same method."],
     bins: ["Basic science", "Applied science"],
     items: [["Working out how a motor protein walks along a filament", 0], ["Sequencing a rare orchid's genome out of curiosity", 0], ["Why do cells divide at a particular size?", 0], ["Designing a drug that blocks a viral enzyme", 1], ["Breeding a drought-tolerant corn", 1], ["Developing a faster diagnostic test", 1]] },
-  { type: "sim", title: "The null hypothesis", tip: "Two lizard populations. The null hypothesis says their average body mass differs by exactly zero. Individuals vary by about 6 g.",
+  { type: "sim", title: "Reject the null, or fail to", solved: "With enough lizards any difference, however small, is 'significant'; with too few, a real difference isn't. And p = 0.049 and p = 0.051 are the same evidence.", tip: "Two lizard populations. The null hypothesis says their average body mass differs by exactly zero. Individuals vary by about 6 g.",
     voice: ["The null is always false: the true difference is never exactly zero. Large samples reject any null.", "The p value is the chance of data at least this extreme if the null were true. Low means clear; high means 'close enough', and we fail to reject. We never prove the null."],
     w: 640, h: 300,
     controls: [{ id: "d", label: "True difference in mean mass", min: 0, max: 3, step: 0.05, val: 0.5, fmt: v => v.toFixed(2) + " g" }, { id: "x", label: "Lizards per population", min: 0.7, max: 4.2, step: 0.05, val: 1.3, fmt: v => Math.round(Math.pow(10, v)).toLocaleString() }],

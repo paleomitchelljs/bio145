@@ -52,7 +52,7 @@ const mutQ = () => {
   }
   return { q: "One change to the gene. Before:" + frameHtml(frame.join("")) + "After:" + frameHtml(after) + "This mutation is…", a: kind };
 };
-Kit.run({ id: "b145_lesson32", num: 32, version: 2, stages: [
+Kit.run({ id: "b145_lesson32", num: 32, version: 3, stages: [
   { type: "sim", title: "A clock and a moving front", tip: "Two signals. The clock: an mRNA that switches its own gene off, decays, and lets the gene switch on again, so it rises and falls; the faster the mRNA decays, the faster the clock. The front: the tail grows away from the head, and cells left behind by the growing tail settle. Each tick of the clock, the cells that have just settled become one segment. Clock period here = 4 min + 4 × the mRNA half-life (a made-up rule of the right shape).",
     solved: "Segment number is growth time divided by the clock's period; segment size is growth speed times the period. Same genes, different rates: a snake's clock ticks fast relative to its growth.",
     voice: ["Segmenting a body without a counter, and with nothing supervising. Cells read where they are and when it is.", "Snakes have hundreds of vertebrae, frogs a handful. Same genes."],
@@ -71,17 +71,17 @@ Kit.run({ id: "b145_lesson32", num: 32, version: 2, stages: [
       { text: "A frog-like body: exactly 5 segments", test: S => Math.floor(S.d * 60 / (4 + 4 * S.hl)) === 5 },
       { text: "A human-like spine: 33 segments, each 100 to 150 µm long", test: S => { const P = 4 + 4 * S.hl, sz = S.v * P; return Math.floor(S.d * 60 / P) === 33 && sz >= 100 && sz <= 150; } },
       { text: "A snake: more than 200 segments in a body no longer than 6 mm", test: S => { const P = 4 + 4 * S.hl, n = Math.floor(S.d * 60 / P); return n > 200 && n * S.v * P <= 6000; } }] },
-  { type: "pick", title: "Classify the mutation", tip: "Silent: same amino acid. Missense: different amino acid. Nonsense: becomes stop. Frameshift: an insertion or deletion not in multiples of three.",
+  { type: "pick", title: "Classify the mutation", solved: "Same amino acid, different amino acid, stop, or every codon after the change: silent, missense, nonsense, frameshift.", tip: "Silent: same amino acid. Missense: different amino acid. Nonsense: becomes stop. Frameshift: an insertion or deletion not in multiples of three.",
     voice: ["Silent, missense, nonsense, frameshift. Inversion and duplication change bigger pieces. Silent is not always neutral."],
     qs: [0, 1, 2, 3, 4, 5].map(() => ({ make: () => { const m = mutQ(); return { q: m.q, ok: m.a, no: ["silent", "missense", "nonsense", "frameshift"].filter(x => x !== m.a), why: "" }; } })) },
-  { type: "sort", title: "Somatic or germline", tip: "Somatic mutations die with the person; germline mutations are heritable.",
+  { type: "classify", title: "Somatic or germline", solved: "Only changes in the germline reach the next generation.", tip: "Somatic mutations die with the person; germline mutations are heritable.",
     voice: ["Mosaicism: half the body can differ from the other half. Germ cells are set aside early; meiotic arrest limits the number of divisions."],
     bins: ["Somatic mutation", "Germline mutation"],
     items: [["A mutation in a skin cell from sunburn", 0], ["A mutation in a developing sperm", 1], ["Passed to children", 1], ["A mosaic patch of different-colored fur", 0], ["Not inherited", 0], ["A mutation in an egg precursor", 1], ["Epithelia divide more, so these accumulate more", 0]] },
-  { type: "order", title: "A retrovirus takes over", tip: "Reverse transcriptase copies RNA into DNA.",
+  { type: "order", title: "Run a retrovirus", solved: "RNA to DNA, into the host's chromosome, read by the host's own machinery.", tip: "Reverse transcriptase copies RNA into DNA.",
     voice: ["The central dogma has exceptions: RNA to DNA. A retrovirus carjacks an idling car: it inserts at an expressed gene and steals the host promoter."],
     items: ["The virus binds the cell and its RNA genome enters", "Reverse transcriptase copies the RNA into DNA", "The DNA enters the nucleus and integrates into a host chromosome", "The host's own machinery transcribes the viral genes", "Viral proteins and RNA assemble into new virus particles", "New viruses bud from the cell"] },
-  { type: "pick", title: "Duplicates and model organisms", tip: "A spare copy is free to change.",
+  { type: "pick", title: "Duplicates and model organisms", solved: "A spare copy is free to change.", tip: "A spare copy is free to change.",
     voice: ["Heir and a spare: silence the spare, free to mutate, a chance of a new function. Model organisms were chosen by accident: zebrafish from a pet store."],
     qs: [
       { q: "Why is a gene duplication useful?", ok: "One copy keeps the old job and the spare is free to evolve a new one", no: ["It doubles every protein forever", "It deletes the gene", "It silences the genome"], why: "Heir and a spare." },

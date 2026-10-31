@@ -31,7 +31,7 @@ const etcDraw = S => (ctx, w, h) => {
   [["proton gradient", e.grad, "#2f6b8f"], ["ATP", e.atp / 32, "#4a7a2a"], ["heat", e.heat, "#a8331a"]].forEach(([n, v, c], i) => { const x = 40 + i * 150; ctx.fillStyle = "#e2e0d9"; ctx.fillRect(x, 20, 80, 160); ctx.fillStyle = c; ctx.fillRect(x, 180 - 160 * v, 80, 160 * v); ctx.fillStyle = "#1d1d1b"; ctx.fillText(n, x + 4, 200); });
   ctx.fillStyle = "#6b6b68"; ctx.fillText("e⁻ → chain → " + (e.o2 ? "O₂ → H₂O" : "(no acceptor)"), 40, 216);
 };
-Kit.run({ id: "b145_lesson16", num: 16, version: 2, stages: [
+Kit.run({ id: "b145_lesson16", num: 16, version: 3, stages: [
   { type: "pick", title: "Predict the chain", tip: "Electrons flow down the chain, pumping protons; protons flowing back through ATP synthase make ATP. Oxygen takes the electrons at the end. Cyanide blocks the last carrier. An uncoupling protein (brown fat's UCP1) lets protons leak back without making ATP. ATP numbers are per glucose, rounded.",
     voice: ["Carriers are cakes: they can't buy anything elsewhere. They are sold for cash (ATP) at the chain.", "The dam is the proton gradient; ATP synthase is the water turbine. About 40% efficient; the rest is heat, which is sometimes the point."],
     solved: "No oxygen or a blocked carrier stops the chain, leaving glycolysis's few ATP. A leaky membrane keeps the chain running but turns the gradient into heat instead of ATP.",
@@ -42,7 +42,7 @@ Kit.run({ id: "b145_lesson16", num: 16, version: 2, stages: [
       [{ o2: true, cn: false, unc: 100 }, "A brown-fat cell, its uncoupling protein wide open."]
     ].map(([S, txt]) => { const e = etc(S), word = e.atp >= 30 ? "About 30 ATP; little heat" : e.atp <= 4 ? "About 4 ATP (glycolysis only); the chain stops" : "About 8 ATP, and much of the rest as heat";
       return { q: txt + " What does a glucose give?", ok: word, no: ["About 30 ATP; little heat", "About 4 ATP (glycolysis only); the chain stops", "About 8 ATP, and much of the rest as heat"].filter(x => x !== word), w: 560, h: 220, after: etcDraw(S), why: e.accum ? "Electrons back up and NADH piles up: the cell must ferment." : "" }; }) },
-  { type: "pick", title: "Counting carbons and ATP", tip: "The citric acid cycle makes no oxygen-needing ATP itself; it loads carriers.",
+  { type: "pick", title: "Counting carbons and ATP", solved: "Two carbons in, two out as CO₂, every turn. The cycle loads carriers; the chain cashes them in.", tip: "The citric acid cycle makes no oxygen-needing ATP itself; it loads carriers.",
     voice: ["Acetyl (2 carbons) joins oxaloacetate (4) to make citrate (6). Two carbons leave as CO₂ each turn; two turns per glucose.", "Weight loss is exhaled carbon: fat leaves as breath."],
     qs: [
       { q: "Citrate has six carbons. After one turn, how many carbons have left as CO₂?", ok: "2", no: ["1", "4", "6"], why: "Back to oxaloacetate, ready for the next acetyl." },
@@ -51,7 +51,7 @@ Kit.run({ id: "b145_lesson16", num: 16, version: 2, stages: [
       { q: "Where does most of the ATP from a glucose come from?", ok: "The electron transport chain and ATP synthase", no: ["Glycolysis", "The citric acid cycle directly", "Pyruvate oxidation"], why: "Theoretical maximum about 30–32; realistic yield is lower." },
       { q: "When you lose weight, where does the carbon go?", ok: "Breathed out as CO₂", no: ["Burned as heat only", "Excreted as urine mostly", "Turned into water"], why: "Fat leaves as breath." },
       { q: "About what fraction of the energy in glucose is captured as ATP?", ok: "About 40%", no: ["About 5%", "About 100%", "About 80%"], why: "Every reaction loses some to heat, which is why we keep eating." }] },
-  { type: "pick", title: "Heat and body size", tip: "Heat is inevitable; sometimes it is an advantage.",
+  { type: "pick", title: "Heat and body size", solved: "Heat is the price of every reaction, and some animals spend it on purpose.", tip: "Heat is inevitable; sometimes it is an advantage.",
     voice: ["Brown fat and uncoupling proteins: infants, shrews, hibernators. The leatherback sea turtle keeps warm by size (volume to surface). Desert rodents get metabolic water."],
     qs: [
       { q: "Infants have brown fat. What does it do?", ok: "Uses uncoupling proteins to turn the gradient into heat", no: ["Stores more glycogen", "Makes extra ATP", "Fixes carbon"], why: "Protons leak through UCP1 instead of ATP synthase." },

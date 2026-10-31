@@ -33,8 +33,8 @@ const rseq = () => Array.from({ length: 7 }, () => pick("ACGT".split(""))).join(
 const NUL = Array.from({ length: 30000 }, () => -Math.log10(Math.random()));
 const HITS = [7.5, 9.1, 6.6];
 const maxNull = Math.max(...NUL);
-Kit.run({ id: "b145_lesson35", num: 35, stages: [
-  { type: "sim", title: "A Manhattan plot", tip: "Each dot is a variant (SNP). Height is −log₁₀ of its p value. With 30,000 tests, a 0.05 cutoff lets in hundreds of false hits. The usual fix: divide 0.05 by the number of tests.",
+Kit.run({ id: "b145_lesson35", num: 35, version: 2, stages: [
+  { type: "sim", title: "Set the line", solved: "With 30,000 tests, p = 0.05 lets in hundreds of false hits; dividing by the number of tests keeps the real ones and drops the rest.", tip: "Each dot is a variant (SNP). Height is −log₁₀ of its p value. With 30,000 tests, a 0.05 cutoff lets in hundreds of false hits. The usual fix: divide 0.05 by the number of tests.",
     voice: ["Mendel got lucky. Most traits are polygenic, and the noncoding genome matters.", "Set the line: too low and the plot is full of false positives; too high and the true signals are lost."],
     w: 640, h: 270,
     controls: [{ id: "th", label: "Significance line (−log₁₀ p)", min: 1, max: 10, step: 0.1, val: 1.3, fmt: v => v.toFixed(1) }],
@@ -50,16 +50,16 @@ Kit.run({ id: "b145_lesson35", num: 35, stages: [
       { text: "Remove every false positive (line above the highest grey dot)", test: S => S.th > maxNull && S.th < 10 },
       { text: "Remove every false positive but keep all three true loci", test: S => S.th > maxNull && HITS.every(v => v >= S.th) },
       { text: "Set it near the Bonferroni value for 30,000 tests (about 5.8)", test: S => Math.abs(S.th - 5.8) <= 0.3 }] },
-  { type: "pick", title: "Reading a Sanger sequence", tip: "A chain terminator (dideoxynucleotide) with a fluorescent dye stops each new strand at one base. The shortest piece ends at the first base.",
+  { type: "pick", title: "Reading a Sanger sequence", solved: "Shortest piece first: the gel reads bottom to top.", tip: "A chain terminator (dideoxynucleotide) with a fluorescent dye stops each new strand at one base. The shortest piece ends at the first base.",
     voice: ["PCR plus dideoxynucleotides. Four dyes. Read the gel bottom to top; a heterozygote shows mixed colors."],
     qs: [0, 1, 2].map(() => ({ make: () => { const s = rseq(); const alts = new Set([s, s.split("").reverse().join("")]); while (alts.size < 4) alts.add(rseq()); return { q: "Read the new strand from the shortest piece to the longest. (A green, C blue, G black, T red.) What is the sequence?", ok: s, no: [...alts].filter(x => x !== s), draw: sanger(s), w: 380, h: 180, why: "Each color marks the last base of a piece; the shortest piece, at the bottom, ends at the first base." }; } })).concat([
       { q: "A Sanger trace shows two colors at the same position. This suggests…", ok: "A heterozygote: two alleles", no: ["A sequencing error only", "A deletion", "Contamination always"], why: "Mixed colors." },
       { q: "Next-generation sequencing differs from Sanger because it…", ok: "Reads millions of short fragments in parallel and aligns them to a reference", no: ["Reads one long fragment", "Uses a gel", "Does not need DNA"], why: "The cost of a genome has dropped enormously." }]) },
-  { type: "sort", title: "CYP2D6 and one dose of codeine", tip: "The liver enzyme CYP2D6 converts codeine to morphine.",
+  { type: "classify", title: "Predict one dose in three people", solved: "Same dose, three outcomes: no relief, relief, or overdose, set by how many working copies of one liver enzyme.", tip: "The liver enzyme CYP2D6 converts codeine to morphine.",
     voice: ["Three people, one dose: nonfunctional allele, normal, ultra-metabolizer. Warfarin is another case."],
     bins: ["Poor metabolizer (nonfunctional alleles)", "Normal metabolizer", "Ultra-rapid metabolizer (extra active copies)"],
     items: [["Little morphine made; codeine gives no pain relief", 0], ["Expected pain relief at the standard dose", 1], ["Too much morphine made; risk of overdose", 2], ["Carries two nonfunctional CYP2D6 alleles", 0], ["Carries extra functional copies of CYP2D6", 2], ["Carries one working copy and one weak copy of average activity", 1]] },
-  { type: "pick", title: "Comparing genomes and the vertical-inheritance trap", tip: "GWAS finds associations, not causes.",
+  { type: "pick", title: "Comparing genomes and the vertical-inheritance trap", solved: "A variant that travels with ancestry will 'predict' anything else that does.", tip: "GWAS finds associations, not causes.",
     voice: ["Red hair and being English; yerba mate; chopsticks; football-club allegiance: a variant that rides with ancestry will 'predict' anything that does too. Hits nudge, they do not prove.", "Conserved non-coding elements; FOXP2; fast lineage-specific change."],
     qs: [
       { q: "A SNP strongly associates with preferring chopsticks. Why is that likely not causal?", ok: "It tracks ancestry, which also tracks culture", no: ["Chopsticks change DNA", "SNPs cannot be associated", "The p value was too high"], why: "Population structure confounds." },

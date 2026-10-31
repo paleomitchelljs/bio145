@@ -49,8 +49,8 @@ function drawSide(name) {
     if (d.lab) { ctx.fillStyle = d.lab === "+" ? "#2f6b8f" : "#b23a48"; ctx.font = "600 20px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText(d.lab, w / 2 + 50, h - 24); }
   };
 }
-Kit.run({ id: "b145_lesson5", num: 5, version: 2, stages: [
-  { type: "sort", title: "What proteins do", tip: "A verb in the cell needs a protein noun.",
+Kit.run({ id: "b145_lesson5", num: 5, version: 3, stages: [
+  { type: "classify", title: "Find the protein doing the verb", solved: "Every job a cell does, from moving to defending to storing, is done by a protein.", tip: "A verb in the cell needs a protein noun.",
     voice: ["Proteins do stuff. Whenever the cell does something, a protein is doing it."],
     bins: ["Enzyme", "Transport", "Motility", "Regulation", "Defense", "Structure", "Storage"],
     items: [["Amylase breaks starch down", 0], ["A neuron's ion channel", 1], ["Hemoglobin carries oxygen", 1], ["Myosin slides along actin", 2], ["Kinesin walks along a microtubule", 2], ["Insulin tells cells to take up glucose", 3], ["An antibody binds a bacterium", 4], ["Collagen in skin", 5], ["Keratin in hair", 5], ["Albumin in egg white", 6]] },
@@ -59,11 +59,11 @@ Kit.run({ id: "b145_lesson5", num: 5, version: 2, stages: [
     solved: "C–H only is nonpolar; an O–H or S–H makes it polar; a carboxylate (−) or an amine (+) makes it charged. In water, the nonpolar ones end up buried.",
     bins: ["Nonpolar", "Polar, uncharged", "Charged"],
     items: Object.keys(SIDE).map(n => ({ q: n[0].toUpperCase() + n.slice(1), bin: ["nonpolar", "polar", "charged"].indexOf(SIDE[n].k), w: 300, h: 180, draw: drawSide(n) })) },
-  { type: "sort", title: "Four levels of structure", tip: "Primary is the sequence; secondary is local backbone shapes; tertiary is the whole chain's fold; quaternary is several chains together.",
+  { type: "classify", title: "Which level holds it?", solved: "Sequence, then local helices and sheets, then the whole fold, then several chains together. Heat undoes all but the first.", tip: "Primary is the sequence; secondary is local backbone shapes; tertiary is the whole chain's fold; quaternary is several chains together.",
     voice: ["Sequence, then local shapes, then the fold, then the team of chains."],
     bins: ["Primary", "Secondary", "Tertiary", "Quaternary"],
     items: [["The order of amino acids in the chain", 0], ["A peptide bond joining two amino acids", 0], ["An α helix", 1], ["A β sheet", 1], ["Hydrogen bonds between backbone atoms", 1], ["The whole chain's 3D fold", 2], ["A disulfide bridge between two side chains", 2], ["Hydrophobic side chains packed inside", 2], ["Four chains of hemoglobin together", 3], ["Different complexes from the same gene's chains", 3]] },
-  { type: "pick", title: "Steroids and denaturation (book, chapter 3)", tip: "Cholesterol is the four-ring core every steroid hormone is built from.",
+  { type: "pick", title: "Steroids and denaturation (book, chapter 3)", solved: "One four-ring core, many hormones: small groups decide which receptor a steroid fits. A denatured protein keeps its sequence and loses its shape.", tip: "Cholesterol is the four-ring core every steroid hormone is built from.",
     voice: ["One core, many hormones: cortisol, aldosterone, progesterone, testosterone, estradiol differ by small groups.", "Heat or pH can unfold a protein; the sequence is intact but the shape, and the job, are gone."],
     qs: [
       { q: "How many rings does the steroid core have?", ok: "Four", no: ["Two", "Three", "Six"], draw: steroid, w: 260, h: 120, why: "Three six-membered rings and one five-membered ring, fused." },

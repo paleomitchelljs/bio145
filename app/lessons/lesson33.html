@@ -56,24 +56,24 @@ const LACQ = [
   [{ lactose: true, glucose: false, capMut: true }, "A mutant CAP site. Lactose and no glucose."]
 ].map(([c, txt]) => { const l = lac(c); return { q: txt + " Predict transcription of the lac genes.", ok: l.word, no: ["Off", "Low: a trickle", "High: the cells turn blue"].filter(x => x !== l.word), draw: lacDraw(c, false), after: lacDraw(c, true), w: 460, h: 180,
   why: l.blocked ? "The repressor sits on the operator." : l.cap ? "Nothing blocks, and CAP-cAMP helps polymerase on." : "Nothing blocks, but without CAP-cAMP polymerase binds poorly." }; });
-Kit.run({ id: "b145_lesson33", num: 33, version: 2, stages: [
+Kit.run({ id: "b145_lesson33", num: 33, version: 3, stages: [
   { type: "pick", title: "Predict the lac operon", tip: "lacZ, lacY and lacA are transcribed together from one promoter. The repressor grips the operator unless lactose (as allolactose) binds it and pulls it off. CAP, with cAMP, helps RNA polymerase onto the promoter; cAMP is high when glucose is low.",
     voice: ["Two inputs, one output: two-input logic. The repressor is a roadblock; lactose pulls it off.", "A reporter gene (lacZ) turns cells blue."],
     solved: "On only when lactose is present; high only when glucose is also absent. Break the repressor or the operator and it ignores lactose; break the CAP site and it ignores glucose.",
     qs: LACQ },
-  { type: "sort", title: "Histone marks", tip: "Acetylation always opens chromatin. Methylation depends on which lysine.",
+  { type: "classify", title: "Open or close the chromatin", solved: "Acetylation always opens; methylation depends on which lysine.", tip: "Acetylation always opens chromatin. Methylation depends on which lysine.",
     voice: ["Histone octamer, tails with lysines. H3K4me3 opens; H3K9me3 closes."],
     bins: ["Opens chromatin (gene on)", "Closes chromatin (gene off)"],
     items: [["Acetylation of a histone lysine", 0], ["H3K4me3", 0], ["H3K9me3", 1], ["A repressive methyl mark", 1], ["Histone acetyltransferase active at a promoter", 0], ["Heterochromatin", 1]] },
-  { type: "sort", title: "Operons and gene control (book, chapter 16)", tip: "The lac operon is inducible; the trp operon is repressible.",
+  { type: "classify", title: "Operons and gene control (book, chapter 16)", solved: "Lac is off until lactose turns it on; trp is on until tryptophan turns it off.", tip: "The lac operon is inducible; the trp operon is repressible.",
     voice: ["Prokaryotes control genes at the operon; eukaryotes have more knobs: chromatin, transcription, processing, stability, translation."],
     bins: ["Lac operon (inducible)", "Trp operon (repressible)", "Eukaryote-only controls"],
     items: [["Normally off; lactose turns it on", 0], ["Normally on; the amino acid tryptophan turns it off", 1], ["Repressor works only when bound to the end product", 1], ["Repressor is released when the inducer binds", 0], ["Enhancers far from the promoter", 2], ["Histone modification", 2], ["Alternative splicing", 2], ["mRNA half-life set by the 3′ UTR", 2]] },
-  { type: "sort", title: "Where is gene expression controlled?", tip: "Multiple knobs, the same output.",
+  { type: "classify", title: "Find the dial", solved: "The same output can be set at five places: chromatin, transcription, processing, mRNA lifetime, translation.", tip: "Multiple knobs, the same output.",
     voice: ["Chromatin state, transcription rate, mRNA processing, mRNA stability, translation rate."],
     bins: ["Chromatin state", "Transcription", "mRNA processing", "mRNA stability", "Translation"],
     items: [["Histone acetylation", 0], ["Enhancers and the TATA box", 1], ["Transcription factors binding the promoter", 1], ["Alternative splicing", 2], ["Capping and polyadenylation", 2], ["miRNA degrades the message", 3], ["3′ UTR sets the half-life", 3], ["Ribosome loading and tRNA supply", 4]] },
-  { type: "pick", title: "Introns, transposons, selfish RNA", tip: "Introns descend from self-splicing elements.",
+  { type: "pick", title: "Introns, transposons, selfish RNA", solved: "Introns began as self-splicing intruders; the genome is a nest of replicators.", tip: "Introns descend from self-splicing elements.",
     voice: ["Nested dolls of replicators: organism, cell, genome, gene, transcript. Cancer is a cell-level escape. Introns are not for the host."],
     qs: [
       { q: "Introns are thought to descend from…", ok: "Self-splicing group II elements that inserted into genes", no: ["Viruses of bacteria", "Mitochondrial DNA", "tRNA genes"], why: "A good outcome of an insertion." },

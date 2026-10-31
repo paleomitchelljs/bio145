@@ -39,11 +39,11 @@ function cellDraw(ctx, w, h, ph) {
   if (ph === 4) { ctx.fillStyle = "#f4d3d7"; [cx - W / 4, cx + W / 4].forEach(x => { ctx.beginPath(); ctx.arc(x, cy, 15, 0, 7); ctx.fill(); }); }
   ctx.lineWidth = 1;
 }
-Kit.run({ id: "b145_lesson21", num: 21, version: 2, stages: [
-  { type: "order", title: "Packing two meters of DNA", tip: "Largest scale last: each level is a tighter coil.",
+Kit.run({ id: "b145_lesson21", num: 21, version: 3, stages: [
+  { type: "order", title: "Pack it", tip: "Largest scale last: each level is a tighter coil.",
     voice: ["Two meters of DNA per cell, fitted into a nucleus. Histones are the spools; open chromatin has genes on, closed has them off."],
     items: ["Double helix of DNA", "DNA wrapped around a histone core: a nucleosome", "Beads on a string: nucleosomes in a row", "A coiled, looped chromatin fiber", "A condensed chromosome at mitosis"] },
-  { type: "pick", title: "Chromosomes and chromatids", tip: "Before S phase a chromosome is one chromatid. After S phase it is two sister chromatids joined at the centromere.",
+  { type: "pick", title: "Count chromosomes and chromatids", solved: "Count centromeres for chromosomes. After S phase each chromosome is two chromatids.", tip: "Before S phase a chromosome is one chromatid. After S phase it is two sister chromatids joined at the centromere.",
     voice: ["Chromatid and chromosome are the same thing before duplication; after duplication, a chromosome holds two sister chromatids.", "Karyotype: chromosomes numbered by size. Trisomy 21 is Down syndrome."],
     qs: [
       { q: "A human cell in G1 has how many chromosomes?", ok: "46", no: ["23", "92", "44"], why: "Diploid." },
@@ -52,7 +52,7 @@ Kit.run({ id: "b145_lesson21", num: 21, version: 2, stages: [
       { q: "How many chromosomes are shown, and are they duplicated?", ok: "Three, not duplicated", no: ["Six, duplicated", "Three, duplicated", "Six, not duplicated"], draw: chromo(3, false), w: 340, h: 140, why: "One chromatid each, before S phase." },
       { q: "A person has three copies of chromosome 21. This is…", ok: "Trisomy 21: Down syndrome", no: ["Monosomy 21", "A balanced translocation", "A duplicated chromatid"], why: "Trisomy 1 never survives; sex chromosome anomalies are milder." },
       { q: "A salamander has a genome many times larger than a human's. This shows…", ok: "Genome size does not track complexity", no: ["Salamanders are more complex", "Big genomes code more proteins", "Humans lost DNA"], why: "Most DNA does nothing useful." }] },
-  { type: "order", title: "The cell cycle", tip: "Interphase is not rest.",
+  { type: "order", title: "Run the cycle", tip: "Interphase is not rest.",
     voice: ["A daughter cell starts half-size: it must grow, duplicate DNA, grow again, then divide.", "Skeletal muscle does mitosis without cytokinesis."],
     items: ["G1: the cell grows", "S: DNA is duplicated", "G2: the cell grows again and prepares", "M: mitosis separates the sister chromatids", "Cytokinesis divides the cytoplasm"] },
   { type: "classify", title: "Count the phases", tip: "A field of dividing root-tip cells, one at a time. Interphase: a round nucleus, chromatin spread out. Prophase: chromosomes condensed inside the nucleus. Metaphase: chromosomes lined up across the middle. Anaphase: two groups pulling apart. Telophase: two new nuclei, the cell pinching or walling in two.",
@@ -60,7 +60,7 @@ Kit.run({ id: "b145_lesson21", num: 21, version: 2, stages: [
     solved: "Most cells are in interphase. The share of cells in a phase is the share of the cycle spent in it: in a 24-hour cycle, 3% of cells in metaphase means about 43 minutes of metaphase.",
     bins: ["Interphase", "Prophase", "Metaphase", "Anaphase", "Telophase"], n: 40, ratio: 100,
     make: () => { const r = Math.random(), ph = r < 0.82 ? 0 : r < 0.89 ? 1 : r < 0.93 ? 2 : r < 0.96 ? 3 : 4; return { q: "", bin: ph, w: 170, h: 120, draw: (ctx, w, h) => cellDraw(ctx, w, h, ph) }; } },
-  { type: "pick", title: "From counts to hours", tip: "If cells are dividing steadily and out of step with each other, the share caught in a phase equals the share of time spent in it.",
+  { type: "pick", title: "From counts to hours", solved: "The share of cells in a phase is the share of time spent in it.", tip: "If cells are dividing steadily and out of step with each other, the share caught in a phase equals the share of time spent in it.",
     voice: ["The counts are the data."],
     qs: [
       { q: "A root tip's cells divide every 24 hours. Of 200 cells, 6 are in metaphase. How long is metaphase?", ok: "About 43 minutes", no: ["About 6 hours", "About 3 minutes", "About 6 minutes"], why: "6/200 = 3% of 24 hours = 0.72 h." },

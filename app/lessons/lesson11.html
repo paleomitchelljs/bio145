@@ -35,7 +35,7 @@ const pump = S => {
   const ghk = 61.5 * Math.log10((pK * 5 + pNa * 145) / (pK * kIn + pNa * naIn)), vm = ghk + (S.atp ? -3 : 0);
   return { naIn, kIn, vm };
 };
-Kit.run({ id: "b145_lesson11", num: 11, version: 2, stages: [
+Kit.run({ id: "b145_lesson11", num: 11, version: 3, stages: [
   { type: "sim", title: "What makes the inside negative", tip: "Outside the cell it is always 145 mM Na⁺ and 5 mM K⁺. The bars show the inside. The pump spends one ATP to move 3 Na⁺ out and 2 K⁺ in. K⁺ leak channels let K⁺ cross on its own, down its gradient.",
     solved: "The pump builds the gradients; the K⁺ leaking back out through open channels makes almost all of the voltage. The pump's own 3-for-2 trade is worth about 3 mV.",
     voice: ["Active transport moves things against the gradient, like spilling water into a full glass: it costs ATP.", "Three out, two in: an antiporter. Where does the negative inside come from?"],
@@ -56,15 +56,15 @@ Kit.run({ id: "b145_lesson11", num: 11, version: 2, stages: [
       { text: "With the pump running and most K⁺ channels open (80% or more), get the inside to −60 mV or below", test: S => S.atp && S.leak >= 80 && pump(S).vm <= -60 },
       { text: "Keep the pump running and close every K⁺ leak channel: the inside sits within 15 mV of zero", test: S => S.atp && S.leak === 0 && pump(S).vm > -15 },
       { text: "Take away the ATP and wait 6 hours or more: Na⁺ inside above 100 mM", test: S => !S.atp && S.hrs >= 6 && pump(S).naIn > 100 }] },
-  { type: "sort", title: "Ways across", tip: "Passive moves down a gradient with no energy. Active spends ATP or uses a gradient someone else made. Bulk moves in vesicles.",
+  { type: "classify", title: "Which way across?", solved: "Down a gradient is free, through the lipids or a protein door. Against it costs ATP, directly or through another gradient. Big cargo goes by vesicle.", tip: "Passive moves down a gradient with no energy. Active spends ATP or uses a gradient someone else made. Bulk moves in vesicles.",
     voice: ["Simple diffusion, facilitated diffusion, active transport, vesicles. Uniporter, symporter, antiporter describe the number and direction of cargo."],
     bins: ["Simple diffusion", "Facilitated diffusion", "Active transport", "Vesicle (bulk) transport"],
     items: [["Oxygen slipping through the bilayer", 0], ["A steroid hormone entering a cell", 0], ["Water through an aquaporin", 1], ["Glucose through a GLUT carrier", 1], ["A voltage-gated channel opening", 1], ["The Na⁺/K⁺ pump", 2], ["A proton pump", 2], ["A symporter importing glucose with Na⁺", 2], ["A macrophage engulfing a bacterium", 3], ["Taking up LDL by receptor-mediated endocytosis", 3], ["A cell releasing insulin by exocytosis", 3], ["Pinocytosis: a cell sipping fluid", 3]] },
-  { type: "sort", title: "Cell junctions", tip: "Match each job to the junction.",
+  { type: "classify", title: "Match the junction", solved: "Tight junctions seal, gap junctions connect, desmosomes and adherens junctions hold on; plants run plasmodesmata through their walls.", tip: "Match each job to the junction.",
     voice: ["Gap junctions pass ions (heart cells beat together). Tight junctions seal sheets. Desmosomes rivet. Adherens link actin through cadherins. Plants have plasmodesmata."],
     bins: ["Tight junction", "Gap junction", "Desmosome", "Adherens junction", "Plasmodesmata"],
     items: [["Seals epithelial cells so gut contents don't leak", 0], ["Made of connexins; lets calcium pass between heart cells", 1], ["A rivet that resists stretching in skin and heart", 2], ["Cadherins link neighbors' actin", 3], ["A channel lined by a desmotubule in plant cell walls", 4], ["Allows cells to beat in synchrony", 1], ["Keeps the lumen separate from the blood", 0]] },
-  { type: "pick", title: "Tonicity and gradients", tip: "Hypo- means low, hyper- means high; water follows solutes.",
+  { type: "pick", title: "Tonicity and gradients", solved: "Water follows solutes, so a cell's own contents are an osmotic problem it pays to manage.", tip: "Hypo- means low, hyper- means high; water follows solutes.",
     voice: ["Hypo means low (hypothesis: low thought). Water follows solutes.", "A proton pump is a bucket on a pulley: the gradient it builds can later drive ATP synthase."],
     qs: [
       { q: "A red blood cell is placed in a solution with less solute than the cell. The solution is…", ok: "Hypotonic, and the cell swells", no: ["Hypertonic, and the cell swells", "Isotonic, and the cell swells", "Hypotonic, and the cell shrinks"], why: "Water moves in toward the higher solute." },

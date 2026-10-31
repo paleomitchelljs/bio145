@@ -30,30 +30,30 @@ const g = (x, m, s) => Math.exp(-0.5 * Math.pow((x - m) / s, 2));
 const absA = x => Math.min(1, 0.95 * g(x, 430, 18) + 0.85 * g(x, 662, 16) + 0.06);
 const absB = x => Math.min(1, 0.9 * g(x, 455, 18) + 0.6 * g(x, 642, 14) + 0.05);
 const absL = x => Math.max(absA(x), absB(x));
-Kit.run({ id: "b145_lesson17", num: 17, stages: [
-  { type: "sort", title: "Burning other fuels", tip: "Everything is brought to glycolysis, acetyl-CoA, or the citric acid cycle.",
+Kit.run({ id: "b145_lesson17", num: 17, version: 2, stages: [
+  { type: "classify", title: "Feed it in", solved: "Every fuel is cut down to something glycolysis or the citric acid cycle already handles.", tip: "Everything is brought to glycolysis, acetyl-CoA, or the citric acid cycle.",
     voice: ["Polysaccharides give glucose. Glycerol joins glycolysis. Fatty acids are cut in two-carbon pieces (beta oxidation): more hydrogen, more ATP. Amino acids lose their nitrogen first (deamination)."],
     bins: ["Enters at glycolysis", "Enters as acetyl-CoA", "Enters the citric acid cycle"],
     items: [["Glycogen", 0], ["Starch", 0], ["Glycerol from a fat", 0], ["Fatty acids after beta oxidation", 1], ["Leucine, after its nitrogen is removed", 1], ["Glutamate, as α-ketoglutarate", 2], ["Aspartate, as oxaloacetate", 2]] },
-  { type: "pick", title: "Nitrogen and waste", tip: "Deamination removes the nitrogen from an amino acid as ammonia, which is toxic.",
+  { type: "pick", title: "Nitrogen and waste", solved: "Carbon skeletons burn; the nitrogen has to be thrown away as ammonia, urea or uric acid.", tip: "Deamination removes the nitrogen from an amino acid as ammonia, which is toxic.",
     voice: ["Ammonia becomes urea (mammals) or uric acid (birds, reptiles). Animals are nitrogen thieves: bacteria and fungi fix it. Urine is fertilizer."],
     qs: [
       { q: "Burning an amino acid for energy first requires…", ok: "Removing its amino group (deamination)", no: ["Adding a phosphate", "Splitting water", "Making it a lipid"], why: "The carbon skeleton enters respiration; the nitrogen is waste." },
       { q: "Ammonia is toxic. Mammals make it into…", ok: "Urea", no: ["Starch", "Glycerol", "ATP"], why: "Birds and reptiles make uric acid." },
       { q: "Who fixes nitrogen from the air into usable forms?", ok: "Certain bacteria", no: ["Animals", "Mammals", "Sunlight"], why: "Animals are nitrogen thieves." },
       { q: "A gram of fat gives more ATP than a gram of sugar because…", ok: "Fatty acids have more hydrogen to carry to the chain", no: ["Fats contain more oxygen", "Fats skip respiration", "Fats are polar"], why: "More H means more NADH." }] },
-  { type: "sort", title: "Making ATP without O₂ as the acceptor", tip: "Fermentation regenerates NAD⁺ so glycolysis can continue; anaerobic respiration uses a different final acceptor.",
+  { type: "classify", title: "Find the electrons' last stop", solved: "Without oxygen, another acceptor (nitrate, sulfate) or none at all: fermentation only recycles NAD⁺ so glycolysis can keep going.", tip: "Fermentation regenerates NAD⁺ so glycolysis can continue; anaerobic respiration uses a different final acceptor.",
     voice: ["Pyruvate pile-up stalls glycolysis. Break glass in an emergency: reduce pyruvate to regenerate NAD⁺. Lactic acid in muscle; ethanol and CO₂ in yeast."],
     bins: ["Aerobic respiration", "Anaerobic respiration (other acceptor)", "Lactic acid fermentation", "Ethanol fermentation"],
     items: [["O₂ is the final electron acceptor", 0], ["The most ATP per glucose", 0], ["Nitrate is the final acceptor", 1], ["Sulfate is the final acceptor", 1], ["Obligate anaerobes in mud", 1], ["Sore muscles after a sprint", 2], ["Pyruvate becomes lactate", 2], ["Yeast in bread dough and beer", 3], ["Pyruvate loses CO₂ and becomes ethanol", 3]] },
-  { type: "pick", title: "Earth's oxygen: banded iron", tip: "Banded iron formations are layers of rusted iron and unrusted iron laid down over a billion years.",
+  { type: "pick", title: "Earth's oxygen: banded iron", solved: "The rocks record oxygen rising and crashing until respiration balanced photosynthesis.", tip: "Banded iron formations are layers of rusted iron and unrusted iron laid down over a billion years.",
     voice: ["Red bands: oxygen was abundant, iron rusted. Black bands: it ran out, mass extinctions. The cycle ended with aerobic respiration soaking up the oxygen."],
     qs: [
       { q: "A red band in a banded iron formation records…", ok: "Oxygen was available and the iron rusted", no: ["No life existed", "The ocean froze", "Carbon dioxide dominated"], why: "Black bands are oxygen-poor times." },
       { q: "What eventually ended the cycle of red and black bands?", ok: "Aerobic respiration and a stable oxygen supply", no: ["Volcanoes stopped", "Fermentation arrived", "Iron ran out"], why: "Consumers balanced the producers." },
       { q: "Why does oxygen outcompete nitrate and sulfate as an acceptor?", ok: "It holds electrons more tightly, so more energy is released", no: ["It is cheaper", "It is heavier", "It is less reactive"], why: "Electronegativity again." },
       { q: "Hot vents support chemosynthetic bacteria. Their energy comes from…", ok: "Inorganic chemicals such as H₂S", no: ["Sunlight", "Glucose", "Oxygen from plants"], why: "Metabolic diversity." }] },
-  { type: "sim", title: "Light and chlorophyll", tip: "Pigments absorb some wavelengths and reflect the rest. Plants look green because green is left over, not preferred.",
+  { type: "sim", title: "Find what chlorophyll takes", solved: "Chlorophyll takes red and blue and leaves green: plants are green because they don't use it.", tip: "Pigments absorb some wavelengths and reflect the rest. Plants look green because green is left over, not preferred.",
     voice: ["Photosynthesis turns air into sugar: you are made of plants, plants of air.", "Chlorophyll absorbs red and blue and reflects green. The Skittles child who hates purple."],
     w: 640, h: 240,
     controls: [{ id: "wl", label: "Wavelength", min: 400, max: 700, step: 1, val: 550, fmt: v => v + " nm" }, { id: "pig", label: "Pigment", type: "select", opts: [["a", "Chlorophyll a"], ["b", "Chlorophyll b"], ["both", "A leaf (both)"]], val: "a" }],

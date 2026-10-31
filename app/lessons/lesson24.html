@@ -25,12 +25,12 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson24", num: 24, stages: [
-  { type: "sort", title: "Sperm and egg", tip: "Spermatogenesis makes four equal cells; oogenesis makes one big egg and polar bodies.",
+Kit.run({ id: "b145_lesson24", num: 24, version: 2, stages: [
+  { type: "classify", title: "Make a gamete", solved: "Sperm: four small cells from one meiosis. Egg: one big cell and polar bodies, paused in prophase I until puberty.", tip: "Spermatogenesis makes four equal cells; oogenesis makes one big egg and polar bodies.",
     voice: ["Why one big egg? Mitochondria and ATP are split four ways in sperm; all go to one egg.", "The oocyte stops in prophase I until puberty and finishes at fertilization."],
     bins: ["Spermatogenesis", "Oogenesis"],
     items: [["One meiosis makes four equal cells", 0], ["One meiosis makes one large cell and polar bodies", 1], ["The cytoplasm is divided unequally", 1], ["Arrested in prophase I until puberty", 1], ["Finishes meiosis II only at fertilization", 1], ["Produces vast numbers of small, motile cells", 0], ["An ostrich egg is a single cell", 1]] },
-  { type: "pick", title: "Bees and the arithmetic of relatedness", tip: "Haplodiploidy: queens and workers are diploid; drones are haploid, from unfertilized eggs.",
+  { type: "pick", title: "Bees and the arithmetic of relatedness", solved: "Haploid fathers make sisters 75% related, more than to their own offspring.", tip: "Haplodiploidy: queens and workers are diploid; drones are haploid, from unfertilized eggs.",
     voice: ["Males haploid, females diploid. A worker is 75% related to her sister but only 50% to her own offspring. Workers feed the queen: a hive from meiotic math.", "Meiotic drive: genes in war; ploidy is a variable."],
     qs: [
       { q: "A drone bee is…", ok: "Haploid, from an unfertilized egg", no: ["Diploid, from a fertilized egg", "Triploid", "Sterile and diploid"], why: "Fathers have no father." },
@@ -39,11 +39,11 @@ Kit.run({ id: "b145_lesson24", num: 24, stages: [
       { q: "A worker's relatedness to her own offspring would be…", ok: "50%", no: ["75%", "25%", "100%"], why: "So helping the queen raise sisters pays." },
       { q: "A gene that gets into more than half of the gametes is showing…", ok: "Meiotic drive", no: ["Independent assortment", "Dominance", "Linkage"], why: "It violates Mendel's law of segregation." },
       { q: "Parthenogenesis means…", ok: "Development from an egg without fertilization", no: ["Fusion of two sperm", "Budding", "Binary fission"], why: "Sometimes by an extra S phase." }] },
-  { type: "sort", title: "Mendel's laws and their exceptions", tip: "Segregation, independent assortment, dominance, and what breaks each.",
+  { type: "classify", title: "Find the law, and what breaks it", solved: "Drive breaks segregation; linkage breaks independent assortment; dominance was never a law.", tip: "Segregation, independent assortment, dominance, and what breaks each.",
     voice: ["Segregation is violated by drive. Independent assortment fails for linked genes. Dominance is the most misleading idea."],
     bins: ["Segregation", "Independent assortment", "Dominance"],
     items: [["Two alleles separate into different gametes", 0], ["Meiotic drive breaks this law", 0], ["Genes on different chromosomes are inherited independently", 1], ["Fails for linked genes close together", 1], ["The heterozygote looks like one homozygote", 2], ["Not a rule: blending and codominance exist", 2]] },
-  { type: "sort", title: "Vocabulary of genetics", tip: "Genotype is the alleles; phenotype is what you see.",
+  { type: "classify", title: "Name it", tip: "Genotype is the alleles; phenotype is what you see.",
     voice: ["Phenotype and genotype. Allele and locus. Homozygous and heterozygous."],
     bins: ["Genotype", "Phenotype", "Allele", "Locus"],
     items: [["Pp", 0], ["pp", 0], ["Purple flowers", 1], ["Wrinkled seeds", 1], ["The P version of the flower-color gene", 2], ["The p version", 2], ["The position of the flower-color gene on its chromosome", 3]] },

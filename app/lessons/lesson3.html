@@ -28,8 +28,8 @@ const C = (q, a) => ({ q, a });
 const BI = 24; /* blood bicarbonate, mM */
 const phBlood = (pco2, acid) => 6.1 + Math.log10(Math.max(0.5, BI - acid) / (0.03 * pco2));
 const phPlain = acid => acid <= 0 ? 7 : Math.max(1, -Math.log10(acid / 1000 + 1e-7));
-Kit.run({ id: "b145_lesson3", num: 3, version: 3, stages: [
-  { type: "sim", title: "The pH scale", tip: "pH = −log₁₀[H⁺] (in mol/L). Each pH unit is a tenfold change in free protons. Pure water has 10⁻⁷ M H⁺ and 10⁻⁷ M OH⁻ from its own auto-ionization.",
+Kit.run({ id: "b145_lesson3", num: 3, version: 4, stages: [
+  { type: "sim", title: "Find the pH", solved: "Each pH unit is ten times the protons: pH 5 has 100 times the H⁺ of water, pH 2 has 100,000 times.", tip: "pH = −log₁₀[H⁺] (in mol/L). Each pH unit is a tenfold change in free protons. Pure water has 10⁻⁷ M H⁺ and 10⁻⁷ M OH⁻ from its own auto-ionization.",
     voice: ["Acids donate protons, bases accept them. Pure water ionizes a little: equal H⁺ and OH⁻ at pH 7.", "A log scale: pH 3 has a hundred times more H⁺ than pH 5."],
     w: 640, h: 190,
     controls: [{ id: "ph", label: "pH", min: 0, max: 14, step: 0.1, val: 7, fmt: v => v.toFixed(1) }],
@@ -45,11 +45,11 @@ Kit.run({ id: "b145_lesson3", num: 3, version: 3, stages: [
       { text: "Make a solution with 100 times more H⁺ than pure water", test: S => Math.abs(S.ph - 5) < 0.15 },
       { text: "Make one with 1,000 times less H⁺ than pure water (a base)", test: S => Math.abs(S.ph - 10) < 0.15 },
       { text: "Find lemon-juice acidity (about pH 2) and see how many times more H⁺ it has than water", test: S => Math.abs(S.ph - 2) < 0.15 }] },
-  { type: "sort", title: "Acid, base, or neutral?", tip: "Below 7 is acidic, above 7 is basic. The body keeps blood within 7.35 to 7.45.",
+  { type: "classify", title: "Acid, base, or neutral?", solved: "Below 7 is acidic, above 7 basic. Blood sits just above 7, between 7.35 and 7.45.", tip: "Below 7 is acidic, above 7 is basic. The body keeps blood within 7.35 to 7.45.",
     voice: ["Poisons and medicines both react chemically, pulling you away from homeostasis. The dose makes the difference."],
     bins: ["Acidic (pH below 7)", "Neutral (about 7)", "Basic (pH above 7)"],
     items: [["Stomach acid (about pH 2)", 0], ["Lemon juice", 0], ["Black coffee", 0], ["Pure water", 1], ["Human blood is slightly basic (7.4)", 2], ["Baking soda in water", 2], ["Household bleach", 2], ["Soapy water", 2], ["Milk is slightly acidic (6.5)", 0]] },
-  { type: "sim", title: "A buffer holds the pH", tip: "Blood is buffered by carbonic acid and bicarbonate: CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. Breathing sets the CO₂. The pH is 6.1 + log([HCO₃⁻] / 0.03·pCO₂).",
+  { type: "sim", title: "Hold the pH", solved: "Ten millimoles of acid wreck plain water but barely move buffered blood. Breathing moves blood pH by moving CO₂: blow it off and pH rises.", tip: "Blood is buffered by carbonic acid and bicarbonate: CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. Breathing sets the CO₂. The pH is 6.1 + log([HCO₃⁻] / 0.03·pCO₂).",
     voice: ["Acids donate protons, bases accept them. pH is the log scale of how many protons float free.", "A buffer is a weak acid and its partner sitting in equilibrium: add acid, the partner soaks it up. Hyperventilate and you blow off CO₂, so the pH rises."],
     w: 640, h: 190,
     controls: [{ id: "buf", label: "Buffer present (blood)", type: "check", val: false }, { id: "acid", label: "Acid added", min: 0, max: 20, step: 0.5, val: 0, fmt: v => v + " mmol/L" }, { id: "co2", label: "CO₂ in the blood (breathing)", min: 15, max: 80, step: 1, val: 40, fmt: v => v + " mmHg" }],
@@ -68,11 +68,11 @@ Kit.run({ id: "b145_lesson3", num: 3, version: 3, stages: [
       { text: "Add the same acid to buffered blood at normal CO₂ and keep the pH above 7", test: S => S.buf && S.acid >= 10 && Math.abs(S.co2 - 40) <= 2 && phBlood(S.co2, S.acid) > 7 },
       { text: "Hyperventilate: blow off CO₂ until blood pH is above 7.5 (no acid)", test: S => S.buf && S.acid === 0 && phBlood(S.co2, 0) > 7.5 },
       { text: "Hypoventilate: let CO₂ build until blood pH is below 7.3 (no acid)", test: S => S.buf && S.acid === 0 && phBlood(S.co2, 0) < 7.3 }] },
-  { type: "sort", title: "Water's properties", tip: "All of these come from hydrogen bonds between water molecules.",
+  { type: "classify", title: "Trace it to the hydrogen bond", solved: "Surface tension, the heat a lake soaks up, sweat cooling you, and ice floating all come from water molecules holding on to each other.", tip: "All of these come from hydrogen bonds between water molecules.",
     voice: ["One cause, many consequences: water sticks to itself, so it pulls tight, soaks heat, and holds ice open."],
     bins: ["Surface tension and cohesion", "High specific heat", "Evaporative cooling", "Ice is less dense than liquid"],
     items: [["A water strider walks on a pond", 0], ["A drop of water beads up", 0], ["A lake stays cool on a hot day", 1], ["The coast has milder weather than the desert", 1], ["Sweat cools you off", 2], ["Panting cools a dog", 2], ["Ice floats", 3], ["Lakes freeze from the top down and fish survive underneath", 3]] },
-  { type: "sort", title: "Isomers", tip: "Isomers have the same atoms in a different arrangement. Receptors read shape, so shape is function.",
+  { type: "classify", title: "Same atoms, different shape", solved: "Isomers share a formula and differ in shape, and receptors read shape: orange and lavender are the same molecule's two hands.", tip: "Isomers have the same atoms in a different arrangement. Receptors read shape, so shape is function.",
     voice: ["Same formula, different shape. Ethanol and dimethyl ether; cis and trans; left- and right-handed linalool (orange or lavender)."],
     bins: ["Structural: atoms connected in a different order", "Geometric: cis or trans around a double bond", "Chiral: mirror-image hands"],
     items: [["Ethanol and dimethyl ether", 0], ["Butane and isobutane", 0], ["A straight chain and a ring with the same formula", 0], ["cis-2-butene and trans-2-butene", 1], ["A cis fat and a trans fat", 1], ["Linalool that smells of orange and linalool that smells of lavender", 2], ["A left-handed and a right-handed amino acid", 2]] },

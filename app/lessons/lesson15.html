@@ -25,12 +25,12 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-Kit.run({ id: "b145_lesson15", num: 15, version: 2, stages: [
-  { type: "sort", title: "Four steps of aerobic respiration", tip: "Glycolysis in the cytoplasm; pyruvate oxidation and the citric acid cycle in the matrix; the electron transport chain on the inner membrane.",
+Kit.run({ id: "b145_lesson15", num: 15, version: 3, stages: [
+  { type: "classify", title: "Place each step", solved: "Glycolysis in the cytoplasm; pyruvate oxidation and the citric acid cycle in the matrix; the chain on the inner membrane.", tip: "Glycolysis in the cytoplasm; pyruvate oxidation and the citric acid cycle in the matrix; the electron transport chain on the inner membrane.",
     voice: ["Respiration is a controlled fire: same reaction, energy captured stepwise, like a bucket lowered down stairs."],
     bins: ["Glycolysis", "Pyruvate to acetyl-CoA", "Citric acid cycle", "Electron transport chain"],
     items: [["Happens in the cytoplasm", 0], ["Investment phase, then payoff phase", 0], ["Net 2 ATP and 2 NADH per glucose", 0], ["Pyruvate dehydrogenase, a giant complex", 1], ["The first carbon leaves as CO₂", 1], ["Coenzyme A, made from vitamin B5", 1], ["Acetyl joins oxaloacetate to make citrate", 2], ["Carbons exhaled as CO₂", 2], ["Oxygen is the final electron acceptor", 3], ["ATP synthase", 3]] },
-  { type: "sort", title: "Drugs and their enzymes", tip: "Inhibiting one enzyme can change a whole body.",
+  { type: "classify", title: "Match the drug to its target", solved: "Most drugs are enzyme inhibitors: block one enzyme and you change a whole body.", tip: "Inhibiting one enzyme can change a whole body.",
     voice: ["Cyanide: one enzyme stops everything. Penicillin: the bacterial cell wall. Aspirin and ibuprofen: COX and prostaglandins. ACE inhibitors: blood pressure. Grapefruit juice: liver enzymes. Gila monster venom: Ozempic."],
     bins: ["Cytochrome oxidase (respiration)", "COX (prostaglandins, inflammation)", "ACE (blood pressure)", "Cell wall enzyme of bacteria", "Liver enzymes that clear drugs", "GLP-1 receptor (appetite)"],
     items: [["Cyanide", 0], ["Aspirin", 1], ["Ibuprofen", 1], ["Lisinopril and other ACE inhibitors", 2], ["Penicillin", 3], ["Grapefruit juice", 4], ["Exendin-4, from Gila monster venom, and Ozempic", 5]] },
@@ -39,7 +39,7 @@ Kit.run({ id: "b145_lesson15", num: 15, version: 2, stages: [
     solved: "Spend 2 ATP, split the sugar in two, and each half pays back 2 ATP and 1 NADH: net 2 ATP and 2 NADH per glucose.",
     bins: ["Investment: spends ATP", "Rearranges or splits: no ATP", "Payoff: makes ATP or NADH"],
     items: [["Hexokinase puts a phosphate from ATP on glucose", 0], ["PFK puts a second phosphate from ATP on the sugar", 0], ["Glucose 6-phosphate is rearranged into fructose 6-phosphate", 1], ["The six-carbon sugar splits into two three-carbon G3P", 1], ["Each G3P is oxidized, turning NAD⁺ into NADH", 2], ["Each three-carbon molecule hands two phosphates to ADP", 2]] },
-  { type: "pick", title: "Glycolysis and its control", tip: "Phosphofructokinase (PFK) is the control point of glycolysis.",
+  { type: "pick", title: "Glycolysis and its control", solved: "PFK is glycolysis's valve: ATP shuts it, AMP opens it.", tip: "Phosphofructokinase (PFK) is the control point of glycolysis.",
     voice: ["Spend 2 ATP, make 4: net 2 ATP and 2 NADH. ATP inhibits PFK; AMP activates it. Insulin raises cAMP, which activates PFK and draws glucose from the blood.", "Type 2 diabetes breaks this loop."],
     qs: [
       { q: "Glycolysis spends 2 ATP and makes 4. The net per glucose is…", ok: "2 ATP", no: ["4 ATP", "6 ATP", "0 ATP"], why: "Plus 2 NADH and 2 pyruvate." },

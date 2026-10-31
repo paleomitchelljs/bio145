@@ -36,8 +36,8 @@ const editDraw = (S, reveal) => (ctx, w, h) => {
   if (reveal && e.cut) { ctx.strokeStyle = "#a8331a"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(215, 20); ctx.lineTo(235, 58); ctx.stroke(); ctx.lineWidth = 1; }
   ctx.fillStyle = "#6b6b68"; ctx.fillText(reveal ? e.out : "", 20, 135);
 };
-Kit.run({ id: "b145_lesson36", num: 36, version: 2, stages: [
-  { type: "order", title: "CRISPR in bacteria", tip: "A bacterial immune system: clustered regularly interspaced short palindromic repeats.",
+Kit.run({ id: "b145_lesson36", num: 36, version: 3, stages: [
+  { type: "order", title: "Run a bacterial immune system", solved: "The bacterium keeps a record of past viruses and uses it to cut them on sight.", tip: "A bacterial immune system: clustered regularly interspaced short palindromic repeats.",
     voice: ["Phage siege: surviving bacteria had defenses. Cas1 and Cas2 capture viral DNA and store it as a spacer between repeats in the CRISPR locus.", "A guide RNA has a constant part and a variable part, like an antibody. Cas9 cuts what the guide matches."],
     items: ["A phage injects its DNA", "Cas1 and Cas2 capture a piece of it", "The piece is stored as a spacer in the CRISPR locus", "The locus is transcribed into guide RNAs", "Cas9 with a guide RNA finds the matching viral DNA", "Cas9 cuts the viral DNA"] },
   { type: "pick", title: "Predict the edit", tip: "Cas9 cuts both strands where its 20-base guide RNA matches the DNA. The cell repairs the cut itself: joining the ends directly is sloppy and usually adds or loses a few bases; given a repair template with matching ends, it copies the template instead.",
@@ -49,14 +49,14 @@ Kit.run({ id: "b145_lesson36", num: 36, version: 2, stages: [
       [{ match: true, tmpl: true }, "Cas9 with a matching guide, plus a repair template carrying one changed base."],
       [{ match: false, tmpl: true }, "A template, but a guide that matches nothing in this gene."]
     ].map(([S, txt]) => { const e = edit(S); return { q: txt + " What happens to the gene?", ok: e.word, no: ["Nothing: it is not cut", "Knocked out: a few bases lost or added, the reading frame shifts", "Precisely changed: the template's base is copied in"].filter(x => x !== e.word), w: 640, h: 150, draw: editDraw(S, false), after: editDraw(S, true), why: e.out }; }) },
-  { type: "order", title: "Casgevy for sickle cell disease", tip: "Edit the cells outside the body, then put them back.",
+  { type: "order", title: "Run the therapy", solved: "Out, edited, the old marrow cleared, back in.", tip: "Edit the cells outside the body, then put them back.",
     voice: ["A point mutation in β-hemoglobin. The therapy reactivates fetal hemoglobin. Bone marrow out, edit ex vivo, ablate the marrow, reinfuse."],
     items: ["Stem cells are taken from the patient's bone marrow", "The cells are edited in the lab to reactivate fetal hemoglobin", "The patient's own marrow is cleared with chemotherapy", "The edited cells are infused back", "They settle in the marrow and make red cells with fetal hemoglobin"] },
-  { type: "sort", title: "The omes", tip: "Closer to phenotype means harder to measure.",
+  { type: "classify", title: "Name the -ome", solved: "The genome is fixed; the transcriptome, proteome and metabolome change with the cell and the day.", tip: "Closer to phenotype means harder to measure.",
     voice: ["The genome is fixed; expression varies with stress, hunger and cancer. A liver and a pancreas cell: same genome, different expression."],
     bins: ["Genomics", "Epigenomics", "Transcriptomics", "Proteomics", "Metabolomics"],
     items: [["The complete DNA sequence", 0], ["Which histones and cytosines are modified", 1], ["Every mRNA being made in a cell right now", 2], ["Every protein present, with no universal handle to tag them", 3], ["Glucose, lactate and other small molecules", 4], ["Variants present in every cell of the body", 0], ["RNA-seq", 2], ["Mass spectrometry of proteins", 3]] },
-  { type: "pick", title: "Bioinformatics and the closing theme", tip: "Biotechnology steals from nature.",
+  { type: "pick", title: "Bioinformatics and the closing theme", solved: "Taq, restriction enzymes, reverse transcriptase, CRISPR: biotechnology is stolen from nature.", tip: "Biotechnology steals from nature.",
     voice: ["Statistics on omics data: dimensionality reduction, clustering by tissue, regression, deep learning. Foldit lets players fold proteins.", "Taq, restriction enzymes, reverse transcriptase, CRISPR: stolen from nature. Are viruses alive?"],
     qs: [
       { q: "Cells cluster by tissue in an expression dataset because…", ok: "Different tissues turn on different genes from the same genome", no: ["Their DNA differs", "They have different chromosomes", "Clustering invents groups"], why: "Dimensionality reduction makes this visible." },

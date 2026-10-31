@@ -454,11 +454,11 @@ function C_start() {
 }
 
 const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", next: "F", stages: [
-  { key: "X1", label: "C", type: "sort", title: "Starch, glycogen, cellulose, chitin (book, chapter 3)", tip: "All four are long chains of sugar joined by glycosidic bonds. They differ in the monomer, the linkage (α or β) and the branching.",
+  { key: "X1", label: "C", type: "classify", title: "Starch, glycogen, cellulose, chitin (book, chapter 3)", solved: "Two stores (starch in plants, glycogen in animals) and two structures (cellulose, chitin). Starch and cellulose are both glucose; the turn of each ring decides which we can digest.", tip: "All four are long chains of sugar joined by glycosidic bonds. They differ in the monomer, the linkage (α or β) and the branching.",
     voice: ["Polysaccharides: storage in plants (starch), storage in animals (glycogen), structure in plants (cellulose), structure in fungi and arthropods (chitin).", "Starch and cellulose are both chains of glucose. The difference is which way each ring is turned: α or β."],
     bins: ["Starch", "Glycogen", "Cellulose", "Chitin"],
     items: [["Energy store of plants (potatoes, grains)", 0], ["Helical chains of α-glucose; amylose and amylopectin", 0], ["Energy store of animals, kept in liver and muscle", 1], ["Very highly branched, so many ends can be cut at once", 1], ["Makes plant cell walls; the most abundant organic molecule on Earth", 2], ["β-glucose chains lie straight and bundle by hydrogen bonds", 2], ["Dietary fiber: humans cannot digest it", 2], ["Termites need gut microbes to digest it", 2], ["Cell walls of fungi and the exoskeletons of insects", 3], ["Monomer is a glucose with a nitrogen-containing group (N-acetylglucosamine)", 3]] },
-  { key: "X2", label: "D", type: "pick", title: "Sugars, sizes and linkages", tip: "Monosaccharides are single sugars; a disaccharide is two joined by a glycosidic bond (releasing water); a polysaccharide is many.",
+  { key: "X2", label: "D", type: "pick", title: "Sugars, sizes and linkages", solved: "One sugar, two, or many, joined by glycosidic bonds that each release a water.", tip: "Monosaccharides are single sugars; a disaccharide is two joined by a glycosidic bond (releasing water); a polysaccharide is many.",
     voice: ["Glucose, fructose, galactose. Sucrose, lactose, maltose. Why we digest starch but not cellulose: our enzymes fit one linkage and not the other."],
     qs: [
       { q: "Sucrose is glucose joined to fructose. It is a…", ok: "Disaccharide", no: ["Monosaccharide", "Polysaccharide", "Lipid"], why: "Table sugar." },
@@ -475,7 +475,7 @@ const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", ne
     items: [["Butter: solid at room temperature", 0], ["Lard", 0], ["Straight tails with only single C–C bonds", 0], ["Olive oil: liquid at room temperature", 1], ["Fish oil rich in omega-3 fatty acids", 1], ["Kinked tails with C=C double bonds", 1], ["A polar head and two nonpolar tails", 2], ["Assembles into a bilayer by itself in water", 2], ["Works like soap or detergent", 2], ["A protein shell carrying fat and cholesterol through the blood", 3]] }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson4", version: 3, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson4", version: 4, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "8 of 8"); Lesson.tick("B", "rounds", true, "6 of 6"); } });

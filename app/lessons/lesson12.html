@@ -39,19 +39,19 @@ const hhDraw = (c, reveal) => (ctx, w, h) => {
   if (muts.length) { ctx.fillStyle = "#a8331a"; ctx.fillText("mutant: " + muts.join(", "), 20, 20); }
 };
 const ALLHH = []; for (const a of [true, false]) for (const b of [true, false]) for (const g of [true, false]) ALLHH.push(hhWord({ ptc: a, smo: b, genes: g }));
-Kit.run({ id: "b145_lesson12", num: 12, version: 2, stages: [
-  { type: "order", title: "A signaling pathway", tip: "The text-message analogy: write, send, read, act, finish.",
+Kit.run({ id: "b145_lesson12", num: 12, version: 3, stages: [
+  { type: "order", title: "Pass the message on", solved: "A signal is made, travels, binds, is relayed inside, changes something, and is switched off. Skip the last step and the cell can't hear the next signal.", tip: "The text-message analogy: write, send, read, act, finish.",
     voice: ["Six steps: synthesis, transport, reception, transduction, response, termination.", "Why transduction? The receptor is stuck in the membrane; the intermediates are water-soluble and can reach the machinery. A work order to the physical plant."],
     items: ["Synthesis: a cell makes the signal", "Transport: the signal travels to its target", "Reception: the signal binds its receptor", "Transduction: intermediate molecules pass the message inside", "Response: gene expression, enzyme activity, or membrane permeability changes", "Termination: the signal is removed and the pathway switches off"] },
-  { type: "sort", title: "How far does the signal go?", tip: "Autocrine, direct contact, paracrine, endocrine, or neurotransmitter.",
+  { type: "classify", title: "How far does the signal go?", solved: "Self, neighbour by touch, neighbours by diffusion, the whole body by blood, or one cell across a synapse.", tip: "Autocrine, direct contact, paracrine, endocrine, or neurotransmitter.",
     voice: ["A text to one person, a group text, a reply-all. Range is the difference between a hormone and a neighbor's whisper."],
     bins: ["Autocrine", "Direct contact", "Paracrine", "Endocrine", "Neurotransmitter"],
     items: [["The cell responds to its own signal", 0], ["A signal bound to the surface of one cell binds the receptor of a touching cell", 1], ["A growth factor diffuses to nearby cells", 2], ["Insulin travels in the blood to distant cells", 3], ["Acetylcholine crosses a synapse", 4], ["Glucocorticoids released by the adrenals", 3], ["Wnt acting on neighboring cells in an embryo", 2]] },
-  { type: "sort", title: "Four kinds of receptor", tip: "Where the receptor sits and what it does decide the type.",
+  { type: "classify", title: "Find the receptor", solved: "Water-soluble signals stop at the membrane and act through ion channels, G proteins or kinases; lipid-soluble ones cross it and bind inside.", tip: "Where the receptor sits and what it does decide the type.",
     voice: ["Ion-linked, G protein-linked (a GTP toggle), enzyme-linked (phosphorylation), and intracellular (lipid-soluble signals like steroids)."],
     bins: ["Ion-linked (ligand-gated channel)", "G protein-linked", "Enzyme-linked", "Intracellular"],
     items: [["The acetylcholine receptor opens a Na⁺ pore", 0], ["The β-adrenergic receptor for epinephrine", 1], ["A receptor that swaps GDP for GTP on its partner", 1], ["The insulin receptor, a kinase", 2], ["A receptor tyrosine kinase phosphorylates itself", 2], ["The estrogen receptor inside the nucleus", 3], ["A receptor for cortisol in the cytoplasm", 3]] },
-  { type: "pick", title: "Context and extras (book, chapter 9)", tip: "The book adds second messengers, apoptosis and quorum sensing.",
+  { type: "pick", title: "Context and extras (book, chapter 9)", solved: "The same signal reads differently in different cells, which is why pathways have many steps.", tip: "The book adds second messengers, apoptosis and quorum sensing.",
     voice: ["The same signal can give opposite results in different cells, which is why pathways have many steps.", "The book adds: second messengers (cAMP, Ca²⁺, IP₃), apoptosis, and quorum sensing."],
     qs: [
       { q: "A rising blood glucose triggers insulin, which lowers glucose. This is…", ok: "Negative feedback", no: ["Positive feedback", "Autocrine signaling", "Apoptosis"], why: "The response shuts off the stimulus." },
