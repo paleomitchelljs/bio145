@@ -5,3 +5,5 @@ display: dim
 lesson1         o   Scale and the levels of life
 lesson2         o   Greedy oxygen: who gets the electrons, and what shape does with it
 lesson3         o   Building molecules: functional groups and the joins between monomers
+lesson4         o   Downhill and uphill: free energy, the hill, and paying with ATP
+lesson5         o   Jiggling across a membrane: diffusion and osmosis
