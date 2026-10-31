@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="../assets/lock.js"></script>
-<title>BIO 145 — Lesson 8</title>
+<title>BIO 145 — Lesson 28</title>
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
@@ -23,7 +23,7 @@
 </style>
 </head>
 <body>
-<header><h1>Lesson 8</h1></header>
+<header><h1>Lesson 28</h1></header>
 <div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
@@ -119,12 +119,12 @@
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
     <div class="col">
       <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 8 is done.</div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 28 is done.</div></div>
     </div>
   </div>
 </section>
 
-<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 8. Your completion code is below: copy it and hand it in.</p></div>
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 28. Your completion code is below: copy it and hand it in.</p></div>
 <div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
 
 <script src="../assets/pips.js"></script>
@@ -278,7 +278,7 @@ const C_BANK = ["semiconservative", "conservative", "dispersive", "Meselson and 
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(6 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson8", version: 1, stages: ["A", "B", "C"], required: "C", bits: 6 + C_CARDS.length,
+Lesson.init({ id: "b145_lesson28", version: 1, stages: ["A", "B", "C"], required: "C", bits: 6 + C_CARDS.length,
   onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paintSpin(); },
   onReveal: () => { AX.solved.fill(true); [0, 1, 2].forEach(i => AX.kept[i] = true); BX.solved.fill(true); BX.spun = true; A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "3 of 3"); Lesson.tick("B", "rounds", true, "3 of 3"); } });
 window.addEventListener("resize", () => { A_paintModel(); B_paintSpin(); });

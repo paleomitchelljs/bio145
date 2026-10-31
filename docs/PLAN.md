@@ -1,5 +1,7 @@
 # BIO 145 lesson plan — first drafts
 
+> **Lesson numbers below are the original draft order (1-14).** They were renumbered to match lecture numbers; see `docs/GUIDE.md` (old → new: 1→7, 2→2, 3→4, 4→13, 5→10, 6→6, 7→29, 8→28, 9→30, 10→23, 11→25, 12→26, 13→27, 14→9).
+
 Built 2026-10-31 from JM's idea list, using BIO 202 lessons 14–21 as the format and widget baseline and lesson 20's
 low-text style (a short draft voice list per stage, everything else as hover text).
 

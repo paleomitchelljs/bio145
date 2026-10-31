@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 29</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<style>
+  .enz { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; margin-top:6px; }
+  .enz button { background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:7px 8px; font-size:13px; cursor:pointer; text-align:left; }
+  .enz button:hover { border-color:var(--ink); }
+  .enz button.wrong { border-color:var(--bad); background:#f8e3df; }
+  .steps { font:12px ui-monospace,Menlo,monospace; color:var(--muted); margin-top:8px; }
+</style>
+</head>
+<body>
+<header><h1>Lesson 29</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc">
+  <a href="#stageA" id="tocA">A</a>
+  <a href="#stageB" id="tocB" class="locked">B</a>
+</nav>
+
+<!-- ========== STAGE A — run the fork (JM: "DNA replication, with students selecting the appropriate enzymes in each step to go all
+     the way through. Imagine them walk through this several times, seeing what step is done by each molecule") ========== -->
+<section class="stage stage-locked" id="stageA">
+  <h2 class="stage-h">A</h2>
+  <div class="lock-banner">Enter your name above to start.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>Copying DNA is a relay. Each molecule does one job, and the next can't start until it has.</li>
+      <li>Pick the molecule that acts next. Three times through: the first with hints, then with the picture alone.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The fork<span class="tip"><span>Black: the two parent strands, 5′ and 3′ ends marked. Blue: new DNA. Orange: RNA. Purple beads: proteins holding the single strands apart.</span><span>The fork opens toward the right. New DNA is only ever added to a 3′ end.</span></span></span></h3>
+        <canvas id="A_fork" width="780" height="300"></canvas>
+        <div class="steps" id="A_steps"></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0"><span id="A_passH">Pass 1</span><span class="tip"><span>Pass 1: a hint says what needs doing. Passes 2 and 3: only the picture. A wrong pick turns red and is recorded once; pick again.</span></span></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="enz" id="A_enz"></div>
+        <div class="verdict" id="A_verdict"></div>
+        <div class="buttons"><button id="A_again" class="ghost" hidden>Go through again</button></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksA">
+          <li data-task="passes">Walk the fork three times <span class="hint" id="A_passes_now">0 of 3</span></li>
+          <li data-task="clean">One pass with the picture alone and no wrong picks <span class="hint" id="A_clean_now"></span></li>
+        </ul>
+        <div class="solved-banner" id="solvedA">Stage B is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE B — the cards (JM: "Then they get a series of flash cards where they see a step and type out the next molecule,
+     or determine what molecule is broken. A bunch of these to drill the terms and process into their brains.") ========== -->
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Each picture is a fork partway through, or one that finished with a molecule missing. Type the molecule. Two right in a row masters a card.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="B_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="B_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksB"><li data-task="m">Master every card <span class="hint" id="B_m_now"></span></li></ul><div class="solved-banner" id="solvedB">Lesson 29 is done.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 29. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/fork.js"></script>
+<script>
+/* bits: A 0-8 (first pick at each step of pass 1), 9 (pass 2 clean), 10 (pass 3 clean); B 11+ */
+const S = Fork.STEPS;
+const AX = { pass: 1, k: 0, wrong: 0, done: 0, clean: false, missedHere: false };
+const NAMES = [...new Set(S.map(s => s.name))].concat(Fork.DECOYS);
+function A_paint() { const { ctx, w, h } = hiDPI($("A_fork")); Fork.draw(ctx, w, h, AX.k, { labels: AX.pass === 1 }); }
+function A_show() {
+  $("A_passH").textContent = "Pass " + Math.min(AX.pass, 3) + (AX.pass > 3 ? " (extra)" : "");
+  if (AX.k >= S.length) {
+    $("A_ttext").innerHTML = "<b>Copied.</b> Two double helixes, each one old strand and one new."; $("A_enz").innerHTML = ""; $("A_again").hidden = false; A_paint(); return;
+  }
+  $("A_ttext").textContent = AX.pass === 1 ? S[AX.k].does + " Which molecule?" : "Which molecule acts next?";
+  $("A_enz").innerHTML = shuffle(NAMES).map(n => '<button data-n="' + n + '">' + n + "</button>").join("");
+  $("A_steps").textContent = "step " + (AX.k + 1) + " of " + S.length;
+  A_paint();
+}
+$("A_enz").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b || b.classList.contains("wrong")) return;
+  const ok = b.dataset.n === S[AX.k].name; Lesson.bump("A");
+  if (AX.pass === 1 && !AX.missedHere) Lesson.record(AX.k, ok);
+  if (!ok) { b.classList.add("wrong"); AX.wrong++; AX.missedHere = true; $("A_verdict").innerHTML = '<span class="off">✗ Incorrect.</span>'; return; }
+  $("A_verdict").innerHTML = '<span class="ok">✓ ' + S[AX.k].name + ".</span>"; AX.k++; AX.missedHere = false;
+  if (AX.k >= S.length) {
+    if (AX.pass === 2) Lesson.record(9, AX.wrong === 0); if (AX.pass === 3) Lesson.record(10, AX.wrong === 0);
+    if (AX.pass >= 2 && AX.wrong === 0) AX.clean = true;
+    AX.done = Math.min(3, AX.done + 1);
+    Lesson.tick("A", "passes", AX.done >= 3, AX.done + " of 3"); Lesson.tick("A", "clean", AX.clean, AX.clean ? "done" : AX.pass >= 2 ? "missed " + AX.wrong + " this pass" : "");
+    if (AX.done >= 3 && AX.clean) Lesson.finish("A");
+  }
+  A_show();
+});
+$("A_again").addEventListener("click", () => { AX.pass++; AX.k = 0; AX.wrong = 0; $("A_again").hidden = true; $("A_verdict").textContent = ""; A_show(); });
+A_show();
+
+/* ====== B: the cards. "Next" cards: the fork after step k; "missing" cards: a finished fork with one molecule gone ====== */
+const nextCards = S.slice(0, -1).map((s, k) => ({ q: "Which molecule acts next?", a: S[k + 1].alias, w: 380, h: 190, draw: (ctx, w, h) => Fork.draw(ctx, w, h, k + 1, {}) }));
+nextCards.unshift({ q: "Nothing has happened yet, and the DNA ahead is wound tight. Which molecule acts first?", a: S[0].alias, w: 380, h: 190, draw: (ctx, w, h) => Fork.draw(ctx, w, h, 0, {}) });
+const MISSING = [
+  ["ligase", "The fork finished. What was missing?"], ["pol1", "The fork finished. What was missing?"], ["ssb", "The fork stopped here. What was missing?"],
+  ["helicase", "Nothing opened. What was missing?"], ["primase", "No new strand was ever started. What was missing?"]
+];
+const missCards = MISSING.map(([key, q]) => { const st = S.find(s => s.key === key) || S.find(s => s.key === "primase1"); return { q, a: st.alias, w: 380, h: 190, draw: (ctx, w, h) => Fork.draw(ctx, w, h, key === "ssb" ? 3 : 9, { missing: key === "primase" ? "primase" : key }) }; });
+const B_CARDS = nextCards.concat(missCards, [
+  { q: "New DNA is always built in which direction? (5′ to 3′ or 3′ to 5′)", a: ["5' to 3'", "5 to 3", "5'-3'", "5' 3'", "5 3"] },
+  { q: "Nucleotides are added to which end of a growing strand? (3′ or 5′)", a: ["3'", "3", "3' end", "3 prime"] },
+  { q: "The new strand built in one piece, toward the fork.", a: ["leading strand", "leading"] },
+  { q: "The new strand built in pieces, away from the fork.", a: ["lagging strand", "lagging"] },
+  { q: "The short pieces of the lagging strand.", a: ["okazaki fragments", "okazaki fragment"] },
+  { q: "The short starter primase lays down is made of…", a: ["rna", "rna primer"] },
+  { q: "The Y-shaped place where the strands are being opened.", a: "replication fork" },
+  { q: "The spot on a chromosome where copying begins.", a: ["origin of replication", "origin"] },
+  { q: "A strand that is read to build a new one.", a: ["template", "template strand"] },
+  { q: "Each new double helix keeps one old strand and gets one new: replication is…", a: ["semiconservative", "semi-conservative"] },
+  { q: "The enzyme that extends the ends of chromosomes in, for example, stem cells.", a: "telomerase" }
+]);
+const B_BANK = ["topoisomerase", "helicase", "single-strand binding protein", "primase", "DNA polymerase III", "DNA polymerase I", "DNA ligase", "leading strand", "lagging strand", "Okazaki fragments", "RNA", "replication fork", "origin of replication", "template", "semiconservative", "telomerase"];
+let B_D = null;
+function B_start() { if (B_D) return; B_D = Drill.make({ mount: $("B_drill"), bankMount: $("B_bank"), bank: B_BANK, cards: B_CARDS, onFirst: (i, ok) => Lesson.record(11 + i, ok), onProgress: (k, n) => Lesson.tick("B", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("B") }); }
+
+Lesson.init({ id: "b145_lesson29", version: 1, stages: ["A", "B"], required: "B", bits: 11 + B_CARDS.length,
+  onOpen: s => { if (s === "B") B_start(); },
+  onReveal: () => { B_start(); B_D.reveal(); ["A", "B"].forEach(Lesson.finish); Lesson.tick("A", "passes", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); } });
+window.addEventListener("resize", A_paint);
+</script>
+</body>
+</html>

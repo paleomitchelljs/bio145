@@ -1,5 +1,5 @@
-/* BIO 145 replication fork: one picture of a fork at any step, with any one molecule missing. Lesson 7 walks it; its drill
-   asks from the same pictures; lesson 8 can reuse it for the strands' fate.
+/* BIO 145 replication fork: one picture of a fork at any step, with any one molecule missing. Lesson 29 walks it; its drill
+   asks from the same pictures; lesson 28 can reuse it for the strands' fate.
 
      Fork.STEPS                      [{ key, name, alias, does }] in the order they act
      Fork.draw(ctx, w, h, k, o)      the fork after step k (0 = nothing yet, 9 = done)

@@ -1,5 +1,5 @@
-/* BIO 145 crosses: one engine for lessons 11 (parents to F1 to F2), 12 (mystery crosses) and 13 (hit the ratio), built on
-   lesson 10's meiosis (BIO 202 lesson 9's bench, copied).
+/* BIO 145 crosses: one engine for lessons 25 (parents to F1 to F2), 26 (mystery crosses) and 27 (hit the ratio), built on
+   lesson 23's meiosis (BIO 202 lesson 9's bench, copied).
 
    A spec names the loci and how they show:
      { loci: [ { dom: "Y", rec: "y", ph: ["yellow", "green"], mode: "complete" | "incomplete" | "codominant",

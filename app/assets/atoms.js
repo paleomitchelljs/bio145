@@ -1,7 +1,7 @@
 /* BIO 145 atoms: electronegativity as the course's recurring widget (JM: "Electronegativity as an organizing principle
    and recurring theme/widget"). One table, one way of drawing a bond's shared pair, one way of drawing a molecule with
-   its partial charges and pull arrows. Lessons 2 (bonds, shape, water), 3 (functional groups), 6 (side chains) and
-   7-9 (base pairs) draw with it.
+   its partial charges and pull arrows. Lessons 2 (bonds, shape, water), 4 (functional groups), 6 (side chains) and
+   28-30 (base pairs) draw with it.
 
      Atoms.EN.O                       3.44 (Pauling)
      Atoms.kind("C", "O")             "polar" | "nonpolar" | "ionic"

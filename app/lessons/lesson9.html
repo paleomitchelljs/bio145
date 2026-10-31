@@ -9,18 +9,10 @@
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
 <style>
-  .seq { font:600 17px ui-monospace,Menlo,monospace; letter-spacing:1px; display:flex; flex-wrap:wrap; align-items:center; gap:0; margin:4px 0; }
-  .seq .b { display:inline-block; width:18px; text-align:center; padding:2px 0; border-radius:2px; cursor:default; }
-  .seq.click .b { cursor:pointer; } .seq.click .b:hover { background:#efeee8; }
-  .seq .b.cod { background:#e8f0f6; } .seq .b.cur { background:#2f6b8f; color:#fff; } .seq .b.bad { background:#f8e3df; color:var(--bad); }
-  .seq .b.gap3 { margin-left:7px; } .seq .end { font:12px ui-monospace,Menlo,monospace; color:var(--muted); margin:0 6px; }
-  .seq .ins { width:7px; height:22px; cursor:pointer; } .seq .ins:hover { background:#d0e1ed; }
-  .lbl { font-size:12px; color:var(--muted); margin-top:8px; }
-  .prot { display:flex; flex-wrap:wrap; gap:4px; margin:4px 0; min-height:26px; }
-  .prot span { font:12.5px ui-monospace,Menlo,monospace; padding:3px 7px; border:1px solid var(--rule); border-radius:12px; background:#fff; }
-  .prot span.stop { background:#f4d3d7; } .prot span.diff { border-color:var(--bad); color:var(--bad); }
-  #A_m { font:16px ui-monospace,Menlo,monospace; letter-spacing:1px; text-transform:uppercase; padding:6px 8px; border:1px solid var(--rule); border-radius:4px; width:100%; }
-  #A_wheel, #B_wheel { cursor:pointer; }
+  .enz { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:6px; margin-top:6px; }
+  .enz button { background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:7px 8px; font-size:13px; cursor:pointer; text-align:left; }
+  .enz button:hover { border-color:var(--ink); }
+  .enz button.wrong { border-color:var(--bad); background:#f8e3df; }
 </style>
 </head>
 <body>
@@ -30,95 +22,132 @@
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
   <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageD" id="tocD" class="locked">D</a>
 </nav>
 
-<!-- ========== STAGE A — read a gene (JM: "Codon decoding") ========== -->
+<!-- ========== STAGE A — walk a kinesin (JM: "Electronegativity as an organizing principle ... build to use it as the mechanism for
+     kinesin walking, filaments sliding, etc"; 2026-10-31: "let's please stick them at the end") ========== -->
 <section class="stage stage-locked" id="stageA">
   <h2 class="stage-h">A</h2>
   <div class="lock-banner">Enter your name above to start.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul>
-      <li>A gene is read twice: once into RNA, once into protein.</li>
-      <li>Type the mRNA, find where reading starts, then click each codon's amino acid on the wheel. Four genes.</li>
+      <li>Kinesin carries cargo along a track, one step per ATP. Nothing in it decides to walk: each step is a grip changing because a molecule bound or left.</li>
+      <li>Pick what happens next, over and over, until the cargo arrives. Three trips: the first with hints.</li>
     </ul></div>
   </div>
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The gene<span class="tip"><span>Top: the DNA template strand, written 3′ to 5′. The mRNA is built along it, 5′ to 3′, each base pairing with the template's (A with U, T with A, G with C, C with G).</span><span>Once the mRNA is right, click the first base of the codon where reading starts. Then the current codon is highlighted.</span></span></span></h3>
-        <div class="lbl">DNA template</div><div class="seq" id="A_dna"></div>
-        <div class="lbl">mRNA</div><div class="seq" id="A_mrna"></div>
-        <div id="A_typebox"><input id="A_m" type="text" autocomplete="off" spellcheck="false" placeholder="type the mRNA, 5′ to 3′"><div class="buttons"><button id="A_check" class="accent">Check</button></div></div>
-        <div class="lbl">protein</div><div class="prot" id="A_prot"></div>
+        <h3><span class="info" tabindex="0">The walker<span class="tip"><span>Grey beads: the microtubule track, one bead every 8 nm. Two heads joined by a neck to the cargo (the box).</span><span>A head's colour: what it is holding. Empty (white), ATP (blue), ADP + phosphate (purple), ADP (pale). A head drawn sitting on the track is gripping it.</span><span>As in Lessons 2 and 13: ATP's three phosphates each carry negative charge on their oxygens, crowded together; splitting one off releases free energy.</span></span></span></h3>
+        <canvas id="A_walk" width="780" height="260"></canvas>
+        <div class="readout" id="A_read"></div>
       </div>
     </div>
     <div class="col">
-      <div class="panel">
-        <h3><span class="info" tabindex="0">The code<span class="tip"><span>Read from the centre out: first base, second base, third base, then the amino acid. Click the codon (or its amino acid) for the highlighted mRNA codon.</span></span></span></h3>
-        <canvas id="A_wheel" width="460" height="460"></canvas>
-      </div>
       <div class="panel tcard">
-        <h3>Gene <span class="pips" id="A_pips"></span></h3>
+        <h3><span class="info" tabindex="0"><span id="A_tripH">Trip 1</span><span class="tip"><span>Each trip is four steps along the track, four events a step. A wrong pick turns red and is recorded once; pick again.</span></span></span></h3>
         <p class="ttext" id="A_ttext"></p>
+        <div class="enz" id="A_opts"></div>
         <div class="verdict" id="A_verdict"></div>
+        <div class="buttons"><button id="A_again" class="ghost" hidden>Next trip</button></div>
       </div>
       <div class="panel">
         <h3>To finish</h3>
-        <ul class="tasks" id="tasksA"><li data-task="rounds">Read four genes <span class="hint" id="A_rounds_now">0 of 4</span></li></ul>
+        <ul class="tasks" id="tasksA">
+          <li data-task="trips">Deliver the cargo three times <span class="hint" id="A_trips_now">0 of 3</span></li>
+          <li data-task="clean">One trip without hints and with no wrong picks <span class="hint" id="A_clean_now"></span></li>
+        </ul>
         <div class="solved-banner" id="solvedA">Stage B is open.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== STAGE B — change one base ========== -->
+<!-- ========== STAGE B — load and fuel: how fast it walks, and when it stalls ========== -->
 <section class="stage stage-locked" id="stageB">
   <h2 class="stage-h">B</h2>
   <div class="lock-banner">Finish Stage A to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul>
-      <li>One letter wrong in a gene can do nothing, or a great deal.</li>
-      <li>Make one change to the DNA to get each kind of result. The mRNA and protein follow on their own.</li>
+      <li>Each step costs one ATP and lifts the cargo against whatever is pulling back.</li>
+      <li>Set the load and the ATP, then <b>Go</b>. Hit each target.</li>
     </ul></div>
   </div>
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The gene<span class="tip"><span>Change: click a base to cycle it A → C → G → T. Insert: click a thin gap to add an A there. Delete: click a base to remove it.</span><span>Exactly one change counts. <b>Undo all</b> puts the gene back.</span></span></span></h3>
-        <div class="buttons" style="margin-top:0;"><span class="chips" id="B_mode"><button class="chip on" data-m="sub">change</button><button class="chip" data-m="ins">insert</button><button class="chip" data-m="del">delete</button></span><button id="B_undo" class="ghost">Undo all</button></div>
-        <div class="lbl">DNA template</div><div class="seq click" id="B_dna"></div>
-        <div class="lbl">mRNA</div><div class="seq" id="B_mrna"></div>
-        <div class="lbl">protein now</div><div class="prot" id="B_prot"></div>
-        <div class="lbl">protein before</div><div class="prot" id="B_prot0"></div>
+        <h3><span class="info" tabindex="0">The trip<span class="tip"><span>The track runs 2 µm (250 steps of 8 nm). <b>Go</b> lets the kinesin walk for 3 seconds, shown slowed down. Each step happens at random; how often depends on the load and the ATP.</span></span></span></h3>
+        <canvas id="B_track" width="780" height="150"></canvas>
+      </div>
+      <div class="panel">
+        <h3><span class="info" tabindex="0">Energy per step<span class="tip"><span>Left bar: free energy from splitting one ATP in a cell (about 50 kJ/mol, more than the 30.5 in Lesson 13's table, because a cell keeps far more ATP than ADP). Right bar: the work of one 8 nm step against the load. A step needs the left bar to be taller.</span></span></span></h3>
+        <canvas id="B_bill" width="780" height="170"></canvas>
       </div>
     </div>
     <div class="col">
-      <div class="panel"><h3>The code</h3><canvas id="B_wheel" width="460" height="460"></canvas></div>
+      <div class="panel controls">
+        <h3>Set</h3>
+        <div class="tbar"><label>load (pN) <input type="range" id="B_load" min="0" max="10" step="0.5" value="2"></label><b id="B_load_v"></b></div>
+        <div class="tbar"><label>ATP (mM) <input type="range" id="B_atp" min="0" max="3" step="0.005" value="3"></label><b id="B_atp_v"></b></div>
+      </div>
       <div class="panel tcard">
-        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Five targets in any order. Each starts from the original gene.</span></span></span> <span class="pips" id="B_pips"></span></h3>
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Four targets in any order. A practice run is not scored.</span></span></span> <span class="pips" id="B_pips"></span></h3>
         <p class="ttext" id="B_ttext"></p>
-        <div class="buttons"><button id="B_lock" class="accent">Lock in</button></div>
+        <div class="practice-row"><input type="checkbox" id="B_prac"><label for="B_prac">practice run</label></div>
+        <div class="buttons"><button id="B_go" class="accent">Go</button></div>
         <div class="verdict" id="B_verdict"></div>
       </div>
-      <div class="panel">
-        <h3>To finish</h3>
-        <ul class="tasks" id="tasksB"><li data-task="rounds">Hit five targets <span class="hint" id="B_rounds_now">0 of 5</span></li></ul>
-        <div class="solved-banner" id="solvedB">Stage C is open.</div>
-      </div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksB"><li data-task="rounds">Hit four targets <span class="hint" id="B_rounds_now">0 of 4</span></li></ul><div class="solved-banner" id="solvedB">Stage C is open.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ========== STAGE C — the drill ========== -->
+<!-- ========== STAGE C — filaments sliding: a sarcomere ========== -->
 <section class="stage stage-locked" id="stageC">
   <h2 class="stage-h">C</h2>
   <div class="lock-banner">Finish Stage B to unlock this section.</div>
-  <div class="panel stage-intro"><div class="voice"><ul><li>Codon cards come back with new codons. Amino acids: type the three-letter name (Met) or the full name. Two right in a row masters a card.</li></ul></div></div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>Muscle is the same trick with a different motor: myosin heads grabbing, pulling and letting go of actin.</li>
+      <li>Toggle calcium and ATP and watch the sarcomere. Hit each target.</li>
+    </ul></div>
+  </div>
   <div class="stage-body grid">
-    <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div><div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div></div>
     <div class="col">
-      <div class="panel"><h3>The code</h3><div class="bank" id="C_wheel"></div></div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 9 is done.</div></div>
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The sarcomere<span class="tip"><span>Thin red lines: actin, anchored to the Z lines at each end. Thick blue bar: myosin, its heads reaching toward the actin.</span><span>Calcium uncovers the binding sites on actin. A head with a site open grabs, pulls (the power stroke) and then needs a new ATP to let go. No ATP: the heads stay stuck.</span></span></span></h3>
+        <canvas id="C_sarc" width="780" height="200"></canvas>
+        <div class="readout">length: <b id="C_len">100%</b> · heads gripping: <b id="C_grip">0</b></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel controls">
+        <h3>Set</h3>
+        <label class="practice-row"><input type="checkbox" id="C_ca"> calcium</label>
+        <label class="practice-row"><input type="checkbox" id="C_atp" checked> ATP</label>
+      </div>
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Three targets, in order; each starts from the sarcomere as you left it. Lock in when it matches.</span></span></span> <span class="pips" id="C_pips"></span></h3>
+        <p class="ttext" id="C_ttext"></p>
+        <div class="buttons"><button id="C_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="C_verdict"></div>
+      </div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="rounds">Hit three targets <span class="hint" id="C_rounds_now">0 of 3</span></li></ul><div class="solved-banner" id="solvedC">Stage D is open.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE D — the drill ========== -->
+<section class="stage stage-locked" id="stageD">
+  <h2 class="stage-h">D</h2>
+  <div class="lock-banner">Finish Stage C to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Walker cards come back at a new point in the cycle.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="D_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="D_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksD"><li data-task="m">Master every card <span class="hint" id="D_m_now"></span></li></ul><div class="solved-banner" id="solvedD">Lesson 9 is done.</div></div>
     </div>
   </div>
 </section>
@@ -131,162 +160,204 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
-<script src="../assets/code.js"></script>
 <script>
-/* bits: A 0-3 mRNA right first try, 4-7 start and every codon right first try; B 8-12; C 13+ */
-const SENSE = []; for (let i = 0; i < 64; i++) { const c = Code.B[i >> 4] + Code.B[(i >> 2) & 3] + Code.B[i & 3]; if (Code.aa(c) !== "Stop" && c !== "AUG") SENSE.push(c); }
-const STOPS = ["UAA", "UAG", "UGA"], RB = "ACGU", TOT = { A: "T", U: "A", G: "C", C: "G" };
-function makeGene() {
-  for (;;) {
-    let lead = ""; for (let i = 0, n = rint(2, 4); i < n; i++) lead += pick(RB);
-    let body = "AUG"; for (let i = 0, n = rint(3, 4); i < n; i++) body += pick(SENSE);
-    const m = lead + body + pick(STOPS) + pick(RB) + pick(RB), t = Code.translate(m);
-    if (t.start === lead.length && t.stopAt === lead.length + body.length) return m;
-  }
-}
-const toTemplate = m => [...m].map(b => TOT[b]).join("");
-function wheelInto(cv, hi) { const { ctx, w, h } = hiDPI(cv), R = Math.min(w, h) / 2 - 4; Code.wheel(ctx, w / 2, h / 2, R, hi); return { w, h, R }; }
+/* bits: A 0-3 (first pick at each event of trip 1), 4 (trip 2 clean), 5 (trip 3 clean); B 6-9; C 10-12; D 13+ */
 
-/* ====== A ====== */
-const AX = { genes: [makeGene(), makeGene(), makeGene(), makeGene()], cur: 0, solved: [false, false, false, false], phase: "type", at: 0, missed: false, typedTry: false, prot: [] };
-function seqHtml(s, cls) { return '<span class="end">' + cls[0] + "</span>" + [...s].map((b, i) => '<span class="b" data-i="' + i + '">' + b + "</span>").join("") + '<span class="end">' + cls[1] + "</span>"; }
-function A_render() {
-  const m = AX.genes[AX.cur], t = Code.translate(m);
-  $("A_dna").innerHTML = seqHtml(toTemplate(m), ["3′", "5′"]);
-  $("A_typebox").hidden = AX.phase !== "type";
-  if (AX.phase === "type") { $("A_mrna").innerHTML = '<span class="end">5′ … 3′</span>'; $("A_prot").innerHTML = ""; $("A_ttext").textContent = "Type the mRNA this template makes, 5′ to 3′."; }
-  else {
-    $("A_mrna").innerHTML = seqHtml(m, ["5′", "3′"]); $("A_mrna").classList.toggle("click", AX.phase === "start");
-    const spans = $("A_mrna").querySelectorAll(".b");
-    if (AX.phase !== "start") spans.forEach((s, i) => { if (i >= t.start && i < t.start + t.codons.length * 3) { s.classList.add("cod"); if ((i - t.start) % 3 === 0 && i > t.start) s.classList.add("gap3"); if (AX.phase === "read" && Math.floor((i - t.start) / 3) === AX.at) s.classList.add("cur"); } });
-    $("A_ttext").textContent = AX.phase === "start" ? "Click the first base of the codon where reading starts." : AX.phase === "read" ? "Click the amino acid for the highlighted codon." : "Done.";
-    $("A_prot").innerHTML = AX.prot.map(a => '<span class="' + (a === "Stop" ? "stop" : "") + '">' + a + "</span>").join("");
+/* ====== A: the kinesin cycle, the textbook four events a step. A state: which head leads, each head's nucleotide and grip,
+   where the heads sit on the track. Start of a step: the front head grips the track, empty; the rear head is free, holding ADP. ====== */
+const EV = [
+  { key: "atp", name: "ATP binds the front head", hint: "The head gripping the track is empty. What has to arrive first?" },
+  { key: "swing", name: "the rear head swings forward", hint: "With ATP bound, the front head's neck snaps forward and flings the free head past it." },
+  { key: "bind", name: "the new front head grips the track and lets go of its ADP", hint: "The swung head lands one site ahead. Gripping makes it give up what it held." },
+  { key: "split", name: "the rear head splits its ATP; the phosphate leaves; it lets go of the track", hint: "Now the back head spends its ATP. Holding ADP alone, it grips weakly and comes off." }
+];
+const DECOYS = ["ADP binds the front head", "both heads let go of the track", "the cargo pulls the heads forward", "the front head splits its ATP first"];
+const STEPS_PER_TRIP = 4;
+const AX = { trip: 1, step: 0, ev: 0, wrong: 0, done: 0, clean: false, missedHere: false, firstTried: [false, false, false, false],
+  pos: 0, heads: null };
+function startHeads() { return { lead: 0, h: [{ site: 1, nuc: "empty", grip: true }, { site: 0, nuc: "ADP", grip: false }] }; }
+function applyEv(H, key) {
+  const f = H.h[H.lead], r = H.h[1 - H.lead];
+  if (key === "atp") f.nuc = "ATP";
+  if (key === "swing") { r.site = f.site + 1; H.lead = 1 - H.lead; }
+  if (key === "bind") { const nf = H.h[H.lead]; nf.grip = true; nf.nuc = "empty"; }
+  if (key === "split") { const nr = H.h[1 - H.lead]; nr.nuc = "ADP"; nr.grip = false; }
+}
+function drawWalker(ctx, w, h, H, o) {
+  o = o || {}; const y0 = h - 50, sp = 46, x0 = 40 - (o.scroll || 0);
+  for (let k = -2; k < 40; k++) { const x = x0 + k * sp; if (x < -20 || x > w + 20) continue; ctx.fillStyle = "#d9d6cc"; ctx.beginPath(); ctx.arc(x, y0, 13, 0, 7); ctx.fill(); ctx.fillStyle = "#c4c0b4"; ctx.beginPath(); ctx.arc(x + sp / 2, y0, 13, 0, 7); ctx.fill(); }
+  ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText("microtubule →", 8, h - 14);
+  const COL = { empty: "#ffffff", ATP: "#2f6b8f", "ADP+P": "#8a5fb8", ADP: "#c9d8e6" };
+  const hx = hd => x0 + hd.site * sp, hy = hd => hd.grip ? y0 - 24 : y0 - 62;
+  const top = { x: (hx(H.h[0]) + hx(H.h[1])) / 2, y: y0 - 110 };
+  ctx.fillStyle = "#e9e1c9"; ctx.strokeStyle = "#9a8a5a"; ctx.lineWidth = 1.5; ctx.fillRect(top.x - 34, top.y - 44, 68, 34); ctx.strokeRect(top.x - 34, top.y - 44, 68, 34);
+  ctx.fillStyle = "#6b5a2a"; ctx.textAlign = "center"; ctx.fillText("cargo", top.x, top.y - 23);
+  for (const hd of H.h) { ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(top.x, top.y - 10); ctx.lineTo(hx(hd), hy(hd) - 14); ctx.stroke(); }
+  H.h.forEach((hd, i) => {
+    ctx.fillStyle = COL[hd.nuc]; ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(hx(hd), hy(hd), 17, 14, 0, 0, 7); ctx.fill(); ctx.stroke();
+    if (o.labels) { ctx.fillStyle = hd.nuc === "ATP" || hd.nuc === "ADP+P" ? "#fff" : "#1d1d1b"; ctx.font = "600 10px -apple-system,sans-serif"; ctx.fillText(hd.nuc === "empty" ? "" : hd.nuc, hx(hd), hy(hd) + 3); }
+  });
+}
+function A_paint() {
+  const { ctx, w, h } = hiDPI($("A_walk")); drawWalker(ctx, w, h, AX.heads, { labels: AX.trip === 1, scroll: Math.max(0, (Math.max(AX.heads.h[0].site, AX.heads.h[1].site) - 12) * 46) });
+  $("A_read").textContent = "steps this trip: " + AX.step + " of " + STEPS_PER_TRIP + " · ATP spent: " + AX.step;
+}
+function A_show() {
+  $("A_tripH").textContent = "Trip " + Math.min(AX.trip, 3) + (AX.trip > 3 ? " (extra)" : "");
+  if (AX.step >= STEPS_PER_TRIP) { $("A_ttext").innerHTML = "<b>Delivered.</b> Four steps, four ATP."; $("A_opts").innerHTML = ""; $("A_again").hidden = false; A_paint(); return; }
+  const e = EV[AX.ev];
+  $("A_ttext").textContent = AX.trip === 1 ? e.hint + " What happens?" : "What happens next?";
+  $("A_opts").innerHTML = shuffle(EV.map(x => x.name).concat(DECOYS.slice(0, 2))).map(n => '<button data-n="' + n + '">' + n + "</button>").join("");
+  A_paint();
+}
+$("A_opts").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b || b.classList.contains("wrong")) return;
+  const ok = b.dataset.n === EV[AX.ev].name; Lesson.bump("A");
+  if (AX.trip === 1 && AX.step === 0 && !AX.missedHere && !AX.firstTried[AX.ev]) { AX.firstTried[AX.ev] = true; Lesson.record(AX.ev, ok); }
+  if (!ok) { b.classList.add("wrong"); AX.wrong++; AX.missedHere = true; $("A_verdict").innerHTML = '<span class="off">✗ That can\'t happen now.</span>'; return; }
+  AX.missedHere = false; applyEv(AX.heads, EV[AX.ev].key); $("A_verdict").innerHTML = '<span class="ok">✓</span>';
+  AX.ev++; if (AX.ev === 4) { AX.ev = 0; AX.step++; }
+  if (AX.step >= STEPS_PER_TRIP) {
+    if (AX.trip === 2) Lesson.record(4, AX.wrong === 0); if (AX.trip === 3) Lesson.record(5, AX.wrong === 0);
+    if (AX.trip >= 2 && AX.wrong === 0) AX.clean = true;
+    AX.done = Math.min(3, AX.done + 1);
+    Lesson.tick("A", "trips", AX.done >= 3, AX.done + " of 3"); Lesson.tick("A", "clean", AX.clean, AX.clean ? "done" : "");
+    if (AX.done >= 3 && AX.clean) Lesson.finish("A");
   }
-  $("A_pips").innerHTML = Pips.html(4, j => AX.solved[j], AX.cur);
-  wheelInto($("A_wheel"));
-}
-function A_open(i) { AX.cur = i; AX.phase = AX.solved[i] ? "done" : "type"; AX.at = 0; AX.missed = false; AX.typedTry = false; AX.prot = AX.solved[i] ? Code.translate(AX.genes[i]).aas : []; $("A_m").value = ""; $("A_verdict").innerHTML = AX.solved[i] ? '<span class="ok">✓ Read.</span>' : ""; A_render(); }
-$("A_check").addEventListener("click", () => {
-  const m = AX.genes[AX.cur], v = $("A_m").value.toUpperCase().replace(/[^ACGTU]/g, ""), ok = v === m;
-  if (!AX.typedTry) { AX.typedTry = true; Lesson.record(AX.cur, ok); } Lesson.bump("A");
-  if (ok) { AX.phase = "start"; $("A_verdict").innerHTML = '<span class="ok">✓ Correct mRNA.</span>'; A_render(); return; }
-  $("A_mrna").innerHTML = '<span class="end">5′</span>' + [...v].map((b, i) => '<span class="b ' + (b === m[i] ? "" : "bad") + '">' + b + "</span>").join("") + '<span class="end">3′</span>';
-  $("A_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> Red letters are wrong' + (v.includes("T") ? "; RNA uses U, never T" : "") + (v.length !== m.length ? "; it should be " + m.length + " bases long" : "") + ".";
+  A_show();
 });
-$("A_m").addEventListener("keydown", e => { if (e.key === "Enter") $("A_check").click(); });
-$("A_mrna").addEventListener("click", e => {
-  if (AX.phase !== "start") return; const b = e.target.closest(".b"); if (!b) return;
-  const t = Code.translate(AX.genes[AX.cur]); Lesson.bump("A");
-  if (+b.dataset.i === t.start) { AX.phase = "read"; AX.at = 0; $("A_verdict").innerHTML = '<span class="ok">✓ AUG, the start.</span>'; A_render(); }
-  else { AX.missed = true; $("A_verdict").innerHTML = '<span class="off">✗ Not there.</span> Reading starts at the first start codon.'; }
-});
-$("A_wheel").addEventListener("click", e => {
-  if (AX.phase !== "read") return;
-  const cv = $("A_wheel"), p = canvasXY(cv, e), w = cv.clientWidth, h = +cv.dataset.h, R = Math.min(w, h) / 2 - 4, c = Code.wheelHit(p.x, p.y, w / 2, h / 2, R); if (!c) return;
-  const t = Code.translate(AX.genes[AX.cur]), want = t.aas[AX.at]; Lesson.bump("A");
-  if (Code.aa(c) === want) {
-    AX.prot.push(want); AX.at++; $("A_verdict").innerHTML = '<span class="ok">✓ ' + want + ".</span>";
-    if (AX.at >= t.codons.length) {
-      AX.phase = "done"; Lesson.record(4 + AX.cur, !AX.missed); AX.solved[AX.cur] = true;
-      const n = AX.solved.filter(Boolean).length; Lesson.tick("A", "rounds", n === 4, n + " of 4"); $("A_verdict").innerHTML = '<span class="ok">✓ Read.</span>';
-      if (n === 4) Lesson.finish("A"); else setTimeout(() => A_open(AX.solved.indexOf(false)), 1300);
-    }
-    A_render();
-  } else { AX.missed = true; $("A_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> That codon reads ' + Code.aa(c) + "."; }
-});
-Pips.wire($("A_pips"), A_open);
-A_open(0);
+$("A_again").addEventListener("click", () => { AX.trip++; AX.step = 0; AX.ev = 0; AX.wrong = 0; AX.heads = startHeads(); $("A_again").hidden = true; $("A_verdict").textContent = ""; A_show(); });
+AX.heads = startHeads(); A_show();
 
-/* ====== B: one gene, five kinds of change. mRNA 5'-GC AUG GAA UGG AAA CUU UAC GCA UAA GC-3' ====== */
-const B_M0 = "GCAUGGAAUGGAAACUUUACGCAUAAGC", B_D0 = toTemplate(B_M0), CYC = { A: "C", C: "G", G: "T", T: "A" };
-const BX = { cur: 0, solved: Array(5).fill(false), dna: B_D0, mode: "sub" };
-const fromTemplate = d => [...d].map(b => ({ A: "U", T: "A", G: "C", C: "G" })[b]).join("");
-function lev(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
-function kind(dna) {
-  const p0 = Code.translate(B_M0).aas, m = fromTemplate(dna), t = Code.translate(m), p = t.aas;
-  if (t.start !== Code.translate(B_M0).start || !p.length) return "none";
-  if ((dna.length - B_D0.length) % 3 !== 0) return "frameshift";
-  if (p.join() === p0.join()) return "silent";
-  const k = p.indexOf("Stop"); if (k >= 0 && k < p0.length - 1) return "nonsense";
-  return "missense";
-}
+/* ====== B: steps per second = 100 x ATP / (Km + ATP) x (1 - load / stall), Km 0.06 mM, stall 7 pN; 100 steps a second is about
+   kinesin's real top speed (0.8 µm/s). Steps are random (a Poisson process), so a run is a roll. Energy: ATP in a cell gives about
+   50 kJ/mol, 83 pN·nm a molecule; a step against F pN costs 8F pN·nm, so at the 7 pN stall a step would use 56 of the 83 (about
+   two thirds; the rest is heat). Measured, 2,000 runs each: 100-150 steps in 3 s -- 4 pN with ATP 3 mM 0.97 (3.5 pN 0.64, 4.5 pN
+   0.70, 3 pN 0.08); no load with ATP 0.045 mM 0.97 (0.03 0.54, 0.06 0.52, 0.08 0.06). All 250 steps in 3 s: no load 0.999, 1 pN
+   0.56, 1.5 pN 0.11. Fewer than 10 steps: 7 pN 1.00, 6.5 pN 0.002. ====== */
+const VMAX = 100, KM = 0.06, STALL = 7, STEP_NM = 8, TRACK = 250, TEND = 3, ATP_PNNM = 83;
+const BX = { cur: 0, solved: Array(4).fill(false), pos: 0, run: null };
+const v = id => +$(id).value;
 const B_T = [
-  { t: "Change one base so the protein comes out exactly the same.", k: "silent" },
-  { t: "Change one base so one amino acid is swapped for another.", k: "missense" },
-  { t: "Change one base so the protein stops early.", k: "nonsense" },
-  { t: "Add or remove one base so every amino acid after it changes.", k: "frameshift" },
-  { t: "Change one base so the original start codon is no longer read.", k: "none" }
+  { t: "Deliver the cargo all 2 µm within the 3 seconds.", ok: s => s.tDone != null },
+  { t: "With plenty of ATP (2 mM or more), make it stall: fewer than 10 steps in 3 seconds.", ok: (s, c) => s.pos < 10 && c.atp >= 2 },
+  { t: "With plenty of ATP (2 mM or more), end between the red lines (40-60% of the way) after 3 seconds.", ok: (s, c) => c.atp >= 2 && s.pos >= 100 && s.pos <= 150 },
+  { t: "With no load, end between the red lines after 3 seconds by changing the ATP alone.", ok: (s, c) => c.load === 0 && s.pos >= 100 && s.pos <= 150 }
 ];
-function B_render() {
-  const d = BX.dna, m = fromTemplate(d), t = Code.translate(m), p0 = Code.translate(B_M0).aas;
-  $("B_dna").innerHTML = '<span class="end">3′</span>' + [...d].map((b, i) => (BX.mode === "ins" ? '<span class="ins" data-g="' + i + '"></span>' : "") + '<span class="b" data-i="' + i + '">' + b + "</span>").join("") + (BX.mode === "ins" ? '<span class="ins" data-g="' + d.length + '"></span>' : "") + '<span class="end">5′</span>';
-  $("B_mrna").innerHTML = seqHtml(m, ["5′", "3′"]);
-  if (t.start >= 0) $("B_mrna").querySelectorAll(".b").forEach((s, i) => { if (i >= t.start && i < t.start + t.codons.length * 3) { s.classList.add("cod"); if ((i - t.start) % 3 === 0 && i > t.start) s.classList.add("gap3"); } });
-  $("B_prot").innerHTML = t.aas.length ? t.aas.map((a, i) => '<span class="' + (a === "Stop" ? "stop " : "") + (a !== p0[i] ? "diff" : "") + '">' + a + "</span>").join("") : '<span class="diff">no protein from the original start</span>';
-  $("B_prot0").innerHTML = p0.map(a => '<span class="' + (a === "Stop" ? "stop" : "") + '">' + a + "</span>").join("");
+function rate(load, atp) { return VMAX * (atp / (KM + atp)) * Math.max(0, 1 - load / STALL); }
+function B_vals() { $("B_load_v").textContent = v("B_load") + " pN"; $("B_atp_v").textContent = (+$("B_atp").value).toFixed(3) + " mM"; }
+function B_paint() {
+  { const { ctx, w, h } = hiDPI($("B_track")), x0 = 30, x1 = w - 30, X = p => x0 + p / TRACK * (x1 - x0);
+    ctx.strokeStyle = "#c4c0b4"; ctx.lineWidth = 10; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(x0, 100); ctx.lineTo(x1, 100); ctx.stroke();
+    ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(100), 84); ctx.lineTo(X(100), 116); ctx.moveTo(X(150), 84); ctx.lineTo(X(150), 116); ctx.stroke();
+    ctx.fillStyle = "#e9e1c9"; ctx.strokeStyle = "#9a8a5a"; ctx.lineWidth = 1.5; ctx.fillRect(X(BX.pos) - 16, 50, 32, 28); ctx.strokeRect(X(BX.pos) - 16, 50, 32, 28);
+    ctx.strokeStyle = "#1d1d1b"; ctx.beginPath(); ctx.moveTo(X(BX.pos), 78); ctx.lineTo(X(BX.pos) - 5, 94); ctx.moveTo(X(BX.pos), 78); ctx.lineTo(X(BX.pos) + 5, 94); ctx.stroke();
+    if (v("B_load") > 0) { ctx.strokeStyle = "#a8331a"; ctx.lineWidth = 1 + v("B_load") / 2; ctx.beginPath(); ctx.moveTo(X(BX.pos) - 16, 64); ctx.lineTo(X(BX.pos) - 30 - v("B_load") * 4, 64); ctx.stroke(); }
+    ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText("0", x0, 130); ctx.fillText("1 µm", (x0 + x1) / 2, 130); ctx.fillText("2 µm", x1, 130);
+    ctx.textAlign = "left"; ctx.fillText("steps: " + BX.pos + " of " + TRACK, x0, 24); }
+  { const { ctx, w, h } = hiDPI($("B_bill")), work = STEP_NM * v("B_load"), Y = e => 150 - e * 1.4;
+    const bar = (x, val, col, lab) => { ctx.fillStyle = col; ctx.fillRect(x, Y(val), 90, 150 - Y(val)); ctx.fillStyle = "#1d1d1b"; ctx.font = "12px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText(lab, x + 45, 166); ctx.fillText(Math.round(val) + " pN·nm", x + 45, Y(val) - 6); };
+    bar(60, ATP_PNNM, "#2f6b8f", "one ATP"); bar(200, work, work >= ATP_PNNM * 0.84 ? "#a8331a" : "#b23a48", "one step's work");
+    ctx.strokeStyle = "#1d1d1b"; ctx.beginPath(); ctx.moveTo(40, 150); ctx.lineTo(320, 150); ctx.stroke(); }
 }
-$("B_mode").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; BX.mode = b.dataset.m; for (const c of $("B_mode").children) c.classList.toggle("on", c === b); B_render(); });
-$("B_dna").addEventListener("click", e => {
-  const g = e.target.closest(".ins"), b = e.target.closest(".b"); let d = BX.dna;
-  if (BX.mode === "ins" && g) d = d.slice(0, +g.dataset.g) + "A" + d.slice(+g.dataset.g);
-  else if (BX.mode === "del" && b) d = d.slice(0, +b.dataset.i) + d.slice(+b.dataset.i + 1);
-  else if (BX.mode === "sub" && b) d = d.slice(0, +b.dataset.i) + CYC[d[+b.dataset.i]] + d.slice(+b.dataset.i + 1);
-  else return;
-  BX.dna = d; Lesson.bump("B"); if (!BX.solved[BX.cur]) $("B_verdict").textContent = ""; B_render();
+function B_open(i) { BX.cur = i; BX.pos = 0; $("B_ttext").textContent = B_T[i].t; $("B_verdict").innerHTML = BX.solved[i] ? '<span class="ok">✓ Hit.</span>' : ""; $("B_pips").innerHTML = Pips.html(4, j => BX.solved[j], i); B_paint(); }
+function B_go() {
+  if (BX.run) return; const i = BX.cur, prac = $("B_prac").checked, c = { load: v("B_load"), atp: +$("B_atp").value }, r = rate(c.load, c.atp);
+  BX.pos = 0; let t = 0, tDone = null; const DT = 0.01; $("B_go").disabled = true;
+  BX.run = setInterval(() => {
+    for (let k = 0; k < 5 && t < TEND - 1e-9; k++) { t += DT; if (BX.pos < TRACK) { let n = 0, L = Math.exp(-r * DT), p = 1; do { p *= Math.random(); n++; } while (p > L); BX.pos = Math.min(TRACK, BX.pos + n - 1); if (BX.pos >= TRACK && tDone == null) tDone = t; } }
+    B_paint();
+    if (t >= TEND - 1e-9) {
+      clearInterval(BX.run); BX.run = null; $("B_go").disabled = false;
+      const s = { pos: BX.pos, tDone }, ok = B_T[i].ok(s, c), msg = BX.pos + " steps" + (tDone != null ? ", arrived at " + tDone.toFixed(1) + " s" : "") + ".";
+      if (prac || BX.solved[i]) { $("B_verdict").textContent = (prac ? "Practice: " : "") + msg; return; }
+      Lesson.record(6 + i, ok); Lesson.bump("B");
+      if (ok) { BX.solved[i] = true; $("B_verdict").innerHTML = '<span class="ok">✓ Hit.</span> ' + msg; const n = BX.solved.filter(Boolean).length; Lesson.tick("B", "rounds", n === 4, n + " of 4"); if (n === 4) Lesson.finish("B"); }
+      else $("B_verdict").innerHTML = '<span class="off">✗ Missed.</span> ' + msg;
+      $("B_pips").innerHTML = Pips.html(4, j => BX.solved[j], i);
+    }
+  }, 50);
+}
+for (const id of ["B_load", "B_atp"]) $(id).addEventListener("input", () => { B_vals(); BX.pos = 0; B_paint(); Lesson.bump("B"); });
+$("B_go").addEventListener("click", B_go);
+Pips.wire($("B_pips"), i => { if (!BX.run) B_open(i); });
+B_vals(); B_open(0);
+
+/* ====== C: a sarcomere. Each frame every myosin head: free and a site open (calcium) -> grips; gripping -> pulls (shortens by a
+   little) and, if ATP is there, lets go. No ATP: a gripping head stays (rigor) and nothing moves either way. No calcium and ATP:
+   heads let go and the sarcomere springs back toward rest. ====== */
+const NH = 12;
+const CX = { cur: 0, solved: Array(3).fill(false), len: 1, heads: Array.from({ length: NH }, () => ({ grip: false, phase: Math.random() })), t: 0 };
+const C_T = [
+  { t: "Shorten the sarcomere below 80% and hold it there.", ok: () => CX.len < 0.8 },
+  { t: "Lock it: make every head grip and stay gripping (rigor, as after death).", ok: () => CX.heads.every(h => h.grip) && !$("C_atp").checked },
+  { t: "Let it relax back above 97% of its length.", ok: () => CX.len > 0.97 && CX.heads.every(h => !h.grip) }
+];
+function C_tick() {
+  const ca = $("C_ca").checked, atp = $("C_atp").checked; let pull = 0;
+  for (const h of CX.heads) {
+    h.phase += 0.05 + Math.random() * 0.03; if (h.phase < 1) continue; h.phase = 0;
+    if (!h.grip && ca && CX.len > 0.62) h.grip = true;
+    else if (h.grip) { pull++; if (atp) h.grip = false; }
+  }
+  const gripping = CX.heads.filter(h => h.grip).length;
+  if (atp) { CX.len = Math.max(0.6, CX.len - pull * 0.006); if (!ca && gripping === 0) CX.len = Math.min(1, CX.len + 0.004); }
+  C_paint();
+}
+function C_paint() {
+  const { ctx, w, h } = hiDPI($("C_sarc")), cx = w / 2, half = (w * 0.42) * CX.len, cy = h / 2, ca = $("C_ca").checked;
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 4; for (const s of [-1, 1]) { ctx.beginPath(); ctx.moveTo(cx + s * half, cy - 70); ctx.lineTo(cx + s * half, cy + 70); ctx.stroke(); }
+  ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText("Z", cx - half, cy - 76); ctx.fillText("Z", cx + half, cy - 76);
+  const actinLen = w * 0.3;
+  for (const s of [-1, 1]) for (const dy of [-38, 38]) { ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx + s * half, cy + dy); ctx.lineTo(cx + s * (half - actinLen), cy + dy); ctx.stroke();
+    if (ca) for (let k = 1; k < 8; k++) { ctx.fillStyle = "#e8730c"; ctx.beginPath(); ctx.arc(cx + s * (half - k * actinLen / 8), cy + dy, 2.5, 0, 7); ctx.fill(); } }
+  ctx.fillStyle = "#2f6b8f"; ctx.fillRect(cx - w * 0.2, cy - 8, w * 0.4, 16);
+  CX.heads.forEach((hd, i) => {
+    const side = i < NH / 2 ? -1 : 1, k = i % (NH / 2), x = cx + side * (24 + k * (w * 0.2 - 30) / (NH / 2 - 1)) * 0.95, up = k % 2 ? -1 : 1, y1 = cy + up * 8, y2 = cy + up * (hd.grip ? 36 : 24);
+    ctx.strokeStyle = hd.grip ? "#1d1d1b" : "#5b8db0"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x - side * (hd.grip ? 10 : -4), y2); ctx.stroke();
+    ctx.fillStyle = hd.grip ? "#1d1d1b" : "#5b8db0"; ctx.beginPath(); ctx.arc(x - side * (hd.grip ? 10 : -4), y2, 4, 0, 7); ctx.fill();
+  });
+  $("C_len").textContent = Math.round(CX.len * 100) + "%"; $("C_grip").textContent = CX.heads.filter(h => h.grip).length + " of " + NH;
+}
+function C_open(i) { CX.cur = i; $("C_ttext").textContent = C_T[i].t; $("C_verdict").innerHTML = CX.solved[i] ? '<span class="ok">✓ Hit.</span>' : ""; $("C_pips").innerHTML = Pips.html(3, j => CX.solved[j], i); }
+$("C_lock").addEventListener("click", () => {
+  const i = CX.cur; if (CX.solved[i]) return; const ok = C_T[i].ok(); Lesson.record(10 + i, ok); Lesson.bump("C");
+  if (ok) { CX.solved[i] = true; $("C_verdict").innerHTML = '<span class="ok">✓ Hit.</span>'; const n = CX.solved.filter(Boolean).length; Lesson.tick("C", "rounds", n === 3, n + " of 3"); if (n === 3) Lesson.finish("C"); else setTimeout(() => C_open(CX.solved.indexOf(false)), 900); }
+  else $("C_verdict").innerHTML = '<span class="off">✗ Not yet.</span>';
+  $("C_pips").innerHTML = Pips.html(3, j => CX.solved[j], i);
 });
-$("B_undo").addEventListener("click", () => { BX.dna = B_D0; B_render(); });
-function B_open(i) { BX.cur = i; BX.dna = B_D0; $("B_ttext").textContent = B_T[i].t; $("B_verdict").innerHTML = BX.solved[i] ? '<span class="ok">✓ Correct.</span>' : ""; $("B_pips").innerHTML = Pips.html(5, j => BX.solved[j], i); B_render(); wheelInto($("B_wheel")); }
-function B_lock() {
-  const i = BX.cur; if (BX.solved[i]) return;
-  const edits = lev(B_D0, BX.dna); if (edits !== 1) { $("B_verdict").textContent = edits ? "Make exactly one change (you have " + edits + ")." : "Make one change first."; return; }
-  const ok = kind(BX.dna) === B_T[i].k; Lesson.record(8 + i, ok); Lesson.bump("B");
-  if (ok) { BX.solved[i] = true; $("B_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const n = BX.solved.filter(Boolean).length; Lesson.tick("B", "rounds", n === 5, n + " of 5"); if (n === 5) Lesson.finish("B"); else setTimeout(() => B_open(BX.solved.indexOf(false)), 1300); }
-  else $("B_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> Compare the protein now with the protein before.';
-  $("B_pips").innerHTML = Pips.html(5, j => BX.solved[j], i);
-}
-$("B_lock").addEventListener("click", B_lock);
-Pips.wire($("B_pips"), B_open);
-B_open(0);
+for (const id of ["C_ca", "C_atp"]) $(id).addEventListener("change", () => Lesson.bump("C"));
+Pips.wire($("C_pips"), C_open);
+setInterval(() => { if (Lesson.isOpen("C")) C_tick(); }, 60);
+C_open(0); C_paint();
 
-/* ====== C: the drill; the wheel is shown as a picture ====== */
-const aaAns = a => [a.toLowerCase(), Code.FULL[a]];
-const C_CARDS = [
-  { make() { const c = pick(SENSE.concat(["AUG"])); return { q: "mRNA codon <b class='mono'>" + c + "</b>: which amino acid?", a: aaAns(Code.aa(c)) }; } },
-  { make() { const c = pick(SENSE.concat(["AUG"])); return { q: "mRNA codon <b class='mono'>" + c + "</b>: which amino acid?", a: aaAns(Code.aa(c)) }; } },
-  { make() { const c = pick(SENSE.concat(["AUG"])), d = toTemplate(c); return { q: "DNA template <b class='mono'>3′-" + d + "-5′</b>: type the mRNA codon, 5′ to 3′.", a: [c] }; } },
-  { make() { const c = pick(SENSE.concat(["AUG"])); return { q: "mRNA codon <b class='mono'>5′-" + c + "-3′</b>: type the tRNA anticodon that pairs with it, 3′ to 5′.", a: [Code.anticodon(c)] }; } },
-  { make() { const c = pick(SENSE), a = Code.aa(c), syn = SENSE.filter(x => Code.aa(x) === a && x !== c), mis = SENSE.filter(x => Code.aa(x) !== a && x.slice(0, 2) === c.slice(0, 2));
-      const r = Math.random(), to = syn.length && r < 0.33 ? pick(syn) : r < 0.66 && mis.length ? pick(mis) : null;
-      if (!to) { const s = c.slice(0, 2) + "A"; const stop = ["UAA", "UAG", "UGA"].find(x => lev(x, c) === 1); if (stop) return { q: "<b class='mono'>" + c + " → " + stop + "</b>. What kind of mutation?", a: ["nonsense", "nonsense mutation"] }; }
-      const t2 = to || pick(syn.concat(mis)), k = Code.aa(t2) === a ? "silent" : "missense";
-      return { q: "<b class='mono'>" + c + " (" + a + ") → " + t2 + " (" + Code.aa(t2) + ")</b>. What kind of mutation?", a: [k, k + " mutation"] }; } },
-  { q: "Making RNA from a DNA template.", a: "transcription" },
-  { q: "Making a protein from an mRNA.", a: "translation" },
-  { q: "Three mRNA bases that stand for one amino acid.", a: "codon" },
-  { q: "The three bases on a tRNA that pair with a codon.", a: "anticodon" },
-  { q: "The RNA that carries an amino acid to the ribosome (abbreviation).", a: ["trna", "transfer rna"] },
-  { q: "The RNA copied from a gene and read by the ribosome (abbreviation).", a: ["mrna", "messenger rna"] },
-  { q: "The structure that reads mRNA and joins amino acids.", a: "ribosome" },
-  { q: "The enzyme that builds mRNA.", a: "rna polymerase" },
-  { q: "The DNA sequence where RNA polymerase binds to start a gene.", a: "promoter" },
-  { q: "The start codon.", a: "aug" },
-  { q: "Name any one stop codon.", a: ["uaa", "uag", "uga"] },
-  { q: "Adding or removing one base shifts every codon after it: a…", a: ["frameshift", "frameshift mutation"] },
-  { q: "RNA uses this base in place of thymine.", a: ["uracil", "u"] }
-];
-const C_BANK = ["transcription", "translation", "codon", "anticodon", "tRNA", "mRNA", "ribosome", "RNA polymerase", "promoter", "silent", "missense", "nonsense", "frameshift", "uracil"];
-let C_D = null;
-function C_start() {
-  if (C_D) return;
-  const cv = document.createElement("canvas"); cv.width = 420; cv.height = 420; const r = 2; cv.width = 840; cv.height = 840; const x = cv.getContext("2d"); x.scale(r, r); x.fillStyle = "#fff"; x.fillRect(0, 0, 420, 420); Code.wheel(x, 210, 210, 206);
-  $("C_wheel").innerHTML = '<img alt="" draggable="false" width="420" height="420" src="' + cv.toDataURL("image/png") + '">';
-  C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(13 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") });
+/* ====== D: the drill ====== */
+function walkerAt(k) {   /* the walker after k events of a step */
+  const H = startHeads(); for (let i = 0; i < k; i++) applyEv(H, EV[i].key);
+  return (ctx, w, h) => drawWalker(ctx, w, h, H, { labels: true });
 }
+const D_CARDS = EV.map((e, k) => ({ q: "What happens next? One word: ATP (binds), swing, grip or split.", a: [["atp"], ["swing", "swings", "rear head", "rear"], ["grip", "grips", "binds", "bind"], ["split", "hydrolysis", "splits"]][k], w: 380, h: 200, draw: walkerAt(k) })).concat([
+  { q: "The motor protein that walks along microtubules carrying cargo.", a: "kinesin" },
+  { q: "The track kinesin walks on.", a: ["microtubule", "microtubules"] },
+  { q: "The motor protein that pulls on actin in muscle.", a: "myosin" },
+  { q: "The thin filaments myosin pulls.", a: "actin" },
+  { q: "The unit of a muscle fibre between two Z lines.", a: "sarcomere" },
+  { q: "The ion that uncovers actin's binding sites and lets muscle contract.", a: ["calcium", "ca2+", "ca", "calcium ion"] },
+  { q: "Without ATP, myosin heads cannot let go of actin. The stiffness this causes after death.", a: ["rigor mortis", "rigor"] },
+  { q: "The myosin head's pulling movement (two words).", a: "power stroke" },
+  { q: "How many ATP does kinesin spend per 8 nm step?", a: ["1", "one"] },
+  { q: "ATP's phosphates crowd together negative charges on which electronegative atom?", a: ["oxygen", "o"] },
+  { q: "Splitting ATP into ADP and phosphate with water.", a: ["hydrolysis", "atp hydrolysis"] },
+  { q: "The motor protein that walks toward the minus end of microtubules, the other way from most kinesins.", a: "dynein" }
+]);
+const D_BANK = ["ATP", "swing", "grip", "split", "kinesin", "microtubule", "myosin", "actin", "sarcomere", "calcium", "rigor mortis", "power stroke", "oxygen", "hydrolysis", "dynein"];
+let D_D = null;
+function D_start() { if (D_D) return; D_D = Drill.make({ mount: $("D_drill"), bankMount: $("D_bank"), bank: D_BANK, cards: D_CARDS, onFirst: (i, ok) => Lesson.record(13 + i, ok), onProgress: (k, n) => Lesson.tick("D", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("D") }); }
 
-Lesson.init({ id: "b145_lesson9", version: 1, stages: ["A", "B", "C"], required: "C", bits: 13 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") wheelInto($("B_wheel")); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "4 of 4"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
-window.addEventListener("resize", () => { wheelInto($("A_wheel")); wheelInto($("B_wheel")); });
+Lesson.init({ id: "b145_lesson9", version: 1, stages: ["A", "B", "C", "D"], required: "D", bits: 13 + D_CARDS.length,
+  onOpen: s => { if (s === "D") D_start(); if (s === "B") B_paint(); if (s === "C") C_paint(); },
+  onReveal: () => { BX.solved.fill(true); CX.solved.fill(true); B_open(0); C_open(0); D_start(); D_D.reveal(); ["A", "B", "C", "D"].forEach(Lesson.finish); Lesson.tick("A", "trips", true, "3 of 3"); Lesson.tick("A", "clean", true, "done"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("C", "rounds", true, "3 of 3"); } });
+window.addEventListener("resize", () => { A_paint(); B_paint(); C_paint(); });
 </script>
 </body>
 </html>

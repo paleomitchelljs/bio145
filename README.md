@@ -12,8 +12,10 @@ so students can read the spelling but can't copy and paste it. Pasting into the 
 *drawn*: each time a card comes back it shows a new molecule, fork, cell or cross, so students drill the idea and not one
 picture.
 
+**Numbering: lesson N is the homework for lecture N.** `docs/GUIDE.md` maps all 36 lectures to the book and to the lessons; most slots are empty so far, and the fourteen drafts sit in their lecture's slot.
+
 **Status: first drafts, fourteen lessons.** The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20
-(lesson 10 keeps JM's BIO 202 lesson 9 voice). `docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
+(lesson 23 keeps JM's BIO 202 lesson 9 voice). `docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
 
 **House rules for this repo (JM, 2026-10-31):** copy existing engines from BIO 202 wherever possible (the copies may drift;
 they are different classes); no real-data panels; no R panels.
@@ -28,12 +30,12 @@ app/assets/
   b145.css                 the BIO 202 lesson stylesheet (same palette), lifted into one shared file, plus drill/tile/cross styles
   stage.js                 gates, task ticks, first-try bits, bypass/study mode, drag tiles (Tiles)
   drill.js                 the typed mastery drill and PNG word bank
-  atoms.js                 electronegativity widget: bonds, partial charges, pull arrows (lessons 2, 3, 6)
-  fork.js                  the replication fork at any step, with any molecule missing (lesson 7)
-  quiz.js, sim.js, paths.js, paths.css   copied from BIO 202 for lesson 10 (the meiosis bench)
-  code.js                  the genetic code and a clickable codon wheel (lesson 9)
-  cross.js                 crosses on lesson 10's meiosis (BIO 202 lesson 9's chromatids / two divisions, copied): gametes,
-                           offspring, phenotype ratios, X-linkage, linkage, parent cards (lessons 11-13)
+  atoms.js                 electronegativity widget: bonds, partial charges, pull arrows (lessons 2, 4, 6, 28-30)
+  fork.js                  the replication fork at any step, with any molecule missing (lesson 29)
+  quiz.js, sim.js, paths.js, paths.css   copied from BIO 202 for lesson 23 (the meiosis bench)
+  code.js                  the genetic code and a clickable codon wheel (lesson 30)
+  cross.js                 crosses on lesson 23's meiosis (BIO 202 lesson 9's chromatids / two divisions, copied): gametes,
+                           offspring, phenotype ratios, X-linkage, linkage, parent cards (lessons 25-27)
   score.js, lock.js, hover.*, pips.js, score.css   copied from BIO 202 (salt and storage keys renamed to bio145)
 instructor/                verify_code.html, aggregate.html (decode student codes)
 scripts/
@@ -46,7 +48,7 @@ docs/PLAN.md               idea list -> lessons, measured numbers, open question
 
 ```
 node scripts/smoke.js            # every lesson: no errors as a student; every stage opens and a code is minted under the bypass
-node scripts/smoke.js lesson7    # one lesson
+node scripts/smoke.js lesson29   # one lesson
 python3 scripts/test_codec.py    # Python decoder agrees with score.js
 python3 -m http.server 8000      # then open http://localhost:8000/
 ```

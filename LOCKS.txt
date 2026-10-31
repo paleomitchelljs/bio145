@@ -2,17 +2,17 @@
 # One row per page.  o = open   x = locked.  Change a letter, commit, push.
 # Add ?preview=1 to a URL to see a locked page. Same mechanics as BIO 202's LOCKS.txt (see that file's header).
 display: dim
-lesson1         o   Scale and the levels of life
 lesson2         o   Greedy oxygen: who gets the electrons, and what shape does with it
-lesson3         o   Building molecules: functional groups and the joins between monomers
-lesson4         o   Downhill and uphill: free energy, the hill, and paying with ATP
-lesson5         o   Jiggling across a membrane: diffusion and osmosis
+lesson4         o   Building molecules: functional groups and the joins between monomers
 lesson6         o   Folding a chain in water: proteins
-lesson7         o   The copying relay: DNA replication, molecule by molecule
-lesson8         o   Heavy and light: the Meselson-Stahl experiment
-lesson9         o   Reading a gene: transcription, the codon wheel, and mutations
-lesson10        o   Dividing a cell: mitosis and meiosis (from BIO 202 lesson 9)
-lesson11        o   Parents to offspring: F1 and F2
-lesson12        o   Mystery crosses: dominance, blending, both at once, and test crosses
-lesson13        o   Hit the ratio: one gene, two genes, the X, and genes that travel together
-lesson14        o   Motors: kinesin walks on ATP, filaments slide
+lesson7         o   Scale and the levels of life
+lesson9         o   Motors: kinesin walks on ATP, filaments slide
+lesson10        o   Jiggling across a membrane: diffusion and osmosis
+lesson13        o   Downhill and uphill: free energy, the hill, and paying with ATP
+lesson23        o   Dividing a cell: mitosis and meiosis
+lesson25        o   Parents to offspring: F1 and F2
+lesson26        o   Mystery crosses: dominance, blending, both at once, and test crosses
+lesson27        o   Hit the ratio: one gene, two genes, the X, and genes that travel together
+lesson28        o   Heavy and light: the Meselson–Stahl experiment
+lesson29        o   The copying relay: DNA replication, molecule by molecule
+lesson30        o   Reading a gene: transcription, the codon wheel, and mutations

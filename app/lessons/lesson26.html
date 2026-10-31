@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="../assets/lock.js"></script>
-<title>BIO 145 — Lesson 12</title>
+<title>BIO 145 — Lesson 26</title>
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
@@ -24,7 +24,7 @@
 </style>
 </head>
 <body>
-<header><h1>Lesson 12</h1></header>
+<header><h1>Lesson 26</h1></header>
 <div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
@@ -112,12 +112,12 @@
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
     <div class="col">
       <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 12 is done.</div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 26 is done.</div></div>
     </div>
   </div>
 </section>
 
-<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 12. Your completion code is below: copy it and hand it in.</p></div>
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 26. Your completion code is below: copy it and hand it in.</p></div>
 <div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
 
 <script src="../assets/pips.js"></script>
@@ -144,7 +144,7 @@ function Bench(o) {
   B.cross = () => {
     if (!B.sel[0] || !B.sel[1]) return false;
     const pickOne = s => pick(classes(B.stocks[s.s])[s.p]), m = pickOne(B.sel[0]), d = pickOne(B.sel[1]);
-    const kids = Cross.breed(B.spec, { sex: "F", c: m.c }, { sex: "M", c: d.c }, 40);   /* every gamete a real meiosis (lesson 10) */
+    const kids = Cross.breed(B.spec, { sex: "F", c: m.c }, { sex: "M", c: d.c }, 40);   /* every gamete a real meiosis (lesson 23) */
     const nm = B.stocks[B.sel[0].s].short + " " + B.sel[0].p + " × " + B.stocks[B.sel[1].s].short + " " + B.sel[1].p;
     B.stocks.push({ name: "Cross " + (B.stocks.length - B.base + 1) + ": " + nm, short: "cross " + (B.stocks.length - B.base + 1), inds: kids, n: 40 });
     B.sel = [null, null]; B.render(); return true;
@@ -179,7 +179,7 @@ const lookA = p => '<span class="dot" style="background:' + (AX.col[AX.cur][p] |
 AX.bench = Bench({ mount: "A_stocks", slots: ["A_p1", "A_p2"], look: lookA });
 function A_answers() {
   const t = TRAITS[AX.cur];
-  /* the three rules in Lesson 10 Stage D's words (copied from BIO 202 lesson 9): one masks the other, both show side by side, they blend */
+  /* the three rules in Lesson 23 Stage D's words (copied from BIO 202 lesson 9): one masks the other, both show side by side, they blend */
   const opts = [["domA", "one masks the other: " + t.a[0] + " masks " + t.b[0]], ["domB", "one masks the other: " + t.b[0] + " masks " + t.a[0]], ["incomplete", "they blend (incomplete dominance)"], ["codominant", "both show, side by side (codominance)"]];
   $("A_ans").innerHTML = opts.map(([k, l]) => '<button data-a="' + k + '"' + (AX.ans === k ? ' class="on"' : "") + ">" + l + "</button>").join("");
 }
@@ -251,7 +251,7 @@ const C_BANK = ["incomplete dominance", "codominance", "complete dominance", "te
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(11 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson12", version: 1, stages: ["A", "B", "C"], required: "C", bits: 11 + C_CARDS.length,
+Lesson.init({ id: "b145_lesson26", version: 1, stages: ["A", "B", "C"], required: "C", bits: 11 + C_CARDS.length,
   onOpen: s => { if (s === "C") C_start(); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
 </script>

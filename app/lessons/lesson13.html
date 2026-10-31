@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<style>
+  #A_land { touch-action:none; cursor:ns-resize; }
+  .shelf { display:flex; flex-direction:column; gap:5px; }
+  .shelf button { text-align:left; background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:6px 9px; font-size:13px; cursor:pointer; }
+  .shelf button:hover { border-color:var(--ink); }
+  .shelf button b { font:12.5px ui-monospace,Menlo,monospace; float:right; margin-left:10px; }
+</style>
 </head>
 <body>
 <header><h1>Lesson 13</h1></header>
@@ -18,61 +25,77 @@
   <a href="#stageC" id="tocC" class="locked">C</a>
 </nav>
 
-<!-- ========== STAGES A and B — set the parents to hit a ratio (JM: "students shown a pair of parents, try to set their alleles to
-     get a target ratio of phenotypes in F1 & F2. As it progresses we do monohybrid rounds, dihybrid rounds, sex linked rounds, and
-     recombination rounds.") One widget, two stages: peas (A), then flies (B). ========== -->
+<!-- ========== STAGE A — where a reaction ends, and how fast it gets there (JM: "Something on Gibbs free energy & *gonic chemical
+     interactions"). The roll: set the landscape, Go, watch 60 molecules hop. ========== -->
 <section class="stage stage-locked" id="stageA">
   <h2 class="stage-h">A</h2>
   <div class="lock-banner">Enter your name above to start.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul>
-      <li>Every ratio Mendel counted was set by what the parents carried.</li>
-      <li>Click the parents' alleles until the offspring bars fill the red boxes.</li>
-    </ul></div>
-  </div>
-  <div class="stage-body grid">
-    <div class="col">
-      <div class="panel"><h3><span class="info" tabindex="0">The parents<span class="tip"><span>Pea plants. Y yellow seeds, y green; R round seeds, r wrinkled. Each chromosome pair carries one gene; click a copy to switch it.</span></span></span></h3><div class="parents" id="A_par"></div></div>
-      <div class="panel"><h3><span class="info" tabindex="0">Offspring<span class="tip"><span>Bars: the share of offspring with each look, worked out exactly from every combination of egg and pollen. F2: the F1 bred among themselves at random. Red boxes: the target.</span></span></span></h3><canvas id="A_bars" width="780" height="300"></canvas></div>
-    </div>
-    <div class="col">
-      <div class="panel tcard">
-        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Five targets in any order, one gene and then two.</span></span></span> <span class="pips" id="A_pips"></span></h3>
-        <p class="ttext" id="A_ttext"></p>
-        <div class="buttons"><button id="A_lock" class="accent">Lock in</button></div>
-        <div class="verdict" id="A_verdict"></div>
-      </div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksA"><li data-task="rounds">Hit five targets <span class="hint" id="A_rounds_now">0 of 5</span></li></ul><div class="solved-banner" id="solvedA">Stage B is open.</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="stage stage-locked" id="stageB">
-  <h2 class="stage-h">B</h2>
-  <div class="lock-banner">Finish Stage A to unlock this section.</div>
-  <div class="panel stage-intro">
-    <div class="voice"><ul>
-      <li>Now fruit flies, and genes that don't sort independently: one on the X, then two on the same chromosome.</li>
-      <li>Set the parents (and, for genes on one chromosome, how far apart they sit) to fill the red boxes.</li>
+      <li>Molecules hop back and forth over a hill. How far downhill the products sit, and how tall the hill is, are two different questions.</li>
+      <li>Drag the products' level and the top of the hill, then <b>Go</b>. Hit each target.</li>
     </ul></div>
   </div>
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Eye colour: R red, r white, on the X chromosome; a male has one X and a Y, which carries no copy.</span><span>Body and wings: B grey, b black; V normal wings, v vestigial. In the last two targets both genes sit on one chromosome: the two copies on a chromosome travel together unless a crossover falls between them. The slider sets how often that happens.</span></span></span></h3>
-        <div class="parents" id="B_par"></div>
-        <div class="tbar" id="B_cmrow" hidden><label>distance apart <input type="range" id="B_cm" min="0" max="50" value="25"></label><b id="B_cm_v"></b></div>
+        <h3><span class="info" tabindex="0">The hill<span class="tip"><span>Left valley: reactants. Right valley: products. Up: free energy (kJ/mol). Each dot is a molecule.</span><span>Drag near the right valley to move the products up or down; drag near the top to raise or lower the hill. ΔG: products minus reactants. The hill's height is measured from the reactants.</span><span>Molecules hop both ways, uphill hops more rarely. The enzyme toggle lowers the hill (dashed); it moves neither valley.</span></span></span></h3>
+        <canvas id="A_land" width="780" height="300"></canvas>
+        <div class="readout">ΔG: <b id="A_dg"></b> · hill: <b id="A_ea"></b></div>
+        <label class="practice-row"><input type="checkbox" id="A_enz"> enzyme</label>
       </div>
-      <div class="panel"><h3>Offspring</h3><canvas id="B_bars" width="780" height="300"></canvas></div>
+      <div class="panel">
+        <h3><span class="info" tabindex="0">Share that is product<span class="tip"><span>Across: seconds since <b>Go</b> (every molecule starts as reactant). Up: the share of the 60 molecules that are product. The red box: the target.</span></span></span></h3>
+        <canvas id="A_time" width="780" height="200"></canvas>
+      </div>
     </div>
     <div class="col">
       <div class="panel tcard">
-        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Four targets in any order: two on the X, two with genes on one chromosome.</span></span></span> <span class="pips" id="B_pips"></span></h3>
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Five targets in any order. <b>Go</b> runs 30 seconds; the share at the end is what counts. A practice run is not scored.</span></span></span> <span class="pips" id="A_pips"></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="practice-row"><input type="checkbox" id="A_prac"><label for="A_prac">practice run</label></div>
+        <div class="buttons"><button id="A_go" class="accent">Go</button></div>
+        <div class="verdict" id="A_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksA"><li data-task="rounds">Hit five targets <span class="hint" id="A_rounds_now">0 of 5</span></li></ul>
+        <div class="solved-banner" id="solvedA">Stage B is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE B — paying for an uphill reaction with a downhill one ========== -->
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>A cell has to make plenty of uphill reactions go. It pays for them by running a downhill one at the same time.</li>
+      <li>Add reactions from the shelf to the one you need until the whole thing goes. Click a bar to take it off.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The bill<span class="tip"><span>First bar: the reaction you need, its ΔG (kJ/mol). Each bar after it: a reaction run at the same time. The black line: the running total. The coupled reaction goes if the total ends below zero.</span><span>Click a bar (not the first) to remove it.</span></span></span></h3>
+        <canvas id="B_bill" width="780" height="320"></canvas>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Four targets in any order. Use as few shelf reactions as will do the job.</span></span></span> <span class="pips" id="B_pips"></span></h3>
         <p class="ttext" id="B_ttext"></p>
+        <div class="shelf" id="B_shelf"></div>
         <div class="buttons"><button id="B_lock" class="accent">Lock in</button></div>
         <div class="verdict" id="B_verdict"></div>
       </div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksB"><li data-task="rounds">Hit four targets <span class="hint" id="B_rounds_now">0 of 4</span></li></ul><div class="solved-banner" id="solvedB">Stage C is open.</div></div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksB"><li data-task="rounds">Pay for four reactions <span class="hint" id="B_rounds_now">0 of 4</span></li></ul>
+        <div class="solved-banner" id="solvedB">Stage C is open.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -81,7 +104,7 @@
 <section class="stage stage-locked" id="stageC">
   <h2 class="stage-h">C</h2>
   <div class="lock-banner">Finish Stage B to unlock this section.</div>
-  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Answer fractions like 3/16.</li></ul></div></div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Drawn cards come back as new diagrams.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
     <div class="col">
@@ -99,114 +122,191 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
-<script src="../assets/cross.js"></script>
 <script>
 /* bits: A 0-4, B 5-8, C 9+ */
-const LY = { dom: "Y", rec: "y", ph: ["yellow", "green"] }, LR = { dom: "R", rec: "r", ph: ["round", "wrinkled"] };
-const LX = { dom: "R", rec: "r", ph: ["red-eyed", "white-eyed"], x: true };
-const LB = { dom: "B", rec: "b", ph: ["grey", "black"] }, LV = { dom: "V", rec: "v", ph: ["normal", "vestigial"] };
-const MONO = { loci: [LY] }, DI = { loci: [LR, LY] }, XL = { loci: [LX] }, LINK = { loci: [LB, LV], linked: 0.25 };
-const q = (a, b) => a / b;
-const ROUNDS_A = [
-  { t: "F1 all yellow; F2 three yellow to one green.", spec: MONO, f1: { yellow: 1 }, f2: { yellow: q(3, 4), green: q(1, 4) } },
-  { t: "F1 half yellow, half green.", spec: MONO, f1: { yellow: q(1, 2), green: q(1, 2) } },
-  { t: "F1 all round and yellow; F2 9 : 3 : 3 : 1.", spec: DI, f1: { "round yellow": 1 }, f2: { "round yellow": q(9, 16), "round green": q(3, 16), "wrinkled yellow": q(3, 16), "wrinkled green": q(1, 16) } },
-  { t: "F1 1 : 1 : 1 : 1, all four looks.", spec: DI, f1: { "round yellow": q(1, 4), "round green": q(1, 4), "wrinkled yellow": q(1, 4), "wrinkled green": q(1, 4) } },
-  { t: "F1 3 : 3 : 1 : 1 (round yellow : round green : wrinkled yellow : wrinkled green).", spec: DI, f1: { "round yellow": q(3, 8), "round green": q(3, 8), "wrinkled yellow": q(1, 8), "wrinkled green": q(1, 8) } }
+/* ====== A: two valleys and a hill. Rates k = A exp(-barrier / RT), RT = 2.5 kJ/mol (about 25 °C); A = e^4, so a 10 kJ hill
+   is crossed about once a second. Measured: with the hill at 10 or below, 30 s is long enough for the share to settle at
+   1 / (1 + exp(ΔG / RT)); a hill of 24 or more leaves under 10% product in 30 s, whatever ΔG. ====== */
+const RT = 2.5, PRE = Math.exp(4), N = 60, TEND = 30, DT = 0.05, ENZ = 20;
+const AX = { dg: 0, ea: 15, enz: false, cur: 0, solved: Array(5).fill(false), run: null, trace: [], pos: [] };
+const A_T = [
+  { t: "End with about three quarters of the molecules as product.", box: [0.65, 0.85], ok: (f) => f >= 0.65 && f <= 0.85 },
+  { t: "End with almost every molecule as product.", box: [0.95, 1], ok: (f) => f >= 0.95 },
+  { t: "Keep the hill low (10 or less), and end with almost nothing as product.", box: [0, 0.05], ok: (f, s) => f <= 0.05 && s.hill <= 10 },
+  { t: "Products far downhill (ΔG of −10 or lower), yet almost nothing happens in 30 seconds.", box: [0, 0.1], ok: (f, s) => f <= 0.1 && s.dg <= -10 && !s.enz },
+  { t: "Keep target 4's landscape (ΔG −10 or lower, hill 24 or more). Make it reach nearly all product without touching either.", box: [0.9, 1], ok: (f, s) => f >= 0.9 && s.dg <= -10 && s.ea >= 24 && s.enz }
 ];
-const ROUNDS_B = [
-  { t: "F1: every daughter red-eyed, every son white-eyed.", spec: XL, f1: { "red-eyed female": q(1, 2), "white-eyed male": q(1, 2) } },
-  { t: "F1: half red-eyed and half white-eyed, in daughters and sons alike.", spec: XL, f1: { "red-eyed female": q(1, 4), "white-eyed female": q(1, 4), "red-eyed male": q(1, 4), "white-eyed male": q(1, 4) } },
-  { t: "F1: 41.5% grey normal, 41.5% black vestigial, 8.5% grey vestigial, 8.5% black normal.", spec: LINK, link: true, f1: { "grey normal": 0.415, "black vestigial": 0.415, "grey vestigial": 0.085, "black normal": 0.085 } },
-  { t: "F1: 35% grey vestigial, 35% black normal, 15% grey normal, 15% black vestigial.", spec: LINK, link: true, f1: { "grey vestigial": 0.35, "black normal": 0.35, "grey normal": 0.15, "black vestigial": 0.15 } }
+const hill = () => Math.max(AX.ea - (AX.enz ? ENZ : 0), Math.max(0, AX.dg) + 1);
+function A_clamp() { AX.ea = Math.max(Math.max(0, AX.dg) + 2, Math.min(40, AX.ea)); AX.dg = Math.max(-20, Math.min(20, AX.dg)); }
+function landY(e, h) { return 40 + (40 - e) / 70 * (h - 60); }   /* free energy -30..40 to pixels */
+function A_paint() {
+  const { ctx, w, h } = hiDPI($("A_land")), x0 = 60, x1 = w - 30, xr = x0 + (x1 - x0) * 0.2, xp = x0 + (x1 - x0) * 0.8, xt = (x0 + x1) / 2;
+  const curve = (top, dash) => {
+    ctx.setLineDash(dash ? [6, 5] : []); ctx.strokeStyle = dash ? "#2f6b8f" : "#1d1d1b"; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let x = x0; x <= x1; x += 3) {
+      const u = (x - x0) / (x1 - x0); let e;
+      if (u < 0.2) e = 0; else if (u > 0.8) e = AX.dg; else { const v = (u - 0.2) / 0.6; e = AX.dg * (3 * v * v - 2 * v * v * v) + (top - AX.dg / 2) * Math.sin(Math.PI * v) ** 2; }
+      ctx[x === x0 ? "moveTo" : "lineTo"](x, landY(e, h));
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  };
+  /* axis */
+  ctx.strokeStyle = "#e2e0d9"; ctx.lineWidth = 1; ctx.font = "11px -apple-system,sans-serif"; ctx.fillStyle = "#6b6b68"; ctx.textAlign = "right";
+  for (let e = -20; e <= 40; e += 10) { const y = landY(e, h); ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); ctx.fillText(e, x0 - 6, y + 4); }
+  curve(AX.ea, false); if (AX.enz) curve(hill(), true);
+  /* arrows: ΔG at the right, the hill in the middle */
+  const arr = (x, e1, e2, col, lab) => { ctx.strokeStyle = ctx.fillStyle = col; ctx.lineWidth = 1.5; const y1 = landY(e1, h), y2 = landY(e2, h); ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.stroke();
+    if (Math.abs(y2 - y1) > 8) { ctx.beginPath(); ctx.moveTo(x, y2); ctx.lineTo(x - 4, y2 + (y2 > y1 ? -7 : 7)); ctx.lineTo(x + 4, y2 + (y2 > y1 ? -7 : 7)); ctx.fill(); }
+    ctx.textAlign = "left"; ctx.font = "12px -apple-system,sans-serif"; ctx.fillText(lab, x + 6, (y1 + y2) / 2 + 4); };
+  ctx.setLineDash([2, 3]); ctx.strokeStyle = "#c9c5b8"; ctx.beginPath(); ctx.moveTo(xr, landY(0, h)); ctx.lineTo(x1, landY(0, h)); ctx.stroke(); ctx.setLineDash([]);
+  arr(x1 - 14, 0, AX.dg, "#b23a48", "ΔG"); arr(xt + 10, 0, AX.ea, "#6b6b68", "hill");
+  /* the molecules */
+  AX.pos.forEach((p, i) => { const inP = p.s === 1, cx = (inP ? xp : xr) + p.jx * 50, cy = landY(inP ? AX.dg : 0, h) - 6 - p.jy * 16;
+    ctx.fillStyle = inP ? "#2f6b8f" : "#b23a48"; ctx.beginPath(); ctx.arc(cx, cy, 3.6, 0, 7); ctx.fill(); });
+  ctx.fillStyle = "#1d1d1b"; ctx.font = "12px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText("reactants", xr, h - 6); ctx.fillText("products", xp, h - 6);
+  $("A_dg").textContent = (AX.dg > 0 ? "+" : "") + AX.dg.toFixed(1) + " kJ/mol"; $("A_ea").textContent = AX.ea.toFixed(0) + (AX.enz ? " (with enzyme " + hill().toFixed(0) + ")" : "") + " kJ/mol";
+}
+function A_plot() {
+  const { ctx, w, h } = hiDPI($("A_time")), x0 = 40, x1 = w - 10, y0 = h - 24, y1 = 10, X = t => x0 + t / TEND * (x1 - x0), Y = f => y0 - f * (y0 - y1);
+  const T = A_T[AX.cur]; ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 2; ctx.strokeRect(X(TEND) - 26, Y(T.box[1]), 24, Y(T.box[0]) - Y(T.box[1]));
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "right"; [0, 0.5, 1].forEach(f => ctx.fillText(f, x0 - 5, Y(f) + 4));
+  ctx.textAlign = "center"; [0, 10, 20, 30].forEach(t => ctx.fillText(t + " s", X(t), y0 + 15));
+  if (AX.trace.length) { ctx.strokeStyle = "#2f6b8f"; ctx.lineWidth = 2; ctx.beginPath(); AX.trace.forEach(([t, f], i) => ctx[i ? "lineTo" : "moveTo"](X(t), Y(f))); ctx.stroke(); }
+}
+function A_reset() { AX.pos = Array.from({ length: N }, () => ({ s: 0, jx: rnd(-1, 1), jy: Math.random() })); AX.trace = []; }
+function A_go() {
+  if (AX.run) return; const prac = $("A_prac").checked, i = AX.cur;
+  A_reset(); const snap = { dg: AX.dg, ea: AX.ea, enz: AX.enz, hill: hill() };
+  const kf = PRE * Math.exp(-snap.hill / RT), kr = PRE * Math.exp(-(snap.hill - snap.dg) / RT), pf = 1 - Math.exp(-kf * DT), pr = 1 - Math.exp(-kr * DT);
+  let t = 0; $("A_go").disabled = true; $("A_verdict").textContent = "";
+  AX.run = setInterval(() => {
+    for (let k = 0; k < 6 && t < TEND; k++) { t += DT; for (const p of AX.pos) { if (p.s === 0 ? Math.random() < pf : Math.random() < pr) p.s ^= 1; } AX.trace.push([t, AX.pos.filter(p => p.s).length / N]); }
+    A_paint(); A_plot();
+    if (t >= TEND - 1e-9) {
+      clearInterval(AX.run); AX.run = null; $("A_go").disabled = false;
+      const f = AX.trace[AX.trace.length - 1][1], ok = A_T[i].ok(f, snap), pct = Math.round(f * 100) + "% product.";
+      if (prac) { $("A_verdict").innerHTML = "Practice: " + pct; return; }
+      if (AX.solved[i]) { $("A_verdict").innerHTML = pct; return; }
+      Lesson.record(i, ok); Lesson.bump("A");
+      if (ok) { AX.solved[i] = true; $("A_verdict").innerHTML = '<span class="ok">✓ Hit.</span> ' + pct; const n = AX.solved.filter(Boolean).length; Lesson.tick("A", "rounds", n === 5, n + " of 5"); if (n === 5) Lesson.finish("A"); }
+      else $("A_verdict").innerHTML = '<span class="off">✗ Missed.</span> ' + pct;
+      $("A_pips").innerHTML = Pips.html(5, j => AX.solved[j], i);
+    }
+  }, 30);
+}
+function A_open(i) { AX.cur = i; $("A_ttext").textContent = A_T[i].t; $("A_verdict").innerHTML = AX.solved[i] ? '<span class="ok">✓ Hit.</span>' : ""; $("A_pips").innerHTML = Pips.html(5, j => AX.solved[j], i); A_plot(); }
+(function () {
+  const cv = $("A_land"); let mode = null;
+  cv.addEventListener("pointerdown", e => { if (AX.run) return; const { x } = canvasXY(cv, e), w = cv.clientWidth; mode = x > w * 0.68 ? "dg" : "ea"; cv.setPointerCapture(e.pointerId); move(e); });
+  const move = e => { if (!mode) return; const { y } = canvasXY(cv, e), h = +cv.dataset.h, en = 40 - (y - 40) / (h - 60) * 70;
+    if (mode === "dg") AX.dg = Math.round(en * 2) / 2; else AX.ea = Math.round(en); A_clamp(); AX.trace = []; A_paint(); A_plot(); };
+  cv.addEventListener("pointermove", move);
+  cv.addEventListener("pointerup", () => { if (mode) Lesson.bump("A"); mode = null; });
+})();
+$("A_enz").addEventListener("change", () => { AX.enz = $("A_enz").checked; A_paint(); Lesson.bump("A"); });
+$("A_go").addEventListener("click", A_go);
+Pips.wire($("A_pips"), i => { if (!AX.run) A_open(i); });
+A_reset(); A_paint(); A_open(0);
+
+/* ====== B: coupling. ΔG°' values, kJ/mol (standard textbook numbers) ====== */
+const RX = {
+  atp:  { n: "ATP → ADP + phosphate", g: -30.5 },
+  pep:  { n: "PEP → pyruvate + phosphate", g: -61.9 },
+  bpg:  { n: "1,3-bisphosphoglycerate → 3-phosphoglycerate + phosphate", g: -49.4 },
+  g6p:  { n: "glucose-6-phosphate → glucose + phosphate", g: -13.8 },
+  mkatp:{ n: "ADP + phosphate → ATP", g: 30.5 }
+};
+const B_T = [
+  { t: "Make glutamine: glutamate + ammonia → glutamine (+14.2).", need: 14.2, shelf: ["atp", "g6p", "mkatp"], best: 1 },
+  { t: "Make sucrose: glucose + fructose → sucrose (+27.6).", need: 27.6, shelf: ["atp", "g6p", "mkatp"], best: 1 },
+  { t: "Make ATP: ADP + phosphate → ATP (+30.5).", need: 30.5, shelf: ["atp", "pep", "g6p"], best: 1, noATP: true },
+  { t: "A reaction needs +48. Pay for it with ATP only.", need: 48, shelf: ["atp", "g6p"], best: 2, onlyATP: true }
 ];
-function startParents(spec) {   /* both parents heterozygous at every locus to start (a male hemizygous for the X) */
-  const L = spec.loci.length, het = sex => ({ sex, c: [spec.loci.map(l => l.dom), spec.loci.map(l => l.x && sex === "M" ? null : l.rec)] });
-  return [het("F"), het("M")];
-}
-function bars(cv, now, target, now2, target2) {
-  const { ctx, w, h } = hiDPI(cv), groups = [["F1", now, target]].concat(target2 ? [["F2", now2, target2]] : []);
-  const gw = (w - 20) / groups.length;
-  groups.forEach(([lab, cur, tgt], gi) => {
-    const keys = [...new Set(Object.keys(tgt).concat(Object.keys(cur)))].sort((a, b) => (tgt[b] || 0) - (tgt[a] || 0) || a.localeCompare(b));
-    const x0 = 10 + gi * gw, bw = Math.min(70, (gw - 20) / Math.max(1, keys.length)), y0 = h - 70, H = y0 - 30;
-    ctx.fillStyle = "#1d1d1b"; ctx.font = "600 13px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText(lab, x0, 16);
-    ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + keys.length * bw + 6, y0); ctx.stroke();
-    keys.forEach((k, i) => {
-      const x = x0 + 6 + i * bw, v = cur[k] || 0, t = tgt[k] || 0;
-      ctx.fillStyle = "#2f6b8f"; ctx.fillRect(x + 6, y0 - v * H, bw - 12, v * H);
-      if (t > 0) { ctx.strokeStyle = "#b23a48"; ctx.lineWidth = 2; ctx.strokeRect(x + 3, y0 - t * H - 3, bw - 6, 6); }
-      ctx.fillStyle = "#1d1d1b"; ctx.font = "11px ui-monospace,Menlo,monospace"; ctx.textAlign = "center"; ctx.fillText(Math.round(v * 1000) / 10 + "%", x + bw / 2, y0 - v * H - 8);
-      ctx.save(); ctx.translate(x + bw / 2, y0 + 8); ctx.rotate(Math.PI / 5); ctx.textAlign = "left"; ctx.font = "11.5px -apple-system,sans-serif"; ctx.fillText(k, 0, 0); ctx.restore();
-    });
+const BX = { cur: 0, solved: Array(4).fill(false), stack: [] };
+function B_paint() {
+  const { ctx, w, h } = hiDPI($("B_bill")), T = B_T[BX.cur], bars = [{ n: "you need", g: T.need }].concat(BX.stack.map(k => ({ n: RX[k].n, g: RX[k].g })));
+  const x0 = 50, bw = Math.min(90, (w - 80) / Math.max(4, bars.length)), Y = g => 160 - g * 1.8;
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0 - 10, Y(0)); ctx.lineTo(w - 10, Y(0)); ctx.stroke();
+  ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "right"; [-60, -30, 0, 30, 60].forEach(g => ctx.fillText(g, x0 - 14, Y(g) + 4));
+  let run = 0; const pts = [];
+  bars.forEach((b, i) => {
+    const x = x0 + i * bw, a = run, z = run + b.g; run = z;
+    ctx.fillStyle = b.g > 0 ? "#b23a48" : "#2f6b8f"; ctx.fillRect(x + 6, Math.min(Y(a), Y(z)), bw - 12, Math.abs(Y(a) - Y(z)));
+    ctx.fillStyle = "#1d1d1b"; ctx.textAlign = "center"; ctx.fillText((b.g > 0 ? "+" : "") + b.g, x + bw / 2, Math.min(Y(a), Y(z)) - 4);
+    ctx.save(); ctx.translate(x + bw / 2, h - 4); ctx.rotate(-Math.PI / 2.6); ctx.textAlign = "left"; ctx.fillStyle = "#6b6b68"; ctx.fillText(b.n.length > 26 ? b.n.slice(0, 25) + "…" : b.n, 0, 0); ctx.restore();
+    pts.push([x + bw, z]);
   });
+  ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0, Y(0)); pts.forEach(([x, g]) => ctx.lineTo(x, Y(g))); ctx.stroke();
+  ctx.font = "600 13px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillStyle = "#1d1d1b"; ctx.fillText("total: " + (run > 0 ? "+" : "") + run.toFixed(1) + " kJ/mol", x0, 22);
+  return run;
 }
-/* one widget for both stages */
-function Ratio(o) {
-  const R = { cur: 0, solved: o.rounds.map(() => false), mom: null, dad: null };
-  const spec = () => o.rounds[R.cur].spec;
-  R.dists = () => { const s = spec(), d1 = Cross.offspring(s, R.mom, R.dad); return { d1, p1: Cross.phenoDist(s, d1), p2: o.rounds[R.cur].f2 ? Cross.phenoDist(s, Cross.next(s, d1)) : null }; };
-  R.paint = () => {
-    const s = spec();
-    $(o.p + "_par").innerHTML = '<div id="' + o.p + '_mom">' + Cross.card(s, R.mom, { edit: true }) + '</div><div class="x">×</div><div id="' + o.p + '_dad">' + Cross.card(s, R.dad, { edit: true }) + "</div>" +
-      '<div class="readout">' + Cross.geno(s, R.mom) + " × " + Cross.geno(s, R.dad) + "</div>";
-    const d = R.dists(), T = o.rounds[R.cur]; bars($(o.p + "_bars"), d.p1, T.f1, d.p2, T.f2);
-  };
-  R.open = i => {
-    R.cur = i; [R.mom, R.dad] = startParents(spec());
-    if (o.rounds[i].link) { $("B_cmrow").hidden = false; $("B_cm").value = 25; LINK.linked = 0.25; $("B_cm_v").textContent = "25 map units"; } else if ($("B_cmrow")) $("B_cmrow").hidden = true;
-    $(o.p + "_ttext").textContent = o.rounds[i].t; $(o.p + "_verdict").innerHTML = R.solved[i] ? '<span class="ok">✓ Hit.</span>' : "";
-    $(o.p + "_pips").innerHTML = Pips.html(o.rounds.length, j => R.solved[j], i); R.paint();
-  };
-  $(o.p + "_par").addEventListener("click", e => {
-    const b = e.target.closest("button.al"); if (!b) return; const who = b.closest("#" + o.p + "_mom") ? R.mom : R.dad, i = +b.dataset.i, k = +b.dataset.k, l = spec().loci[i];
-    who.c[k][i] = who.c[k][i] === l.dom ? l.rec : l.dom; Lesson.bump(o.stage); if (!R.solved[R.cur]) $(o.p + "_verdict").textContent = ""; R.paint();
-  });
-  $(o.p + "_lock").addEventListener("click", () => {
-    const i = R.cur; if (R.solved[i]) return; const d = R.dists(), T = o.rounds[i];
-    const ok = Cross.same(d.p1, T.f1) && (!T.f2 || Cross.same(d.p2, T.f2));
-    Lesson.record(o.bit0 + i, ok); Lesson.bump(o.stage);
-    if (ok) { R.solved[i] = true; $(o.p + "_verdict").innerHTML = '<span class="ok">✓ Hit.</span>'; const n = R.solved.filter(Boolean).length; Lesson.tick(o.stage, "rounds", n === o.rounds.length, n + " of " + o.rounds.length); if (n === o.rounds.length) Lesson.finish(o.stage); else setTimeout(() => R.open(R.solved.indexOf(false)), 1200); }
-    else $(o.p + "_verdict").innerHTML = '<span class="off">✗ Not yet.</span>';
-    $(o.p + "_pips").innerHTML = Pips.html(o.rounds.length, j => R.solved[j], i);
-  });
-  Pips.wire($(o.p + "_pips"), R.open);
-  return R;
+function B_open(i) {
+  BX.cur = i; BX.stack = []; const T = B_T[i];
+  $("B_ttext").textContent = T.t;
+  $("B_shelf").innerHTML = T.shelf.map(k => '<button data-k="' + k + '">' + RX[k].n + "<b>" + (RX[k].g > 0 ? "+" : "") + RX[k].g + "</b></button>").join("");
+  $("B_verdict").innerHTML = BX.solved[i] ? '<span class="ok">✓ Correct.</span>' : ""; $("B_pips").innerHTML = Pips.html(4, j => BX.solved[j], i); B_paint();
 }
-const RA = Ratio({ p: "A", stage: "A", rounds: ROUNDS_A, bit0: 0 });
-const RB = Ratio({ p: "B", stage: "B", rounds: ROUNDS_B, bit0: 5 });
-$("B_cm").addEventListener("input", () => { LINK.linked = +$("B_cm").value / 100; $("B_cm_v").textContent = $("B_cm").value + " map units"; Lesson.bump("B"); RB.paint(); });
-RA.open(0); RB.open(0);
+$("B_shelf").addEventListener("click", e => { const b = e.target.closest("button"); if (!b || BX.stack.length >= 4) return; BX.stack.push(b.dataset.k); Lesson.bump("B"); B_paint(); });
+$("B_bill").addEventListener("click", e => {
+  const { x } = canvasXY($("B_bill"), e), w = $("B_bill").clientWidth, bw = Math.min(90, (w - 80) / Math.max(4, BX.stack.length + 1)), i = Math.floor((x - 50) / bw) - 1;
+  if (i >= 0 && i < BX.stack.length) { BX.stack.splice(i, 1); B_paint(); }
+});
+function B_lock() {
+  const i = BX.cur, T = B_T[i]; if (BX.solved[i]) return;
+  const tot = B_paint(), n = BX.stack.length, futile = BX.stack.includes("atp") && BX.stack.includes("mkatp");
+  let ok = tot < 0 && n === T.best && !futile;
+  if (T.noATP && BX.stack.includes("atp")) ok = false;
+  if (T.onlyATP && BX.stack.some(k => k !== "atp")) ok = false;
+  Lesson.record(5 + i, ok); Lesson.bump("B");
+  if (ok) { BX.solved[i] = true; $("B_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const k = BX.solved.filter(Boolean).length; Lesson.tick("B", "rounds", k === 4, k + " of 4"); if (k === 4) Lesson.finish("B"); else setTimeout(() => B_open(BX.solved.indexOf(false)), 1100); }
+  else $("B_verdict").innerHTML = '<span class="off">✗ Incorrect.</span>' + (tot >= 0 ? " The total is not below zero." : n > T.best ? " It goes, but with more than it needs." : T.noATP ? " Spending ATP to make ATP gains nothing." : "");
+  $("B_pips").innerHTML = Pips.html(4, j => BX.solved[j], i);
+}
+$("B_lock").addEventListener("click", B_lock);
+Pips.wire($("B_pips"), B_open);
+B_open(0);
 
 /* ====== C: the drill ====== */
-const frac = (a, b) => { const g = (x, y) => y ? g(y, x % y) : x, d = g(a, b) || 1; return a === 0 ? ["0"] : [a / d + "/" + b / d, String(+(a / b).toFixed(4)), String(+(100 * a / b).toFixed(2)) + "%"]; };
-const DIHY = [["round yellow", 9], ["round green", 3], ["wrinkled yellow", 3], ["wrinkled green", 1]];
+function drawHill(dg, top, enz) {
+  return (ctx, w, h) => {
+    const x0 = 30, x1 = w - 20, Y = e => 20 + (40 - e) / 70 * (h - 40);
+    const curve = (tp, dash) => { ctx.setLineDash(dash ? [5, 4] : []); ctx.strokeStyle = dash ? "#2f6b8f" : "#1d1d1b"; ctx.lineWidth = 2; ctx.beginPath();
+      for (let x = x0; x <= x1; x += 3) { const u = (x - x0) / (x1 - x0); let e; if (u < 0.2) e = 0; else if (u > 0.8) e = dg; else { const v = (u - 0.2) / 0.6; e = dg * (3 * v * v - 2 * v * v * v) + (tp - dg / 2) * Math.sin(Math.PI * v) ** 2; } ctx[x === x0 ? "moveTo" : "lineTo"](x, Y(e)); }
+      ctx.stroke(); ctx.setLineDash([]); };
+    curve(Math.max(top, dg + 5), false); if (enz) curve(Math.max(top * 0.45, dg + 3), true);
+    ctx.fillStyle = "#6b6b68"; ctx.font = "11px -apple-system,sans-serif"; ctx.textAlign = "center"; ctx.fillText("reactants", x0 + (x1 - x0) * 0.1, h - 4); ctx.fillText("products", x0 + (x1 - x0) * 0.9, h - 4);
+  };
+}
 const C_CARDS = [
-  { make() { const [k, n] = pick(DIHY); return { q: "<b class='mono'>RrYy × RrYy</b>. What fraction of offspring are " + k + "?", a: frac(n, 16) }; } },
-  { make() { const [k] = pick(DIHY); return { q: "<b class='mono'>RrYy × rryy</b>. What fraction are " + k + "?", a: frac(1, 4) }; } },
-  { make() { const cm = rint(2, 40); return { q: "Two genes " + cm + " map units apart. What percent of a test cross's offspring are recombinant? (type a number)", a: [String(cm), cm + "%"] }; } },
-  { q: "A carrier mother (XᴿXʳ) and a red-eyed father (XᴿY): what fraction of their sons are white-eyed?", a: frac(1, 2) },
-  { q: "Same parents: what fraction of their daughters are white-eyed?", a: ["0", "none"] },
-  { q: "Genes on the X chromosome.", a: ["x-linked", "x linked", "sex-linked", "sex linked"] },
-  { q: "Genes close together on the same chromosome, inherited together more often than not.", a: ["linked genes", "linked"] },
-  { q: "Exchange of pieces between homologous chromosomes in meiosis (two words).", a: "crossing over" },
-  { q: "Offspring with a new combination of the parents' alleles.", a: ["recombinant", "recombinants", "recombinant offspring"] },
-  { q: "Offspring with the same combination as one parent.", a: ["parental type", "parental", "parental types"] },
-  { q: "One map unit means this percent recombination.", a: ["1", "1%"] },
-  { q: "Another name for a map unit.", a: ["centimorgan", "cm"] },
-  { q: "Alleles of different genes sorting into gametes independently (Mendel's law of…)", a: "independent assortment" },
-  { q: "A cross between two individuals heterozygous at two genes.", a: ["dihybrid cross", "dihybrid"] },
-  { q: "A male, with one copy of each X gene, is called… for those genes.", a: "hemizygous" },
-  { q: "The F2 ratio of a dihybrid cross with complete dominance (type it like a:b:c:d).", a: ["9:3:3:1", "9 3 3 1"] }
+  { make() { const dg = pick([-1, 1]) * rnd(8, 20); return { q: "Exergonic or endergonic?", a: dg < 0 ? "exergonic" : "endergonic", w: 340, h: 160, draw: drawHill(dg, rnd(15, 30)) }; } },
+  { make() { const dg = pick([-1, 1]) * rnd(8, 20); return { q: "Does this reaction release free energy or take it in? Type released or absorbed.", a: dg < 0 ? "released" : "absorbed", w: 340, h: 160, draw: drawHill(dg, rnd(15, 30)) }; } },
+  { make() { const dg = pick([-1, 1]) * rnd(8, 20); return { q: "The dashed path is the same reaction with what added?", a: ["an enzyme", "enzyme", "a catalyst", "catalyst"], w: 340, h: 160, draw: drawHill(dg, rnd(22, 30), true) }; } },
+  { q: "A reaction with a negative ΔG.", a: "exergonic" },
+  { q: "A reaction with a positive ΔG.", a: "endergonic" },
+  { q: "The energy needed to get reactants over the hill.", a: "activation energy" },
+  { q: "A protein that lowers the hill without changing ΔG.", a: "enzyme" },
+  { q: "Any substance that speeds a reaction without being used up.", a: "catalyst" },
+  { q: "Running a downhill reaction to pay for an uphill one.", a: ["energy coupling", "coupling", "coupled reactions"] },
+  { q: "The molecule cells spend most often to pay for uphill reactions (abbreviation).", a: ["atp", "adenosine triphosphate"] },
+  { q: "What ATP becomes when it loses one phosphate (abbreviation).", a: ["adp", "adenosine diphosphate"] },
+  { q: "Splitting ATP with water.", a: ["hydrolysis", "atp hydrolysis"] },
+  { q: "Does an enzyme change ΔG? (yes or no)", a: "no" },
+  { q: "Does an enzyme change how fast the reaction reaches its end point? (yes or no)", a: "yes" },
+  { q: "The energy in a system that is available to do work (two words).", a: "free energy" },
+  { q: "The point where forward and backward reactions happen at the same rate.", a: "equilibrium" },
+  { q: "The molecule an enzyme acts on.", a: "substrate" },
+  { q: "The spot on an enzyme where the substrate binds (two words).", a: "active site" },
+  { make() { const a = rint(12, 28) + 0.5, n = Math.ceil(a / 30.5) + (Math.random() < 0.4 ? 1 : 0), need = n * 30.5 - rint(2, 12); return { q: "A reaction needs +" + need.toFixed(1) + " kJ/mol. Each ATP gives −30.5. Fewest ATP that makes it go?", a: String(Math.ceil(need / 30.5)) }; } }
 ];
-const C_BANK = ["X-linked", "linked genes", "crossing over", "recombinant", "parental type", "centimorgan", "independent assortment", "dihybrid cross", "hemizygous"];
+const C_BANK = ["exergonic", "endergonic", "released", "absorbed", "enzyme", "catalyst", "activation energy", "energy coupling", "ATP", "ADP", "hydrolysis", "free energy", "equilibrium", "substrate", "active site", "yes", "no"];
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(9 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
 Lesson.init({ id: "b145_lesson13", version: 1, stages: ["A", "B", "C"], required: "C", bits: 9 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") RB.paint(); },
-  onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
-window.addEventListener("resize", () => { RA.paint(); RB.paint(); });
+  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
+window.addEventListener("resize", () => { A_paint(); A_plot(); B_paint(); });
 </script>
 </body>
 </html>

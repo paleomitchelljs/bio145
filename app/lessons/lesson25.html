@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="../assets/lock.js"></script>
-<title>BIO 145 — Lesson 11</title>
+<title>BIO 145 — Lesson 25</title>
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
@@ -15,7 +15,7 @@
 </style>
 </head>
 <body>
-<header><h1>Lesson 11</h1></header>
+<header><h1>Lesson 25</h1></header>
 <div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
@@ -37,7 +37,7 @@
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Pea plants, one gene for flower colour. P: the purple allele. p: the white allele. Each plant carries two copies, one on each chromosome of the pair. Click a copy to switch it.</span><span>Under each parent: the eggs or pollen it makes, and their shares. Each one comes from a meiosis like Lesson 10's.</span></span></span></h3>
+        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Pea plants, one gene for flower colour. P: the purple allele. p: the white allele. Each plant carries two copies, one on each chromosome of the pair. Click a copy to switch it.</span><span>Under each parent: the eggs or pollen it makes, and their shares. Each one comes from a meiosis like Lesson 23's.</span></span></span></h3>
         <div class="parents" id="A_par"></div>
       </div>
       <div class="panel">
@@ -117,12 +117,12 @@
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
     <div class="col">
       <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
-      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 11 is done.</div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 25 is done.</div></div>
     </div>
   </div>
 </section>
 
-<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 11. Your completion code is below: copy it and hand it in.</p></div>
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 25. Your completion code is below: copy it and hand it in.</p></div>
 <div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
 
 <script src="../assets/pips.js"></script>
@@ -141,7 +141,7 @@ function kidHtml(k, i, sel) { const ph = Cross.pheno(SPEC, k); return '<div clas
 function tally(kids) { const t = { purple: 0, white: 0, PP: 0, Pp: 0, pp: 0, n: kids.length }; for (const k of kids) { t[Cross.pheno(SPEC, k)]++; t[gt(k)]++; } return t; }
 const tallyText = t => "purple " + t.purple + " · white " + t.white + " · PP " + t.PP + " · Pp " + t.Pp + " · pp " + t.pp;
 function gamHtml(p) { const g = {}; for (const x of Cross.gametes(SPEC, p)) g[x.h[0]] = (g[x.h[0]] || 0) + x.p; return '<div class="gam">' + Object.keys(g).map(a => "<span>" + a + " " + (g[a] === 1 ? "all" : "½") + "</span>").join("") + "</div>"; }
-function breed(m, d, n) { return Cross.breed(SPEC, m, d, n); }   /* every gamete a real meiosis (lesson 10) */
+function breed(m, d, n) { return Cross.breed(SPEC, m, d, n); }   /* every gamete a real meiosis (lesson 23) */
 
 /* ====== A. Windows measured on 48 offspring (20,000 runs): a 3/4 cross lands in 0.6-0.9 purple in 99% of runs, a 1/2 cross in 10%;
    a 1/2 cross lands in 0.35-0.65 in 97%, a 3/4 cross in 7%. The 1:2:1 windows (PP and pp each 0.12-0.38, Pp 0.32-0.68) hold 93% of
@@ -248,7 +248,7 @@ const C_BANK = ["allele", "homozygous", "heterozygous", "dominant", "recessive",
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(10 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson11", version: 1, stages: ["A", "B", "C"], required: "C", bits: 10 + C_CARDS.length,
+Lesson.init({ id: "b145_lesson25", version: 1, stages: ["A", "B", "C"], required: "C", bits: 10 + C_CARDS.length,
   onOpen: s => { if (s === "C") C_start(); },
   onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
 </script>

@@ -1,4 +1,4 @@
-/* BIO 145 genetic code: the table, complementing, translating, and a clickable codon wheel. Lesson 9; any later lesson that
+/* BIO 145 genetic code: the table, complementing, translating, and a clickable codon wheel. Lesson 30; any later lesson that
    reads a sequence.
 
      Code.aa("AUG")                 "Met" ("Stop" for a stop codon)
