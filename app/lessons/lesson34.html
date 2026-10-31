@@ -31,7 +31,7 @@ const onGel = d => d > 0.3 && d < 7.7;
 const comp = { A: "T", T: "A", G: "C", C: "G" };
 const rc = s => s.split("").reverse().map(b => comp[b]).join("");
 const six = () => { if (Math.random() < 0.5) { const h = Array.from({ length: 3 }, () => pick("ACGT".split(""))).join(""); return h + rc(h); } let s; do { s = Array.from({ length: 6 }, () => pick("ACGT".split(""))).join(""); } while (s === rc(s)); return s; };
-const fp = (lanes, mark) => (ctx, w, h) => { ctx.fillStyle = "#222"; ctx.fillRect(10, 10, w - 20, h - 20); const lw = (w - 40) / lanes.length; lanes.forEach((l, i) => { const x = 20 + i * lw; ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif"; ctx.fillText(l.n, x + 4, h - 2); l.b.forEach(y => { ctx.fillStyle = "#9fe0ff"; ctx.fillRect(x + 4, 18 + y * (h - 50), lw - 14, 4); }); }); };
+const fp = (lanes, mark) => (ctx, w, h) => { ctx.fillStyle = "#1d1d1b"; ctx.fillRect(10, 10, w - 20, h - 20); const lw = (w - 40) / lanes.length; lanes.forEach((l, i) => { const x = 20 + i * lw; ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif"; ctx.fillText(l.n, x + 4, h - 2); l.b.forEach(y => { ctx.fillStyle = "#d0e1ed"; ctx.fillRect(x + 4, 18 + y * (h - 50), lw - 14, 4); }); }); };
 Kit.run({ id: "b145_lesson34", num: 34, stages: [
   { type: "sim", title: "Run a gel", tip: "DNA is negative (phosphate backbone), so it runs toward the positive end. The agarose mesh holds big pieces back. Fragments here: 600, 1000, 1100, 2000, 3000 bp.",
     voice: ["Technology built on technology, stolen from nature: agarose from seaweed.", "Small runs far, large runs short. Too long and the small ones run off the end; too high a gel and nothing separates."],
@@ -39,8 +39,8 @@ Kit.run({ id: "b145_lesson34", num: 34, stages: [
     controls: [{ id: "agar", label: "Agarose", min: 0.5, max: 3, step: 0.1, val: 1, fmt: v => v.toFixed(1) + "%" }, { id: "v", label: "Voltage", min: 20, max: 150, step: 5, val: 80, fmt: v => v + " V" }, { id: "t", label: "Run time", min: 5, max: 90, step: 1, val: 30, fmt: v => v + " min" }],
     readout: S => FR.map(s => s + " bp: " + (dist(s, S) > 8 ? "off the end" : dist(s, S).toFixed(1) + " cm")).join(" · "),
     draw(ctx, w, h, S) {
-      ctx.fillStyle = "#222"; ctx.fillRect(20, 20, w - 40, 210); ctx.fillStyle = "#fff"; ctx.font = "12px sans-serif"; ctx.fillText("− (wells)", 24, 16); ctx.fillText("+", w - 34, 16);
-      const X = d => 28 + d / 8 * (w - 70); FR.forEach((s, i) => { const d = dist(s, S); if (d > 8) return; ctx.fillStyle = onGel(d) ? "#9fe0ff" : "#667"; ctx.fillRect(X(d), 40 + i * 32, 6, 22); ctx.fillStyle = "#fff"; ctx.fillText(s, w - 36, 55 + i * 32); });
+      ctx.fillStyle = "#1d1d1b"; ctx.fillRect(20, 20, w - 40, 210); ctx.fillStyle = "#fff"; ctx.font = "12px sans-serif"; ctx.fillText("− (wells)", 24, 16); ctx.fillText("+", w - 34, 16);
+      const X = d => 28 + d / 8 * (w - 70); FR.forEach((s, i) => { const d = dist(s, S); if (d > 8) return; ctx.fillStyle = onGel(d) ? "#d0e1ed" : "#667"; ctx.fillRect(X(d), 40 + i * 32, 6, 22); ctx.fillStyle = "#fff"; ctx.fillText(s, w - 36, 55 + i * 32); });
     },
     goals: [
       { text: "Get all five bands onto the gel", test: S => FR.every(s => onGel(dist(s, S))) },

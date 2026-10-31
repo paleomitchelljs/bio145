@@ -25,7 +25,7 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-const chromo = (n, dup) => (ctx, w, h) => { ctx.strokeStyle = "#222"; ctx.lineWidth = 3; for (let i = 0; i < n; i++) { const x = w / 2 - (n - 1) * 30 + i * 60; const arm = (dx) => { ctx.beginPath(); ctx.moveTo(x + dx, 22); ctx.lineTo(x + dx, 118); ctx.stroke(); }; if (dup) { arm(-5); arm(5); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 8, 66, 16, 8); } else { arm(0); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 5, 66, 10, 8); } } };
+const chromo = (n, dup) => (ctx, w, h) => { ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 3; for (let i = 0; i < n; i++) { const x = w / 2 - (n - 1) * 30 + i * 60; const arm = (dx) => { ctx.beginPath(); ctx.moveTo(x + dx, 22); ctx.lineTo(x + dx, 118); ctx.stroke(); }; if (dup) { arm(-5); arm(5); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 8, 66, 16, 8); } else { arm(0); ctx.fillStyle = "#b5651d"; ctx.fillRect(x - 5, 66, 10, 8); } } };
 /* a root-tip cell in phase ph: 0 interphase, 1 prophase, 2 metaphase, 3 anaphase, 4 telophase */
 function cellDraw(ctx, w, h, ph) {
   const cx = w / 2, cy = h / 2, W = 120, H = 90; ctx.strokeStyle = "#6b6b68"; ctx.lineWidth = 1.5;

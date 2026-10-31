@@ -35,8 +35,8 @@ Kit.run({ id: "b145_lesson3", num: 3, version: 3, stages: [
     controls: [{ id: "ph", label: "pH", min: 0, max: 14, step: 0.1, val: 7, fmt: v => v.toFixed(1) }],
     readout: S => { const h = Math.pow(10, -S.ph), oh = Math.pow(10, -(14 - S.ph)); return "[H⁺] = <b>" + h.toExponential(1) + "</b> M · [OH⁻] = <b>" + oh.toExponential(1) + "</b> M · " + (S.ph < 6.9 ? "acidic" : S.ph > 7.1 ? "basic" : "neutral") + " · <b>" + (h / 1e-7 >= 1 ? (h / 1e-7).toPrecision(2) + "×" : "1/" + (1e-7 / h).toPrecision(2) + "×") + "</b> the H⁺ of pure water"; },
     draw(ctx, w, h, S) {
-      const X = v => 20 + v / 14 * (w - 40), grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#d9534f"); grd.addColorStop(0.5, "#6cae5c"); grd.addColorStop(1, "#3a5fa8");
-      ctx.fillStyle = grd; ctx.fillRect(20, 70, w - 40, 26); ctx.fillStyle = "#222"; ctx.font = "11px sans-serif";
+      const X = v => 20 + v / 14 * (w - 40), grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#b23a48"); grd.addColorStop(0.5, "#4a7a2a"); grd.addColorStop(1, "#2f6b8f");
+      ctx.fillStyle = grd; ctx.fillRect(20, 70, w - 40, 26); ctx.fillStyle = "#1d1d1b"; ctx.font = "11px sans-serif";
       [[0, "battery acid"], [2, "lemon juice"], [3, "vinegar"], [5, "black coffee"], [7, "pure water"], [7.4, "blood"], [10, "soapy water"], [12.5, "bleach"], [14, "drain cleaner"]].forEach(([v, n], i) => ctx.fillText(n, Math.min(X(v) - 20, w - 80), i % 2 ? 128 : 144));
       ctx.fillStyle = "#fff"; ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(S.ph), 66); ctx.lineTo(X(S.ph) - 8, 46); ctx.lineTo(X(S.ph) + 8, 46); ctx.closePath(); ctx.fill(); ctx.stroke();
     },
@@ -56,12 +56,12 @@ Kit.run({ id: "b145_lesson3", num: 3, version: 3, stages: [
     readout: S => { const ph = S.buf ? phBlood(S.co2, S.acid) : phPlain(S.acid); return "pH <b>" + ph.toFixed(2) + "</b>" + (S.buf ? (ph < 7.35 ? ' · <span class="off">acidosis</span>' : ph > 7.45 ? ' · <span class="off">alkalosis</span>' : ' · <span class="ok">normal range 7.35–7.45</span>') : " · plain water"); },
     draw(ctx, w, h, S) {
       const ph = S.buf ? phBlood(S.co2, S.acid) : phPlain(S.acid), X = v => 20 + v / 14 * (w - 40);
-      const grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#d9534f"); grd.addColorStop(0.5, "#6cae5c"); grd.addColorStop(1, "#3a5fa8");
+      const grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#b23a48"); grd.addColorStop(0.5, "#4a7a2a"); grd.addColorStop(1, "#2f6b8f");
       ctx.fillStyle = grd; ctx.fillRect(20, 70, w - 40, 26);
-      ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; for (let v = 0; v <= 14; v += 2) ctx.fillText(v, X(v) - 4, 114);
-      ctx.fillStyle = "#555"; ctx.fillText("acid", 20, 56); ctx.fillText("base", w - 46, 56);
+      ctx.fillStyle = "#1d1d1b"; ctx.font = "12px sans-serif"; for (let v = 0; v <= 14; v += 2) ctx.fillText(v, X(v) - 4, 114);
+      ctx.fillStyle = "#6b6b68"; ctx.fillText("acid", 20, 56); ctx.fillText("base", w - 46, 56);
       ctx.fillStyle = "#fff"; ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(ph), 62); ctx.lineTo(X(ph) - 8, 44); ctx.lineTo(X(ph) + 8, 44); ctx.closePath(); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = "#222"; ctx.font = "600 13px sans-serif"; ctx.fillText("7.4: healthy blood", X(7.4) - 40, 150);
+      ctx.fillStyle = "#1d1d1b"; ctx.font = "600 13px sans-serif"; ctx.fillText("7.4: healthy blood", X(7.4) - 40, 150);
     },
     goals: [
       { text: "Add 10 mmol/L of acid to plain water and watch the pH crash below 3", test: S => !S.buf && S.acid >= 10 },

@@ -57,13 +57,13 @@ Kit.run({ id: "b145_lesson1", num: 1, stages: [
       const n = Math.round(Math.pow(10, S.x)), p = pval(S.d, n), g = (x, m) => Math.exp(-0.5 * Math.pow((x - m) / 6, 2));
       const base = 150, X = v => 20 + (v - 55) / 50 * (w - 40);
       ctx.lineWidth = 2;
-      [[80, "#2e6da4"], [80 + S.d, "#b5651d"]].forEach(([m, col]) => { ctx.beginPath(); for (let v = 55; v <= 105; v += 0.5) { const y = base - 110 * g(v, m); v === 55 ? ctx.moveTo(X(v), y) : ctx.lineTo(X(v), y); } ctx.strokeStyle = col; ctx.stroke(); });
-      ctx.fillStyle = "#555"; ctx.font = "12px sans-serif"; ctx.fillText("body mass (g): the two populations", 20, base + 18);
+      [[80, "#2f6b8f"], [80 + S.d, "#b5651d"]].forEach(([m, col]) => { ctx.beginPath(); for (let v = 55; v <= 105; v += 0.5) { const y = base - 110 * g(v, m); v === 55 ? ctx.moveTo(X(v), y) : ctx.lineTo(X(v), y); } ctx.strokeStyle = col; ctx.stroke(); });
+      ctx.fillStyle = "#6b6b68"; ctx.font = "12px sans-serif"; ctx.fillText("body mass (g): the two populations", 20, base + 18);
       const PX = lp => 20 + (-lp) / 8 * (w - 40), by = 235;
-      ctx.fillStyle = "#e8e6df"; ctx.fillRect(20, by, w - 40, 10);
-      ctx.fillStyle = "#555"; ctx.fillText("p = 1", 14, by + 28); ctx.fillText("1e-8", w - 40, by + 28);
-      ctx.strokeStyle = "#c0392b"; ctx.beginPath(); ctx.moveTo(PX(Math.log10(0.05)), by - 8); ctx.lineTo(PX(Math.log10(0.05)), by + 18); ctx.stroke(); ctx.fillStyle = "#c0392b"; ctx.fillText("0.05", PX(Math.log10(0.05)) - 12, by - 12);
-      ctx.fillStyle = p < 0.05 ? "#2e7d32" : "#555"; ctx.beginPath(); ctx.arc(PX(Math.max(-8, Math.log10(p))), by + 5, 7, 0, 7); ctx.fill();
+      ctx.fillStyle = "#e2e0d9"; ctx.fillRect(20, by, w - 40, 10);
+      ctx.fillStyle = "#6b6b68"; ctx.fillText("p = 1", 14, by + 28); ctx.fillText("1e-8", w - 40, by + 28);
+      ctx.strokeStyle = "#b23a48"; ctx.beginPath(); ctx.moveTo(PX(Math.log10(0.05)), by - 8); ctx.lineTo(PX(Math.log10(0.05)), by + 18); ctx.stroke(); ctx.fillStyle = "#b23a48"; ctx.fillText("0.05", PX(Math.log10(0.05)) - 12, by - 12);
+      ctx.fillStyle = p < 0.05 ? "#4a7a2a" : "#6b6b68"; ctx.beginPath(); ctx.arc(PX(Math.max(-8, Math.log10(p))), by + 5, 7, 0, 7); ctx.fill();
     },
     goals: [
       { text: "Reject the null even though the true difference is 1 g or less (raise the sample size)", test: S => S.d > 0 && S.d <= 1 && pval(S.d, Math.round(Math.pow(10, S.x))) < 0.05 },

@@ -39,8 +39,8 @@ Kit.run({ id: "b145_lesson19", num: 19, stages: [
     controls: [{ id: "type", label: "Plant", type: "select", opts: [["c3", "C3 (wheat, rice)"], ["c4", "C4 (corn, sugarcane)"], ["cam", "CAM (cactus, agave)"]], val: "c3" }, { id: "dry", label: "Water stress", min: 0, max: 100, step: 1, val: 0, fmt: v => v + "%" }, { id: "hot", label: "Heat", min: 0, max: 100, step: 1, val: 30, fmt: v => v + "%" }],
     readout: S => { const p = plant(S); return "Net carbon fixed <b>" + (p.net * 100).toFixed(0) + "</b> · lost to photorespiration <b>" + (p.loss * 100).toFixed(0) + "</b> · water lost <b>" + (p.water * 100).toFixed(0) + "</b>"; },
     draw(ctx, w, h, S) {
-      const p = plant(S), bars = [["net fixed", p.net, "#2e7d32"], ["photorespiration", p.loss, "#c0392b"], ["water lost", p.water, "#2e6da4"]]; ctx.font = "12px sans-serif";
-      bars.forEach(([n, v, c], i) => { const x = 60 + i * 170; ctx.fillStyle = "#eee"; ctx.fillRect(x, 30, 90, 170); ctx.fillStyle = c; ctx.fillRect(x, 200 - 170 * Math.min(1, v), 90, 170 * Math.min(1, v)); ctx.fillStyle = "#222"; ctx.fillText(n, x + 4, 220); });
+      const p = plant(S), bars = [["net fixed", p.net, "#4a7a2a"], ["photorespiration", p.loss, "#b23a48"], ["water lost", p.water, "#2f6b8f"]]; ctx.font = "12px sans-serif";
+      bars.forEach(([n, v, c], i) => { const x = 60 + i * 170; ctx.fillStyle = "#e2e0d9"; ctx.fillRect(x, 30, 90, 170); ctx.fillStyle = c; ctx.fillRect(x, 200 - 170 * Math.min(1, v), 90, 170 * Math.min(1, v)); ctx.fillStyle = "#1d1d1b"; ctx.fillText(n, x + 4, 220); });
     },
     goals: [
       { text: "C3 plant in severe drought on a hot day (heat 40% or more): photorespiration eats more than half of what it could fix", test: S => S.type === "c3" && S.dry >= 70 && S.hot >= 40 && plant(S).loss > plant(S).net },

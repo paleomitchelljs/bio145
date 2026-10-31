@@ -28,7 +28,7 @@
 const C = (q, a) => ({ q, a });
 /* steroid core drawn: three six-rings and a five-ring */
 function ring(ctx, cx, cy, r, n, rot) { ctx.beginPath(); for (let i = 0; i < n; i++) { const a = rot + i * 2 * Math.PI / n; const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); ctx.stroke(); }
-function steroid(ctx, w, h) { ctx.strokeStyle = "#222"; ctx.lineWidth = 2; const r = 26, dx = r * Math.sqrt(3), cx = w / 2 - dx, cy = h / 2 + 12; ring(ctx, cx, cy, r, 6, Math.PI / 6); ring(ctx, cx + dx, cy - r * 1.5, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx, cy, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx + dx * 0.95, cy - r * 1.95, r * 0.88, 5, Math.PI / 10); }
+function steroid(ctx, w, h) { ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 2; const r = 26, dx = r * Math.sqrt(3), cx = w / 2 - dx, cy = h / 2 + 12; ring(ctx, cx, cy, r, 6, Math.PI / 6); ring(ctx, cx + dx, cy - r * 1.5, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx, cy, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx + dx * 0.95, cy - r * 1.95, r * 0.88, 5, Math.PI / 10); }
 /* side chains, drawn with the atoms widget (copied from lesson 6) */
 const SIDE = {
   alanine:   { k: "nonpolar", atoms: [["C", 0, 0], ["C", 0, 1], ["H", -0.8, 1.4], ["H", 0.8, 1.4], ["H", 0, 1.9]], bonds: [[0, 1], [1, 2], [1, 3], [1, 4]] },

@@ -25,9 +25,9 @@
 <script src="../assets/kit.js"></script>
 <script>
 const C = (q, a) => ({ q, a });
-const COL = { A: "#2e9d3a", C: "#2e6da4", G: "#222", T: "#c0392b" };
-const sanger = seq => (ctx, w, h) => { ctx.fillStyle = "#f4f2ec"; ctx.fillRect(0, 0, w, h); const n = seq.length, bh = (h - 30) / n; ctx.font = "11px sans-serif"; ctx.fillStyle = "#222"; ctx.fillText("short", w - 44, h - 6); ctx.fillText("long", w - 40, 12);
-  for (let i = 0; i < n; i++) { const y = h - 18 - (i + 1) * bh + 2; ctx.fillStyle = COL[seq[i]]; ctx.fillRect(50, y, 140, bh - 5); } [["A", "A"], ["C", "C"], ["G", "G"], ["T", "T"]].forEach(([b], i) => { ctx.fillStyle = COL[b]; ctx.fillRect(220 + i * 40, 20, 14, 14); ctx.fillStyle = "#222"; ctx.fillText(b, 238 + i * 40, 31); }); ctx.fillText("each dye = one base", 220, 52); };
+const COL = { A: "#4a7a2a", C: "#2f6b8f", G: "#1d1d1b", T: "#b23a48" };
+const sanger = seq => (ctx, w, h) => { ctx.fillStyle = "#fafaf7"; ctx.fillRect(0, 0, w, h); const n = seq.length, bh = (h - 30) / n; ctx.font = "11px sans-serif"; ctx.fillStyle = "#1d1d1b"; ctx.fillText("short", w - 44, h - 6); ctx.fillText("long", w - 40, 12);
+  for (let i = 0; i < n; i++) { const y = h - 18 - (i + 1) * bh + 2; ctx.fillStyle = COL[seq[i]]; ctx.fillRect(50, y, 140, bh - 5); } [["A", "A"], ["C", "C"], ["G", "G"], ["T", "T"]].forEach(([b], i) => { ctx.fillStyle = COL[b]; ctx.fillRect(220 + i * 40, 20, 14, 14); ctx.fillStyle = "#1d1d1b"; ctx.fillText(b, 238 + i * 40, 31); }); ctx.fillText("each dye = one base", 220, 52); };
 const rseq = () => Array.from({ length: 7 }, () => pick("ACGT".split(""))).join("");
 /* Manhattan data */
 const NUL = Array.from({ length: 30000 }, () => -Math.log10(Math.random()));
@@ -40,10 +40,10 @@ Kit.run({ id: "b145_lesson35", num: 35, stages: [
     controls: [{ id: "th", label: "Significance line (−log₁₀ p)", min: 1, max: 10, step: 0.1, val: 1.3, fmt: v => v.toFixed(1) }],
     readout: S => { const fp = NUL.filter(v => v >= S.th).length, tp = HITS.filter(v => v >= S.th).length; return "False hits above the line: <b>" + fp + "</b> · true loci found: <b>" + tp + " of 3</b>"; },
     draw(ctx, w, h, S) {
-      const X = i => 30 + i / NUL.length * (w - 50), Y = v => 240 - v / 10 * 220; ctx.fillStyle = "#bbb";
-      NUL.forEach((v, i) => { if (i % 3) return; ctx.fillStyle = v >= S.th ? "#c0392b" : "#aaa"; ctx.fillRect(X(i), Y(v), 2, 2); });
-      HITS.forEach((v, i) => { for (let k = 0; k < 6; k++) { const vv = v - k * 0.5 - Math.random() * 0.02; ctx.fillStyle = vv >= S.th ? "#2e7d32" : "#aaa"; ctx.fillRect(X((i + 1) * 7000) + (k % 3) * 3, Y(Math.max(0.5, vv)), 3, 3); } });
-      ctx.strokeStyle = "#c0392b"; ctx.beginPath(); ctx.moveTo(30, Y(S.th)); ctx.lineTo(w - 20, Y(S.th)); ctx.stroke(); ctx.fillStyle = "#222"; ctx.font = "11px sans-serif"; ctx.fillText("−log₁₀ p", 2, 14);
+      const X = i => 30 + i / NUL.length * (w - 50), Y = v => 240 - v / 10 * 220; ctx.fillStyle = "#e2e0d9";
+      NUL.forEach((v, i) => { if (i % 3) return; ctx.fillStyle = v >= S.th ? "#b23a48" : "#c9c5b8"; ctx.fillRect(X(i), Y(v), 2, 2); });
+      HITS.forEach((v, i) => { for (let k = 0; k < 6; k++) { const vv = v - k * 0.5 - Math.random() * 0.02; ctx.fillStyle = vv >= S.th ? "#4a7a2a" : "#c9c5b8"; ctx.fillRect(X((i + 1) * 7000) + (k % 3) * 3, Y(Math.max(0.5, vv)), 3, 3); } });
+      ctx.strokeStyle = "#b23a48"; ctx.beginPath(); ctx.moveTo(30, Y(S.th)); ctx.lineTo(w - 20, Y(S.th)); ctx.stroke(); ctx.fillStyle = "#1d1d1b"; ctx.font = "11px sans-serif"; ctx.fillText("−log₁₀ p", 2, 14);
     },
     goals: [
       { text: "Use p = 0.05 (line at 1.3): see how many false hits get in", test: S => S.th <= 1.5 && NUL.filter(v => v >= S.th).length > 500 },

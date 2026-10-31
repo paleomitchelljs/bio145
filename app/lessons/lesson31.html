@@ -37,9 +37,9 @@ Kit.run({ id: "b145_lesson31", num: 31, stages: [
     readout: S => { const l = lvl(S); return "Steady state <b>" + l.ss.toFixed(0) + "</b> copies · reaches 90% of that in <b>" + (3.32 * S.hl).toFixed(0) + "</b> min"; },
     draw(ctx, w, h, S) {
       const l = lvl(S), T = 120, X = t => 40 + t / T * (w - 60), mx = Math.max(110, l.ss * 1.1), Y = v => 190 - 160 * v / mx;
-      ctx.strokeStyle = "#2e6da4"; ctx.lineWidth = 2; ctx.beginPath(); for (let t = 0; t <= T; t++) { const v = l.ss * (1 - Math.exp(-l.k * t)); t ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v)); } ctx.stroke();
-      ctx.strokeStyle = "#c0392b"; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(40, Y(100)); ctx.lineTo(w - 20, Y(100)); ctx.stroke(); ctx.setLineDash([]);
-      ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; ctx.fillText("copies per cell over 2 hours (dashed: 100)", 44, 20); ctx.fillText("0", 36, 206); ctx.fillText("120 min", w - 60, 206);
+      ctx.strokeStyle = "#2f6b8f"; ctx.lineWidth = 2; ctx.beginPath(); for (let t = 0; t <= T; t++) { const v = l.ss * (1 - Math.exp(-l.k * t)); t ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v)); } ctx.stroke();
+      ctx.strokeStyle = "#b23a48"; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(40, Y(100)); ctx.lineTo(w - 20, Y(100)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#1d1d1b"; ctx.font = "12px sans-serif"; ctx.fillText("copies per cell over 2 hours (dashed: 100)", 44, 20); ctx.fillText("0", 36, 206); ctx.fillText("120 min", w - 60, 206);
     },
     goals: [
       { text: "A bacterial-style mRNA (half-life about 4 min): reach 100 copies at steady state", test: S => S.hl >= 3 && S.hl <= 5 && Math.abs(lvl(S).ss - 100) <= 8 },
