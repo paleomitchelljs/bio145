@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 8</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<style>
+  .tubes { display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end; }
+  .tube { display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .tube .glass { width:64px; border:2px solid #9aa7b0; border-top:0; border-radius:0 0 26px 26px; background:linear-gradient(#f6f9fb, #dfe8ee); padding:6px 4px 14px; display:flex; flex-direction:column; gap:3px; }
+  .tube .slot { min-height:22px; padding:0 2px; border-style:dotted; justify-content:center; }
+  .tube .cap { font-size:12px; color:var(--muted); text-align:center; }
+  .tile.band { padding:0; width:48px; border:0; border-radius:2px; background:#2f6b8f; }
+  .tile.band.thin { height:5px; } .tile.band.thick { height:13px; }
+  .tile.band.right { outline:2px solid var(--good); } .tile.band.wrong { outline:2px solid var(--bad); }
+  .scale { font:11px ui-monospace,Menlo,monospace; color:var(--muted); display:flex; flex-direction:column; justify-content:space-between; height:150px; padding:8px 0 16px; }
+  .trayrow { display:flex; align-items:center; gap:12px; margin-top:10px; font-size:13px; color:var(--muted); }
+  .trayrow .tiles { min-height:24px; align-items:center; padding:6px 10px; border:1px dashed var(--rule); border-radius:4px; }
+</style>
+</head>
+<body>
+<header><h1>Lesson 8</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc">
+  <a href="#stageA" id="tocA">A</a>
+  <a href="#stageB" id="tocB" class="locked">B</a>
+  <a href="#stageC" id="tocC" class="locked">C</a>
+</nav>
+
+<!-- ========== STAGE A — predict the bands for each idea (JM: "Semi-conservative DNA replication classic experiment interactive to
+     have them explicitly predict the possible results via dragging interactives, then run it and see what comes out, then they
+     have to select the semi conservative prediction they made instead of the alternatives") ========== -->
+<section class="stage stage-locked" id="stageA">
+  <h2 class="stage-h">A</h2>
+  <div class="lock-banner">Enter your name above to start.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>In 1958 there were three ideas for how DNA copies itself. Meselson and Stahl found an experiment that could tell them apart, before anyone knew the answer.</li>
+      <li>For each idea, drag bands into the tubes to predict what a spin would show after one and two rounds of copying.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0"><span id="A_modelH">The idea</span><span class="tip"><span>Dark strands: made with heavy nitrogen (¹⁵N), before the bacteria moved. Pale: made with ordinary light nitrogen (¹⁴N), after.</span><span>Generation 0: the bacteria grew for many generations on heavy nitrogen. Then they move to light nitrogen and copy their DNA once (generation 1), then again (generation 2).</span></span></span></h3>
+        <canvas id="A_model" width="780" height="230"></canvas>
+      </div>
+      <div class="panel">
+        <h3><span class="info" tabindex="0">Your prediction<span class="tip"><span>A spin sorts DNA by density: heavy sinks to the bottom, light floats near the top, half-and-half sits between. The five spots run from all heavy (bottom) to all light (top).</span><span>Drag a thin or thick band from the tray into a spot; drag it back to the tray to remove it. A thick band means more of the DNA is there. Where two bands hold the same amount, make them the same thickness.</span></span></span></h3>
+        <div class="tubes" id="A_tubes"></div>
+        <div class="trayrow">bands: <div class="tiles" id="A_tray"></div></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Idea<span class="tip"><span>Three ideas in any order; each is one prediction of two tubes. A wrong lock-in marks the wrong bands; move them and lock in again.</span></span></span> <span class="pips" id="A_pips"></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="buttons"><button id="A_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="A_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksA"><li data-task="rounds">Predict for all three ideas <span class="hint" id="A_rounds_now">0 of 3</span></li></ul>
+        <div class="solved-banner" id="solvedA">Stage B is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE B — run it, pick the idea, then predict past the data ========== -->
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>Now spin the real thing.</li>
+      <li><b>Spin</b> shows each generation. Pick the prediction that matches, then predict what comes next.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">The spin<span class="tip"><span>One tube per generation sampled, drawn as the photographs of the bands looked: dark where DNA collected.</span></span></span></h3>
+        <canvas id="B_spin" width="780" height="220"></canvas>
+        <div class="buttons"><button id="B_spin_go" class="accent">Spin</button></div>
+      </div>
+      <div class="panel">
+        <h3><span class="info" tabindex="0"><span id="B_workH">Your three predictions</span><span class="tip"><span>Click the prediction that matches the spin. For the later targets: drag bands as in Stage A.</span></span></span></h3>
+        <div class="tubes" id="B_tubes"></div>
+        <div class="trayrow" id="B_trayrow" hidden>bands: <div class="tiles" id="B_tray"></div></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Target<span class="tip"><span>Three targets, in order: pick the idea, predict generation 3, predict the experiment run backwards.</span></span></span> <span class="pips" id="B_pips"></span></h3>
+        <p class="ttext" id="B_ttext"></p>
+        <div class="buttons"><button id="B_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="B_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksB"><li data-task="rounds">Complete three targets <span class="hint" id="B_rounds_now">0 of 3</span></li></ul>
+        <div class="solved-banner" id="solvedB">Stage C is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE C — the drill ========== -->
+<section class="stage stage-locked" id="stageC">
+  <h2 class="stage-h">C</h2>
+  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Number cards come back with a new generation; answer with a fraction like 1/4.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 8 is done.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 8. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script>
+/* bits: A 0-2, B 3-5, C 6+ */
+/* density spots, bottom to top: 4 all heavy, 3 three-quarters, 2 half (hybrid), 1 one-quarter, 0 all light.
+   Each idea's DNA at generation g, as {spot: share}. Strands as heavy fractions; a duplex's density is the mean of its two. */
+const SPOT_LAB = ["light", "¼ heavy", "hybrid", "¾ heavy", "heavy"];
+function duplexes(model, g, start) {   /* start: 1 heavy parent (normal), 0 light parent (backwards run) */
+  let dna = [[start, start]];
+  for (let k = 0; k < g; k++) {
+    const nw = 1 - start, out = [];
+    for (const [a, b] of dna) {
+      if (model === "conservative") out.push([a, b], [nw, nw]);
+      else if (model === "semiconservative") out.push([a, nw], [b, nw]);
+      else { const m = (a + b) / 2; out.push([(m + nw) / 2, (m + nw) / 2], [(m + nw) / 2, (m + nw) / 2]); }   /* dispersive: old and new mixed through both */
+    }
+    dna = out;
+  }
+  return dna;
+}
+function bands(model, g, start) {
+  const d = duplexes(model, g, start == null ? 1 : start), c = {};
+  for (const [a, b] of d) { const s = Math.round((a + b) / 2 * 4); c[s] = (c[s] || 0) + 1 / d.length; }
+  return c;
+}
+const MODELS = ["conservative", "semiconservative", "dispersive"];
+
+/* a tube: five slots, top light, bottom heavy; returns the element */
+function tubeHtml(id, cap) {
+  return '<div class="tube"><div class="glass" id="' + id + '">' + [0, 1, 2, 3, 4].map(s => '<div class="slot" data-s="' + s + '"></div>').join("") + '</div><div class="cap">' + cap + "</div></div>";
+}
+function scaleHtml() { return '<div class="scale"><span>light</span><span>hybrid</span><span>heavy</span></div>'; }
+function refill(tray) { if (!tray.querySelector(".thin")) tray.insertAdjacentHTML("beforeend", '<div class="tile band thin"></div>'); if (!tray.querySelector(".thick")) tray.insertAdjacentHTML("beforeend", '<div class="tile band thick"></div>'); }
+function readTube(id) { const out = {}; for (const s of $(id).querySelectorAll(".slot")) { const t = s.querySelector(".band"); if (t) out[s.dataset.s] = t.classList.contains("thick") ? 2 : 1; } return out; }
+/* right if the same spots hold DNA, and thickness follows amount: more is thicker, equal is equal */
+function tubeOk(pred, truth) {
+  const ks = Object.keys(truth).map(Number), pk = Object.keys(pred).map(Number);
+  if (ks.length !== pk.length || ks.some(k => !(k in pred))) return false;
+  for (const a of ks) for (const b of ks) { if (a === b) continue; const t = Math.sign(truth[a] - truth[b] + 1e-9 * 0), p = Math.sign(pred[a] - pred[b]); if (Math.abs(truth[a] - truth[b]) < 1e-9 ? p !== 0 : p !== Math.sign(truth[a] - truth[b])) return false; }
+  return true;
+}
+function markTube(id, truth) { for (const s of $(id).querySelectorAll(".slot")) { const t = s.querySelector(".band"); if (t) t.classList.add(truth[s.dataset.s] ? "right" : "wrong"); } }
+function setTube(id, b) { for (const s of $(id).querySelectorAll(".slot")) { s.innerHTML = ""; const v = b[s.dataset.s]; if (v) s.innerHTML = '<div class="tile band fixed ' + (v > 0.4 ? "thick" : "thin") + '"></div>'; } }
+
+/* ====== A ====== */
+const AX = { cur: 0, solved: [false, false, false], kept: {} };
+function A_paintModel() {
+  const { ctx, w, h } = hiDPI($("A_model")), m = MODELS[AX.cur], col = f => f > 0.99 ? "#1f3a4d" : f < 0.01 ? "#c7dbe8" : f > 0.6 ? "#3f6c8a" : f > 0.4 ? "#6f98b3" : "#9dbcd0";
+  [0, 1, 2].forEach(g => {
+    const d = duplexes(m, g, 1), x0 = 30 + g * (w - 40) / 3, cw = (w - 40) / 3 - 20;
+    ctx.fillStyle = "#1d1d1b"; ctx.font = "600 12px -apple-system,sans-serif"; ctx.textAlign = "left"; ctx.fillText("generation " + g, x0, 18);
+    d.forEach(([a, b], i) => { const y = 36 + i * 46; for (const [f, dy] of [[a, 0], [b, 12]]) {
+      if (m === "dispersive" && f > 0.01 && f < 0.99) { for (let x = 0; x < cw; x += 10) { ctx.fillStyle = (Math.floor(x / 10) + (dy ? 1 : 0)) % Math.round(1 / f) === 0 ? "#1f3a4d" : "#c7dbe8"; ctx.fillRect(x0 + x, y + dy, 10, 7); } }
+      else { ctx.fillStyle = col(f); ctx.fillRect(x0, y + dy, cw, 7); } } });
+  });
+}
+function A_open(i) {
+  AX.cur = i; const m = MODELS[i];
+  $("A_modelH").textContent = "The " + m + " idea";
+  $("A_ttext").innerHTML = { conservative: "Conservative: the parent double helix stays whole; the copy is entirely new.", semiconservative: "Semiconservative: each new double helix keeps one old strand and gets one new strand.", dispersive: "Dispersive: old and new DNA are mixed in patches along every strand." }[m] + " Predict generations 1 and 2.";
+  $("A_tubes").innerHTML = scaleHtml() + tubeHtml("A_t1", "generation 1") + tubeHtml("A_t2", "generation 2");
+  if (AX.kept[i]) { setTube("A_t1", bands(m, 1)); setTube("A_t2", bands(m, 2)); }
+  $("A_tray").innerHTML = ""; refill($("A_tray"));
+  $("A_verdict").innerHTML = AX.solved[i] ? '<span class="ok">✓ Correct.</span>' : ""; $("A_pips").innerHTML = Pips.html(3, j => AX.solved[j], i); A_paintModel();
+}
+function A_lock() {
+  const i = AX.cur, m = MODELS[i]; if (AX.solved[i]) return;
+  const t1 = bands(m, 1), t2 = bands(m, 2), ok1 = tubeOk(readTube("A_t1"), t1), ok2 = tubeOk(readTube("A_t2"), t2), ok = ok1 && ok2;
+  markTube("A_t1", t1); markTube("A_t2", t2);
+  Lesson.record(i, ok); Lesson.bump("A");
+  if (ok) { AX.solved[i] = AX.kept[i] = true; $("A_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const n = AX.solved.filter(Boolean).length; Lesson.tick("A", "rounds", n === 3, n + " of 3"); if (n === 3) Lesson.finish("A"); else setTimeout(() => A_open(AX.solved.indexOf(false)), 1200); }
+  else $("A_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> ' + (!ok1 ? "Generation 1" : "Generation 2") + (ok1 || ok2 ? " is off." : " and the other are off.") + " Red bands are in spots that hold no DNA; also check which band should be thicker.";
+  $("A_pips").innerHTML = Pips.html(3, j => AX.solved[j], i);
+}
+Tiles.wire($("stageA"), () => { refill($("A_tray")); for (const t of $("A_tray").querySelectorAll(".band")) t.classList.remove("right", "wrong"); if (!AX.solved[AX.cur]) $("A_verdict").textContent = ""; Lesson.bump("A"); });
+$("A_lock").addEventListener("click", A_lock);
+Pips.wire($("A_pips"), A_open);
+A_open(0);
+
+/* ====== B ====== */
+const BX = { cur: 0, solved: [false, false, false], shown: 0, pick: null, spun: false, extra: [] };
+function B_paintSpin() {
+  const { ctx, w, h } = hiDPI($("B_spin")), gens = BX.extra.length ? BX.extra : [[1, 0], [1, 1], [1, 2]].slice(0, BX.shown);
+  ctx.fillStyle = "#6b6b68"; ctx.font = "11px ui-monospace,Menlo,monospace"; ctx.textAlign = "right"; ["light", "hybrid", "heavy"].forEach((l, k) => ctx.fillText(l, 50, 30 + k * 72 + 4));
+  gens.forEach(([start, g], i) => {
+    const x = 70 + i * 120; ctx.fillStyle = "#f2f4f5"; ctx.fillRect(x, 14, 90, 170); ctx.strokeStyle = "#c9c5b8"; ctx.strokeRect(x, 14, 90, 170);
+    const b = bands("semiconservative", g, start);
+    for (const s in b) { const y = 30 + (s / 2) * 72; const gr = ctx.createLinearGradient(0, y - 10, 0, y + 10); gr.addColorStop(0, "rgba(29,29,27,0)"); gr.addColorStop(0.5, "rgba(29,29,27," + Math.min(1, 0.25 + b[s]) + ")"); gr.addColorStop(1, "rgba(29,29,27,0)"); ctx.fillStyle = gr; ctx.fillRect(x + 4, y - 10, 82, 20); }
+    ctx.fillStyle = "#1d1d1b"; ctx.textAlign = "center"; ctx.font = "12px -apple-system,sans-serif"; ctx.fillText((start ? "" : "light→heavy, ") + "gen " + g, x + 45, 202);
+  });
+}
+function B_open(i) {
+  BX.cur = i; BX.extra = []; const done = BX.solved[i];
+  $("B_trayrow").hidden = i === 0;
+  if (i === 0) {
+    $("B_ttext").textContent = "Spin generations 0, 1 and 2. Then click the idea whose prediction matches, and lock in.";
+    $("B_workH").textContent = "Your three predictions";
+    $("B_tubes").innerHTML = MODELS.map((m, k) => '<div class="tube pickable" data-m="' + m + '" style="cursor:pointer; padding:4px; border:2px solid ' + (BX.pick === m ? "#1d1d1b" : "transparent") + '; border-radius:6px;"><div style="display:flex; gap:6px;">' +
+      tubeHtml("B_p" + k + "a", "1") + tubeHtml("B_p" + k + "b", "2") + '</div><div class="cap">' + m + "</div></div>").join("");
+    MODELS.forEach((m, k) => { setTube("B_p" + k + "a", bands(m, 1)); setTube("B_p" + k + "b", bands(m, 2)); });
+    BX.shown = BX.spun ? 3 : 0;
+  } else if (i === 1) {
+    $("B_ttext").textContent = "Predict generation 3, then lock in to spin it."; $("B_workH").textContent = "Your prediction";
+    $("B_tubes").innerHTML = scaleHtml() + tubeHtml("B_g3", "generation 3"); if (done) setTube("B_g3", bands("semiconservative", 3)); BX.shown = 3;
+  } else {
+    $("B_ttext").textContent = "Run it backwards: grow the bacteria on light nitrogen, then move them to heavy. Predict generations 1 and 2."; $("B_workH").textContent = "Your prediction";
+    $("B_tubes").innerHTML = scaleHtml() + tubeHtml("B_r1", "generation 1") + tubeHtml("B_r2", "generation 2"); if (done) { setTube("B_r1", bands("semiconservative", 1, 0)); setTube("B_r2", bands("semiconservative", 2, 0)); } BX.shown = 3;
+  }
+  $("B_tray").innerHTML = ""; refill($("B_tray"));
+  $("B_spin_go").hidden = i !== 0;
+  $("B_verdict").innerHTML = done ? '<span class="ok">✓ Correct.</span>' : ""; $("B_pips").innerHTML = Pips.html(3, j => BX.solved[j], i); B_paintSpin();
+}
+$("B_spin_go").addEventListener("click", () => { BX.spun = true; BX.shown = 0; const t = setInterval(() => { BX.shown++; B_paintSpin(); if (BX.shown >= 3) clearInterval(t); }, 500); Lesson.bump("B"); });
+$("B_tubes").addEventListener("click", e => { if (BX.cur !== 0) return; const t = e.target.closest(".pickable"); if (!t) return; BX.pick = t.dataset.m; for (const x of $("B_tubes").querySelectorAll(".pickable")) x.style.borderColor = x === t ? "#1d1d1b" : "transparent"; });
+function B_lock() {
+  const i = BX.cur; if (BX.solved[i]) return; let ok;
+  if (i === 0) { if (!BX.spun || BX.shown < 3) { $("B_verdict").textContent = "Spin first."; return; } if (!BX.pick) { $("B_verdict").textContent = "Click a prediction first."; return; } ok = BX.pick === "semiconservative"; }
+  else if (i === 1) { const t = bands("semiconservative", 3); ok = tubeOk(readTube("B_g3"), t); markTube("B_g3", t); BX.extra = [[1, 0], [1, 1], [1, 2], [1, 3]]; }
+  else { const a = bands("semiconservative", 1, 0), b = bands("semiconservative", 2, 0); ok = tubeOk(readTube("B_r1"), a) && tubeOk(readTube("B_r2"), b); markTube("B_r1", a); markTube("B_r2", b); BX.extra = [[0, 0], [0, 1], [0, 2]]; }
+  B_paintSpin(); Lesson.record(3 + i, ok); Lesson.bump("B");
+  if (ok) { BX.solved[i] = true; $("B_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const n = BX.solved.filter(Boolean).length; Lesson.tick("B", "rounds", n === 3, n + " of 3"); if (n === 3) Lesson.finish("B"); else setTimeout(() => B_open(BX.solved.indexOf(false)), 1600); }
+  else $("B_verdict").innerHTML = '<span class="off">✗ Incorrect.</span>' + (i === 0 ? "" : " The spin above shows what happened; fix your tube and lock in again.");
+  $("B_pips").innerHTML = Pips.html(3, j => BX.solved[j], i);
+}
+Tiles.wire($("B_tubes").parentElement.parentElement, () => { refill($("B_tray")); Lesson.bump("B"); });
+$("B_lock").addEventListener("click", B_lock);
+Pips.wire($("B_pips"), B_open);
+B_open(0);
+
+/* ====== C: the drill ====== */
+const frac = (a, b) => { const g = (x, y) => y ? g(y, x % y) : x, d = g(a, b); return [a / d + "/" + b / d, String(+(a / b).toFixed(4)), String(+(100 * a / b).toFixed(2)) + "%"]; };
+const C_CARDS = [
+  { make() { const g = rint(2, 5); return { q: "Semiconservative copying, heavy parent, light nitrogen from then on. At generation " + g + ", what fraction of DNA double helixes are hybrid?", a: frac(2, Math.pow(2, g)) }; } },
+  { make() { const g = rint(2, 5); return { q: "Same experiment. At generation " + g + ", what fraction are all light?", a: frac(Math.pow(2, g) - 2, Math.pow(2, g)) }; } },
+  { q: "Each new double helix keeps one old strand and one new.", a: ["semiconservative", "semi-conservative"] },
+  { q: "The old double helix stays whole; the copy is all new.", a: "conservative" },
+  { q: "Old and new DNA mixed in patches along every strand.", a: "dispersive" },
+  { q: "The two scientists who did this experiment in 1958 (A and B).", a: ["meselson and stahl", "meselson & stahl", "meselson stahl"] },
+  { q: "The heavy isotope of nitrogen they used (type it as N15 or 15N).", a: ["15n", "n15", "nitrogen 15", "nitrogen-15"] },
+  { q: "DNA made of one heavy strand and one light strand is called…", a: ["hybrid", "hybrid dna", "intermediate"] },
+  { q: "Spinning DNA so that it settles by how dense it is (three words).", a: ["density gradient centrifugation", "density-gradient centrifugation"] },
+  { q: "After generation 1, there was one band. Which idea did that rule out?", a: "conservative" },
+  { q: "After generation 2, there were two bands, hybrid and light. Which idea did that rule out?", a: "dispersive" }
+];
+const C_BANK = ["semiconservative", "conservative", "dispersive", "Meselson and Stahl", "15N", "hybrid", "density gradient centrifugation"];
+let C_D = null;
+function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(6 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
+
+Lesson.init({ id: "b145_lesson8", version: 1, stages: ["A", "B", "C"], required: "C", bits: 6 + C_CARDS.length,
+  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paintSpin(); },
+  onReveal: () => { AX.solved.fill(true); [0, 1, 2].forEach(i => AX.kept[i] = true); BX.solved.fill(true); BX.spun = true; A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "3 of 3"); Lesson.tick("B", "rounds", true, "3 of 3"); } });
+window.addEventListener("resize", () => { A_paintModel(); B_paintSpin(); });
+</script>
+</body>
+</html>
