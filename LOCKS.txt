@@ -10,3 +10,4 @@ lesson5         o   Jiggling across a membrane: diffusion and osmosis
 lesson6         o   Folding a chain in water: proteins
 lesson7         o   The copying relay: DNA replication, molecule by molecule
 lesson8         o   Heavy and light: the Meselson-Stahl experiment
+lesson9         o   Reading a gene: transcription, the codon wheel, and mutations
