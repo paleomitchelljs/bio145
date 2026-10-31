@@ -12,7 +12,7 @@ so students can read the spelling but can't copy and paste it. Pasting into the 
 *drawn*: each time a card comes back it shows a new molecule, fork, cell or cross, so students drill the idea and not one
 picture.
 
-**Numbering: lesson N is the homework for lecture N.** `docs/GUIDE.md` maps all 36 lectures to the book and to the lessons; most slots are empty so far, and the fourteen drafts sit in their lecture's slot.
+**Numbering: lesson N is the homework for lecture N.** `docs/GUIDE.md` maps all 36 lectures to the book and to the lessons; every slot but the unrecorded lecture 20 has a lesson.
 
 **Status: first drafts, thirty-five lessons** (every lecture but the unrecorded 20). The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20
 (lesson 23 keeps JM's BIO 202 lesson 9 voice). `docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
@@ -42,7 +42,11 @@ instructor/                verify_code.html, aggregate.html (decode student code
 scripts/
   smoke.js                 every lesson in headless Chromium, as a student and as the instructor bypass
   decode_codes.py, test_codec.py   batch decoding, codec pin (from BIO 202)
-docs/PLAN.md               idea list -> lessons, measured numbers, open questions
+docs/guidelines.md         how a lesson is chosen, built and checked (read first)
+docs/style.md              what goes on screen and how it is worded
+docs/todo.md               open work, from the 2026-10-31 review
+docs/GUIDE.md              lecture -> book chapter -> lesson
+docs/PLAN.md               the first drafts: idea list -> lessons, measured numbers, open questions
 ```
 
 ## Checks
