@@ -16,7 +16,7 @@
 //     readable.
 //
 //   * The landing page calls Lock.load() and styles its own cards from the
-//     result, so locked lessons are greyed out or dropped entirely depending
+//     result, so locked lessons are grayed out or dropped entirely depending
 //     on the file's `display:` line.
 //
 // WHAT THIS IS NOT
@@ -90,7 +90,7 @@
       .then(r => (r.ok ? r.text() : ""))
       .then(t => parse(t))
       // An instructor unlock makes every row read as open, so the landing page
-      // stops greying cards out as well.
+      // stops graying cards out as well.
       .then(cfg => (isUnlocked() ? { locked: {}, display: cfg.display } : cfg))
       // Any failure at all -> nothing is locked. See FAILURE MODE above.
       .catch(() => ({ locked: {}, display: "dim" }));

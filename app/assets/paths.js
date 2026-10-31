@@ -64,11 +64,11 @@
 //                          (JM: no pop-ups on arrows that cannot be changed).
 //                          An arrow with `always: true` keeps its `text` on
 //                          show, at its `labelAt`.
-//   lockColours: true      a readonly arrow that is not `dark` gets the class
+//   lockColors: true      a readonly arrow that is not `dark` gets the class
 //                          `locked` and pale heads, for the page's CSS to
-//                          colour as held; a selected arrow keeps its sign's
-//                          colour and head (red now means negative), and its
-//                          value is coloured by sign as it is dragged. An
+//                          color as held; a selected arrow keeps its sign's
+//                          color and head (red now means negative), and its
+//                          value is colored by sign as it is dragged. An
 //                          arrow the student can set now gets `settable`.
 // And per arrow, `width` fixes a `dark` arrow's stroke (default 2.2), and
 // `onto: "<arrow id>"` in place of `to` lands it on the middle of that arrow
@@ -80,12 +80,12 @@
 // same arrow at two different points (lesson 14 D, 2026-10-05: "how common
 // an allele is" and "pathogens" both scale the same host-alleles ->
 // survival arrow). `both: true` draws a head on both ends, for a relation
-// with no direction (lesson 14 C's linkage arrow between two neighbouring
+// with no direction (lesson 14 C's linkage arrow between two neighboring
 // genes); both heads stand off their boxes alike. `caption: "..."` with
 // `captionAt: {x, y}` writes the arrow's name beside it, always on show
 // (`captionUpright: true` turns it to run up the page, for an upright arrow).
 // A box's `cls: "..."` adds a class to its rectangle, for the page's CSS to
-// colour (lesson 17 D, 2026-10-15: four populations, each in its own colour).
+// color (lesson 17 D, 2026-10-15: four populations, each in its own color).
 // A box's `drag: { hit, move, end, cursor }` makes the plot its `glyph` draws
 // something the student drags (lesson 20 D, 2026-10-28; see `boxDrag` below).
 
@@ -106,7 +106,7 @@
   }
   function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
-  // Where the segment from `c` to the centre of box `b` crosses b's edge.
+  // Where the segment from `c` to the center of box `b` crosses b's edge.
   // Rectangles, so it is the nearer of the two axis crossings.
   function edgePoint(b, c) {
     const dx = c.x - b.x, dy = c.y - b.y;
@@ -148,7 +148,7 @@
       dragSpan: a.dragSpan || 0, signed: !!a.signed, width: a.width || 0, always: !!a.always,
       both: !!a.both, caption: a.caption || null, captionAt: a.captionAt || null, captionUpright: !!a.captionUpright
     }));
-    const valuesOnSelect = !!opts.valuesOnSelect, lockColours = !!opts.lockColours;
+    const valuesOnSelect = !!opts.valuesOnSelect, lockColors = !!opts.lockColors;
 
     const state = { sel: null, drag: null, held: false, dirty: false };
 
@@ -163,7 +163,7 @@
 
     const defs = svg("defs");
     [["paths-head", "#2f6b8f"], ["paths-head-sel", "#b23a48"], ["paths-head-dark", "#c4c0b4"],
-     ["paths-head-down", "#9a6b1f"]].concat(opts.lockColours ? [["paths-head-locked", "#a9c7da"], ["paths-head-locked-down", "#e8aab0"]] : [])
+     ["paths-head-down", "#9a6b1f"]].concat(opts.lockColors ? [["paths-head-locked", "#a9c7da"], ["paths-head-locked-down", "#e8aab0"]] : [])
       .forEach(([id, fill]) => {
         // markerUnits is strokeWidth (the default), so the head grows with the
         // line. A fixed head is worse than a big one: past about 8px of stroke
@@ -193,7 +193,7 @@
     }
     /* A signed arrow runs through zero: it can push a thing up or pull it
        down, and BOTH ends are strong. So thickness comes off the magnitude and
-       the sign is carried by colour instead -- otherwise the strongest negative
+       the sign is carried by color instead -- otherwise the strongest negative
        setting draws as a hairline, which says the opposite of what it means. */
     function norm(a) {
       const s = spec(a);
@@ -335,7 +335,7 @@
         const sel = state.sel === a.id;
         const n = norm(a);
         const width = a.ghost ? 1.6 : (a.dark ? (a.width || 2.2) : MIN_W + (MAX_W - MIN_W) * n);
-        const locked = lockColours && a.readonly && !a.dark && !a.ghost;
+        const locked = lockColors && a.readonly && !a.dark && !a.ghost;
         const eds = edgesOf(a);
         const fork = isFork(eds);
         eds.forEach((ed, i) => {
@@ -348,7 +348,7 @@
           if (!g) return;
           if (valuesOnSelect) {
             // what covering it costs: an arrow the student could click next
-            // most, a held one less, a fixed grey one least
+            // most, a held one less, a fixed gray one least
             const k = a.dark || a.ghost ? 0.4 : (!a.readonly && inp(a) && !inp(a).disabled ? 2.5 : 1);
             drawn.push({ id: a.id, g, w: g.fit < width ? g.fit : width, k });
             if (sel) ownGeo.push(geom(ed.from, ed.to, fork && i > 0 ? -b : b, 0, a.both));
@@ -362,20 +362,20 @@
           if (locked) cls.push("locked");
           if (sel) cls.push("selected");
           const head = a.ghost ? null
-                     : (sel && !lockColours ? "url(#paths-head-sel)"
+                     : (sel && !lockColors ? "url(#paths-head-sel)"
                             : (a.dark || n <= 0.0001 ? "url(#paths-head-dark)"
                                                      : (neg ? (locked ? "url(#paths-head-locked-down)" : "url(#paths-head-down)")
                                                             : (locked ? "url(#paths-head-locked)" : "url(#paths-head)"))));
-          // Under lockColours an arrow the student can set right now (not held,
+          // Under lockColors an arrow the student can set right now (not held,
           // not mid-run) is marked, for the page to make it stand out (JM:
           // "maybe any selectable arrow has a 'glow' effect?").
-          if (lockColours && !a.readonly && !a.dark && !a.ghost && inp(a) && !inp(a).disabled) cls.push("settable");
+          if (lockColors && !a.readonly && !a.dark && !a.ghost && inp(a) && !inp(a).disabled) cls.push("settable");
           const path = svg("path", { d: g.d, class: cls.join(" "),
                                      "stroke-width": (g.fit < width ? g.fit : width).toFixed(2),
                                      "marker-end": head, "marker-start": a.both ? head : null });
-          // Under lockColours a held arrow has no hit target, so the drawn
+          // Under lockColors a held arrow has no hit target, so the drawn
           // curve carries its id for a page (or a check) to read its state.
-          if (lockColours) path.setAttribute("data-of", a.id);
+          if (lockColors) path.setAttribute("data-of", a.id);
           gArrows.appendChild(path);
 
           // The hit target is a fat invisible copy of the same curve, so a thin
@@ -425,7 +425,7 @@
             });
             if (showVal) {
               const vcls = ["paths-arrow-value"];
-              if (sel && !lockColours) vcls.push("selected");
+              if (sel && !lockColors) vcls.push("selected");
               else if (isNeg(a)) vcls.push("down");
               if (a.dark) vcls.push("dark");
               const t = svg("text", { x: tx, y: ty + 2, class: vcls.join(" ") });
@@ -487,7 +487,7 @@
     }
 
     // The selected arrow's readout under valuesOnSelect: its number between
-    // the − and +, centred on `c`.
+    // the − and +, centerd on `c`.
     function readout(a, c) {
       // pushed away from its arrow for want of room, it gets a faint leader
       // back to it, so the number is not read as another arrow's
@@ -681,7 +681,7 @@
     }
 
     // A box with `drag` is a small plot the student works by hand (lesson 20
-    // D, 2026-10-28: a wing-length distribution whose centre is dragged, a
+    // D, 2026-10-28: a wing-length distribution whose center is dragged, a
     // line whose ends are dragged; JM: "shift a distribution ... and adjust
     // a correlation by dragging a line"). The box draws its plot with
     // `glyph`; `drag` takes points in the diagram's own units:

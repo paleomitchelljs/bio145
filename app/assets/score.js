@@ -344,7 +344,7 @@
 
   // ---- Instructor bypass -------------------------------------------------
   // Confirming as JMitchell (or JSMitchell) opens every stage at once. Both
-  // spellings are here because the token is normalised before the comparison:
+  // spellings are here because the token is normalized before the comparison:
   // "J. Mitchell" and "J Mitchell" both collapse to j_mitchell, "JMitchell" to
   // jmitchell, and only the js* pair used to be listed -- so the initials JM
   // actually types failed silently and the bypass looked broken. Students arrive with
@@ -374,7 +374,7 @@
       .forEach(function (a) { a.classList.remove("locked"); });
     // A visible section is not the same as an open gate. Lessons keep their own
     // per-stage flags, and lessons 3 and 4 refuse to score a stage whose flag is
-    // still shut -- so with the sections merely un-greyed, the instructor could
+    // still shut -- so with the sections merely un-grayed, the instructor could
     // reach stage E and not be able to solve it. Flip whatever is reachable.
     // `typeof` on an undeclared name is safe; the try guards a lesson that keeps
     // something else under that name.
@@ -490,7 +490,7 @@
   // input handlers, simulate/reseed buttons, drag-to-predict canvases, etc.
   function bumpManipulation(key) {
     if (!key) return;
-    // sim.js randomises each stage's seed at load by firing the `input` event
+    // sim.js randomizes each stage's seed at load by firing the `input` event
     // the lesson already listens for. That event is indistinguishable from a
     // student dragging the slider, so without this guard every lesson would
     // open having already logged a manipulation on every seeded stage — and
@@ -533,7 +533,7 @@
   function getManipulations() { return Object.assign({}, state.manipulations); }
   function manipulationCount(key) { return state.manipulations[String(key)] | 0; }
 
-  // Serialise the manipulations object into a compact `A12B8C5D9`-style token.
+  // Serialize the manipulations object into a compact `A12B8C5D9`-style token.
   // Keys are sorted alphabetically for stability. Empty object → "".
   function manipulationsToken(map) {
     const keys = Object.keys(map).sort();

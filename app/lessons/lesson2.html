@@ -220,7 +220,7 @@ function bentMol(name, ang) {   /* the three-atom molecule with its outer atoms 
   m.atoms[c].x = 0; m.atoms[c].y = 0; m.atoms[outer[0]].x = -Math.sin(h) * L; m.atoms[outer[0]].y = Math.cos(h) * L; m.atoms[outer[1]].x = Math.sin(h) * L; m.atoms[outer[1]].y = Math.cos(h) * L;
   return m;
 }
-function placed(w) {   /* a water (or the centre) at its spot and turn, in molecule units */
+function placed(w) {   /* a water (or the center) at its spot and turn, in molecule units */
   const base = MOLS[w.kind], c = Math.cos(w.rot), s = Math.sin(w.rot);
   return { atoms: base.atoms.map(a => ({ el: a.el, x: w.x + a.x * c - a.y * s, y: w.y + a.x * s + a.y * c })), bonds: base.bonds };
 }
@@ -332,7 +332,7 @@ $("B_choices").addEventListener("click", e => {
   });
   cv.addEventListener("pointermove", e => {
     const d = BX.drag; if (!d) return; const u = units(e);
-    if (d.bend) {   /* angle from the pointer to the centre atom, measured from straight down */
+    if (d.bend) {   /* angle from the pointer to the center atom, measured from straight down */
       const cy = (+cv.dataset.h / 2 - 60) / S;
       const a = Math.atan2(Math.abs(u.x), u.y - cy) * 180 / Math.PI * 2; BX.angle = Math.max(60, Math.min(180, a));
     } else { const wt = BX.waters[d.i]; if (d.turn) wt.rot = d.r0 + Math.atan2(u.y - wt.y, u.x - wt.x) - d.a0; else { wt.x = u.x + d.dx; wt.y = u.y + d.dy; } }

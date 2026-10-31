@@ -1,7 +1,7 @@
 /* BIO 145 — what a stage keeps off the screen until asked for. Companion to hover.js.
    JM, 2026-10-17: "the R code panels should always be last & default to be collapsed"; "We should more liberally
    use hover text and optional boxes in general ... I want attention drawn and fixed to controls, output, and
-   predictions". Colours fall back to the shared palette where a page does not name it. */
+   predictions". Colors fall back to the shared palette where a page does not name it. */
 
 /* under a stage's grid: what is read after the work (observed data), then the R code, last */
 .tail { display:flex; flex-direction:column; gap:16px; margin-top:16px; }

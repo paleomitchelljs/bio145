@@ -47,7 +47,7 @@ Kit.run({ id: "b145_lesson35", num: 35, version: 2, stages: [
     },
     goals: [
       { text: "Use p = 0.05 (line at 1.3): see how many false hits get in", test: S => S.th <= 1.5 && NUL.filter(v => v >= S.th).length > 500 },
-      { text: "Remove every false positive (line above the highest grey dot)", test: S => S.th > maxNull && S.th < 10 },
+      { text: "Remove every false positive (line above the highest gray dot)", test: S => S.th > maxNull && S.th < 10 },
       { text: "Remove every false positive but keep all three true loci", test: S => S.th > maxNull && HITS.every(v => v >= S.th) },
       { text: "Set it near the Bonferroni value for 30,000 tests (about 5.8)", test: S => Math.abs(S.th - 5.8) <= 0.3 }] },
   { type: "pick", title: "Reading a Sanger sequence", solved: "Shortest piece first: the gel reads bottom to top.", tip: "A chain terminator (dideoxynucleotide) with a fluorescent dye stops each new strand at one base. The shortest piece ends at the first base.",

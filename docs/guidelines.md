@@ -44,7 +44,7 @@ These carry over from evo, and most of the weak stages in the current drafts bre
 - A ladder beats a bar. Each rung adds one control and takes away the cheap route that cleared the last one.
 - A sim that reduces to one formula (somites = rate × time) or a truth table (the lac operon's two checkboxes) is a sort in disguise. Make it a prediction or a classify, or cut it.
 - Measure every bar by sweeping the controls. The jsdom harness's grid check proves a goal is reachable. It does not prove the goal is hard to reach by accident.
-- Every number on screen comes off the model. Made-up parameters are labelled "relative", and the code comment says they are invented.
+- Every number on screen comes off the model. Made-up parameters are labeled "relative", and the code comment says they are invented.
 
 ## The interactive menu
 

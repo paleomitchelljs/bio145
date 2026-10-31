@@ -21,7 +21,7 @@
 
 <!-- ========== STAGES A and B — set the parents to hit a ratio (JM: "students shown a pair of parents, try to set their alleles to
      get a target ratio of phenotypes in F1 & F2. As it progresses we do monohybrid rounds, dihybrid rounds, sex linked rounds, and
-     recombination rounds.") One widget, two stages: peas (A), then flies (B). ========== -->
+     recombination rounds.") One widget, two stages: peas (A), then flies and sweet peas (B). ========== -->
 <section class="stage stage-locked" id="stageA">
   <h2 class="stage-h">A</h2>
   <div class="lock-banner">Enter your name above to start.</div>
@@ -53,14 +53,14 @@
   <div class="lock-banner">Finish Stage A to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul>
-      <li>Now fruit flies, and genes that don't sort independently: one on the X, then two on the same chromosome.</li>
+      <li>Now genes that don't sort independently: fruit flies for one on the X, then sweet peas for two on the same chromosome.</li>
       <li>Set the parents (and, for genes on one chromosome, how far apart they sit) to fill the red boxes.</li>
     </ul></div>
   </div>
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Eye colour: R red, r white, on the X chromosome; a male has one X and a Y, which carries no copy.</span><span>Body and wings: B grey, b black; V normal wings, v vestigial. In the last two targets both genes sit on one chromosome: the two copies on a chromosome travel together unless a crossover falls between them. The slider sets how often that happens.</span></span></span></h3>
+        <h3><span class="info" tabindex="0">The parents<span class="tip"><span>Eye color: R red, r white, on the X chromosome; a male has one X and a Y, which carries no copy.</span><span>Sweet peas, in the last two targets: P purple flowers, p red; L long pollen grains, l round. Both genes sit on one chromosome: the two copies on a chromosome travel together unless a crossover falls between them. The slider sets how often that happens.</span></span></span></h3>
         <div class="parents" id="B_par"></div>
         <div class="tbar" id="B_cmrow" hidden><label>distance apart <input type="range" id="B_cm" min="0" max="50" value="25"></label><b id="B_cm_v"></b></div>
       </div>
@@ -106,7 +106,7 @@
 /* bits: A 0-4, B 5-8, C 9+ */
 const LY = { dom: "Y", rec: "y", ph: ["yellow", "green"] }, LR = { dom: "R", rec: "r", ph: ["round", "wrinkled"] };
 const LX = { dom: "R", rec: "r", ph: ["red-eyed", "white-eyed"], x: true };
-const LB = { dom: "B", rec: "b", ph: ["grey", "black"] }, LV = { dom: "V", rec: "v", ph: ["normal", "vestigial"] };
+const LB = { dom: "P", rec: "p", ph: ["purple", "red"] }, LV = { dom: "L", rec: "l", ph: ["long", "round"] };   /* sweet peas (Bateson and Punnett, 1905): hermaphrodites, so every parent can recombine */
 const MONO = { loci: [LY] }, DI = { loci: [LR, LY] }, XL = { loci: [LX] }, LINK = { loci: [LB, LV], linked: 0.25 };
 const q = (a, b) => a / b;
 const ROUNDS_A = [
@@ -119,8 +119,8 @@ const ROUNDS_A = [
 const ROUNDS_B = [
   { t: "F1: every daughter red-eyed, every son white-eyed.", spec: XL, f1: { "red-eyed female": q(1, 2), "white-eyed male": q(1, 2) } },
   { t: "F1: half red-eyed and half white-eyed, in daughters and sons alike.", spec: XL, f1: { "red-eyed female": q(1, 4), "white-eyed female": q(1, 4), "red-eyed male": q(1, 4), "white-eyed male": q(1, 4) } },
-  { t: "F1: 41.5% grey normal, 41.5% black vestigial, 8.5% grey vestigial, 8.5% black normal.", spec: LINK, link: true, f1: { "grey normal": 0.415, "black vestigial": 0.415, "grey vestigial": 0.085, "black normal": 0.085 } },
-  { t: "F1: 35% grey vestigial, 35% black normal, 15% grey normal, 15% black vestigial.", spec: LINK, link: true, f1: { "grey vestigial": 0.35, "black normal": 0.35, "grey normal": 0.15, "black vestigial": 0.15 } }
+  { t: "F1: 41.5% purple long, 41.5% red round, 8.5% purple round, 8.5% red long.", spec: LINK, link: true, f1: { "purple long": 0.415, "red round": 0.415, "purple round": 0.085, "red long": 0.085 } },
+  { t: "F1: 35% purple round, 35% red long, 15% purple long, 15% red round.", spec: LINK, link: true, f1: { "purple round": 0.35, "red long": 0.35, "purple long": 0.15, "red round": 0.15 } }
 ];
 function startParents(spec) {   /* both parents heterozygous at every locus to start (a male hemizygous for the X) */
   const L = spec.loci.length, het = sex => ({ sex, c: [spec.loci.map(l => l.dom), spec.loci.map(l => l.x && sex === "M" ? null : l.rec)] });
@@ -233,15 +233,15 @@ const KX = Kit.extra({ before: "stageC", off: 9 + C_CARDS.length, prev: "B", nex
       { text: "Map set 1: all three distances within 1 cM", test: S => S.set === "1" && mapOK(S) },
       { text: "Map set 2", test: S => S.set === "2" && mapOK(S) },
       { text: "Map set 3", test: S => S.set === "3" && mapOK(S) }] },
-  { key: "X2", label: "D", type: "classify", title: "Count the recombinants", tip: "Morgan's cross. An F1 female got grey body and long wings (b⁺ vg⁺) from her mother and black body and vestigial wings (b vg) from her father. She is mated to a black, vestigial male, so each offspring shows exactly which combination her egg carried. Offspring with the combinations she inherited are parental; mixed ones are recombinant: a crossover between the two genes.",
+  { key: "X2", label: "D", type: "classify", title: "Count the recombinants", tip: "Morgan's cross. An F1 female got gray body and long wings (b⁺ vg⁺) from her mother and black body and vestigial wings (b vg) from her father. She is mated to a black, vestigial male, so each offspring shows exactly which combination her egg carried. Offspring with the combinations she inherited are parental; mixed ones are recombinant: a crossover between the two genes.",
     voice: ["Linked genes are inherited together unless a crossover falls between them. Parental types are overrepresented.", "The centimorgan: the percent of offspring that are recombinant."],
-    solved: "Recombinants came out near 17%: body colour and wing shape sit about 17 cM apart. Unlinked genes would give 50%.",
+    solved: "Recombinants came out near 17%: body color and wing shape sit about 17 cM apart. Unlinked genes would give 50%.",
     bins: ["Parental type", "Recombinant"], n: 40, ratio: 100,
-    make: () => { const rec = Math.random() < 0.17, flip = Math.random() < 0.5, body = rec ? (flip ? "grey" : "black") : (flip ? "grey" : "black"), wing = rec ? (flip ? "vestigial" : "long") : (flip ? "long" : "vestigial");
+    make: () => { const rec = Math.random() < 0.17, flip = Math.random() < 0.5, body = rec ? (flip ? "gray" : "black") : (flip ? "gray" : "black"), wing = rec ? (flip ? "vestigial" : "long") : (flip ? "long" : "vestigial");
       return { q: "Offspring: <b>" + body + " body, " + wing + " wings</b>", bin: rec ? 1 : 0 }; } }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson27", version: 3, stages: KEYS, required: "C", bits: 9 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson27", version: 4, stages: KEYS, required: "C", bits: 9 + C_CARDS.length + KX.bits,
   onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") RB.paint(); },
   onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
 window.addEventListener("resize", () => { RA.paint(); RB.paint(); });

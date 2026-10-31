@@ -44,7 +44,7 @@ Setup lives in tips (`.info` with a hidden `.tip`), not in bullets under the voi
   - "Not literally light-independent" (19).
   - "Code is arbitrary but frozen" (29).
   - "Water follows solutes" (10, 11).
-- Spelling is mixed. The hand-built lessons have about 23 "colour", plus "fibre" and "micrometre"; the kit lessons are American. The outlines and the book are American. JM to pick one.
+- American spelling throughout (JM, 2026-10-31): color, gray, fiber, center, micrometer, labeled, neighbor.
 
 ## Typography
 

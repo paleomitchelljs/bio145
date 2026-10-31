@@ -143,7 +143,7 @@ const A_T = [
   { t: "Start with more blue on the left, and still have at least 20 more on the left than the right at 30 s.", red: false, read: 30, ok: s => s.bl - s.br >= 20 },
   { t: "Start with at least 40 blue dots all on one side, and have them even (within 12) by 5 seconds.", red: false, read: 5, ok: (s, c) => (c.bl + c.br) >= 40 && Math.min(c.bl, c.br) === 0 && Math.abs(s.bl - s.br) <= 12 },
   { t: "Red dots join. Even out the blue (within 12), but keep every red dot on the left.", red: true, read: 30, ok: (s, c) => c.rl >= 10 && Math.abs(s.bl - s.br) <= 12 && (c.bl + c.br) >= 20 && s.rr === 0 },
-  { t: "Start each colour all on the left. Even out both: blue within 12, red within 8.", red: true, read: 30, ok: (s, c) => c.rl >= 10 && (c.bl + c.br) >= 20 && Math.abs(s.bl - s.br) <= 12 && Math.abs(s.rl - s.rr) <= 8 && Math.min(c.bl, c.br) === 0 }
+  { t: "Start each color all on the left. Even out both: blue within 12, red within 8.", red: true, read: 30, ok: (s, c) => c.rl >= 10 && (c.bl + c.br) >= 20 && Math.abs(s.bl - s.br) <= 12 && Math.abs(s.rl - s.rr) <= 8 && Math.min(c.bl, c.br) === 0 }
 ];
 function A_vals() { for (const k of ["bl", "br", "perm", "rl"]) $("A_" + k + "_v").textContent = v("A_" + k) + (k === "perm" ? "%" : ""); }
 function A_seed() {

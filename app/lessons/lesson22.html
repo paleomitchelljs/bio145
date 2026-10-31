@@ -55,17 +55,17 @@ Kit.run({ id: "b145_lesson22", num: 22, version: 3, stages: [
       [{ growth: true, damage: false, attached: true, suppress: true, onco: false }, "Growth signal, healthy DNA, every chromosome attached."],
       [{ growth: false, damage: false, attached: true, suppress: true, onco: false }, "No growth signal. Everything else healthy."],
       [{ growth: true, damage: true, attached: true, suppress: true, onco: false }, "Growth signal, but the DNA is damaged."],
-      [{ growth: true, damage: false, attached: false, suppress: true, onco: false }, "Growth signal and healthy DNA, but one chromosome has no spindle fibre on its kinetochore."],
+      [{ growth: true, damage: false, attached: false, suppress: true, onco: false }, "Growth signal and healthy DNA, but one chromosome has no spindle fiber on its kinetochore."],
       [{ growth: true, damage: true, attached: true, suppress: false, onco: false }, "Damaged DNA, and both copies of a tumor suppressor gene broken."],
       [{ growth: false, damage: false, attached: true, suppress: false, onco: true }, "No growth signal, but an oncogene stuck on and the tumor suppressors broken."]
     ].map(([S, txt]) => { const f = fate(S), word = f.stop ? "Stops at the " + f.stop.replace(" (metaphase)", "") : "Divides";
       return { q: txt + " What does the cell do?", ok: word, no: ["Stops at the G1/S checkpoint", "Stops at the spindle checkpoint", "Divides"].filter(x => x !== word), w: 560, h: 130, draw: ckDraw(S, false), after: ckDraw(S, true), why: f.msg }; }) },
-  { type: "pick", title: "Watching the spindle", tip: "Tubulin tagged so it glows. A laser bleaches a dark band across the spindle fibres between a chromosome and its pole. Then anaphase: the chromosome moves toward the pole.",
+  { type: "pick", title: "Watching the spindle", tip: "Tubulin tagged so it glows. A laser bleaches a dark band across the spindle fibers between a chromosome and its pole. Then anaphase: the chromosome moves toward the pole.",
     voice: ["Microtubules grow at random and stop when they catch a kinetochore. The cell has no eyes or hands."],
-    solved: "The dark band stays where it was while the chromosome closes in on it: the fibre is taken apart at the kinetochore end, and the kinetochore walks toward the pole.",
+    solved: "The dark band stays where it was while the chromosome closes in on it: the fiber is taken apart at the kinetochore end, and the kinetochore walks toward the pole.",
     qs: [
-      { q: "As the chromosome moves toward the pole, the bleached band…", ok: "Stays put, and the chromosome closes in on it", no: ["Moves toward the pole with the chromosome", "Moves away from the pole", "Spreads evenly along the fibre"], w: 460, h: 120,
-        draw: (ctx, w, h) => spindle(ctx, w, h, 0), after: (ctx, w, h) => spindle(ctx, w, h, 1), why: "So the fibre shortens at the kinetochore end: the kinetochore eats its way along." },
+      { q: "As the chromosome moves toward the pole, the bleached band…", ok: "Stays put, and the chromosome closes in on it", no: ["Moves toward the pole with the chromosome", "Moves away from the pole", "Spreads evenly along the fiber"], w: 460, h: 120,
+        draw: (ctx, w, h) => spindle(ctx, w, h, 0), after: (ctx, w, h) => spindle(ctx, w, h, 1), why: "So the fiber shortens at the kinetochore end: the kinetochore eats its way along." },
       { q: "A cell's M cyclin can't be broken down. What happens?", ok: "It stays stuck in mitosis", no: ["It skips mitosis", "It divides faster forever", "Nothing: cyclins don't matter in M"], why: "CDK stays active; cyclin levels have to fall to finish." }] },
   { type: "classify", title: "Split the cell", solved: "Animals pinch, plants build a wall from the middle out, bacteria split with an FtsZ ring.", tip: "Three ways to make two cells.",
     voice: ["Animals and fungi pinch with actin and myosin. Plants build a wall from the middle outward. Prokaryotes divide by binary fission with an FtsZ ring."],

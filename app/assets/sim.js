@@ -9,7 +9,7 @@
  * HOW IT WORKS. This file loads BEFORE each lesson's inline <script>, so a
  * lesson that still defines its own copy shadows the one here and behaves
  * exactly as it did. A lesson that does not define one falls through to these.
- * The crash class is therefore closed without changing any current behaviour.
+ * The crash class is therefore closed without changing any current behavior.
  *
  * Each body below is the majority variant already running in the lessons, copied
  * verbatim rather than retyped, so adopting it cannot change a rendered result.
@@ -157,7 +157,7 @@ var PAGE_SEED_BASE = (function () {
   return ((Date.now() ^ (Math.random() * 0xFFFFFFFF)) >>> 0) || 1;
 })();
 
-/* True only while randomizeSeedSliders() is synthesising input events, so the
+/* True only while randomizeSeedSliders() is synthesizing input events, so the
  * engagement counters can tell "the page seeded itself" from "the student
  * moved a control". Without this every lesson would open claiming the student
  * had already manipulated four panels. */
@@ -209,7 +209,7 @@ function paintSeed(prefix, value) {
   return value;
 }
 
-/* Randomise every stage that already exposes a seed slider.
+/* Randomize every stage that already exposes a seed slider.
  *
  * The lesson's own `input` handler owns the state object, the <output>, the
  * code listing and the redraw, so the cheapest correct move is to set the

@@ -20,13 +20,13 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [x] 4: the lipid half (saturated, unsaturated, phospholipid, lipoprotein classify) and enzyme naming (cards).
 - [x] 6: the second half of lecture 6. Nucleotides, ribose versus deoxyribose, purines and pyrimidines ("Cut pie"), pairing geometry, tRNA's "Frozen accident", ATP and cAMP.
 - [x] 7: surface area to volume ("Area squared, volume cubed"), with a cube slider. Large-cell exceptions. Prokaryote versus eukaryote. Endosymbiosis evidence, as a classify.
-- [ ] 7: move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7)? Lesson 7 now has 5 stages before its drill. JM to decide; removing Stage A changes lesson 7's scoring.
+- [x] 7: the levels-of-life ladder moved to lesson 1 (a kit order stage, with its drill cards).
 - [x] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
 - [x] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.
 - [ ] 23 (needs JM): cut Stage E (polygenic trait under selection; already open in PLAN.md). Move or trim Stage D (dominance rules, lecture 25–26 material). Add cost of sex and when sex pays, ploidy and anisogamy, and alternation of generations.
 - [x] 26: epistasis, with Labrador B and E loci making 9:3:4, best as a classify. Phenotypic plasticity. ABO as a stage, not just cards. (Three classify stages, C–E.)
 - [x] 27: map-building from pairwise distances ("Pythagoras with fingers").
-- [ ] 27: decide on male-fly recombination (PLAN.md).
+- [x] 27: male-fly recombination: the linked-gene targets now use sweet peas (hermaphrodites, Bateson and Punnett's linkage). The X-linked targets stay with Morgan's white-eyed flies; the problem never arose there.
 - [x] 28: DNA structure, damage and repair ("Repair window closes after S phase"), transitions versus transversions, telomeres.
 
 ## Kit lessons
@@ -48,7 +48,7 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [x] 33: predict all four lac conditions before toggling. Add a repressor-mutant or operator-mutant puzzle.
 - [x] 35: make "read top to bottom" one of the Sanger distractors.
 - [x] 36: the editing sim is two checkboxes. Predict first.
-- [x] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases. Every kit `sort` is now a `classify`.
+- [x] Every kit lesson: titles that name the move; solved banners that state the finding; palette colors in canvases. Every kit `sort` is now a `classify`.
 - [x] 25: an F2 classify whose counts build 3:1 (the counts are the data).
 - [x] 27: a recombinant-count classify that gives a map distance.
 
@@ -56,7 +56,7 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 
 - [ ] Rewrite weak distractors in every `pick` stage. Lesson 1's two named examples are fixed; the rest still need a read-through.
 - [ ] Decide which overlaps are deliberate spacing and cut the rest: tonicity (10, 11), structure levels (5, 6), functional groups (3, 4), mitosis (21, 23 M), mutation types (30, 32), RNA zoo (31, 33).
-- [ ] Spelling: one of American or British throughout (about 118 "color", 23 "colour").
+- [x] Spelling: American throughout (JM, 2026-10-31).
 - [ ] Voice: dictation for every draft voice block.
 
 ## Open from PLAN.md

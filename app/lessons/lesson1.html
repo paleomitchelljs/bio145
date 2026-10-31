@@ -27,11 +27,16 @@
 const C = (q, a) => ({ q, a });
 const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x); return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
 const pval = (d, n) => { const z = d / (6 * Math.sqrt(2 / n)); return Math.max(1e-12, 1 - erf(z / Math.SQRT2)); };
-Kit.run({ id: "b145_lesson1", num: 1, version: 2, stages: [
+const LEVELS = ["atom", "molecule", "organelle", "cell", "tissue", "organ", "organ system", "organism", "population", "community", "ecosystem", "biosphere"];
+Kit.run({ id: "b145_lesson1", num: 1, version: 3, stages: [
   { type: "classify", title: "Is it alive?", solved: "Fire copies itself but passes nothing on; a photocopy passes features on but runs no chemistry of its own. Life needs both: heredity, paid for by metabolism.", tip: "Sort each thing by the test it passes or fails. Life as used here: reproduction that passes features on (heredity), plus a metabolism that keeps the thing going.",
     voice: ["Not 'made of cells' (circular) and not 'has DNA' (that describes Earth's life, it doesn't define it).", "Life is reproduction with heredity, paid for by metabolism. Take either away and you have fire or a photocopier."],
     bins: ["Alive: heredity and metabolism", "Not alive: no heredity", "Not alive: no metabolism of its own"],
     items: [["A bacterium dividing in broth", 0], ["A sperm cell", 0], ["An oak tree", 0], ["A tardigrade", 0], ["A fire spreading from match to paper", 1], ["A flame passed from candle to candle", 1], ["A photocopied page", 2], ["A virus particle outside a host cell", 2], ["A computer virus copying itself", 2]] },
+  { type: "order", title: "Stack the levels of life (book, ch. 1)", tip: "Life is built in levels, each made of the one below it. Biggest at the top (slot 1), smallest at the bottom.",
+    voice: ["Each level is made of the one below it, and each has properties the one below doesn't. A cell is alive; its molecules aren't."],
+    solved: "Atom, molecule, organelle, cell, tissue, organ, organ system, organism, population, community, ecosystem, biosphere. The cell is the first level that is alive.",
+    items: ["Biosphere", "Ecosystem", "Community", "Population", "Organism", "Organ system", "Organ", "Tissue", "Cell", "Organelle", "Molecule", "Atom"] },
   { type: "pick", title: "A tree is made of air", solved: "Weighing excluded the soil in one step. Air was left standing because every other option fell: most of a tree's mass is carbon taken from CO₂.", tip: "A pot, weighed soil, a seed. The plant gains mass. Where did it come from?",
     voice: ["Confirming is hard. Excluding is easy: weigh the soil before and after.", "A shrinking list of options, like Sherlock Holmes. Light has no mass."],
     qs: [
@@ -70,8 +75,19 @@ Kit.run({ id: "b145_lesson1", num: 1, version: 2, stages: [
       { text: "Fail to reject the null although the true difference is 2.5 g or more (too few lizards)", test: S => S.d >= 2.5 && pval(S.d, Math.round(Math.pow(10, S.x))) > 0.05 },
       { text: "Find a setup with p between 0.04 and 0.06: nearly the same evidence on either side of the line", test: S => { const p = pval(S.d, Math.round(Math.pow(10, S.x))); return p > 0.04 && p < 0.06; } }] },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
-    bank: ["homeostasis", "metabolism", "heredity", "entropy", "null hypothesis", "p value", "0.05", "fail to reject", "no", "falsification", "inductive", "deductive", "basic science", "applied science", "control group", "carbon dioxide"],
+    bank: LEVELS.concat(["homeostasis", "metabolism", "heredity", "entropy", "null hypothesis", "p value", "0.05", "fail to reject", "no", "falsification", "inductive", "deductive", "basic science", "applied science", "control group", "carbon dioxide"]),
     cards: [
+      C("The smallest unit that can be alive.", "cell"),
+      C("A group of similar cells doing one job.", "tissue"),
+      C("Several tissues working together as one structure, like the heart.", "organ"),
+      C("Several organs working together, like the stomach, intestines and liver.", "organ system"),
+      C("All the individuals of one species living in one area.", "population"),
+      C("All the populations of every species living in one area.", "community"),
+      C("A community together with its nonliving surroundings: water, soil, light.", "ecosystem"),
+      C("Every ecosystem on Earth, taken together.", "biosphere"),
+      C("A structure inside a cell with its own job, like a mitochondrion.", "organelle"),
+      { make() { const i = rint(0, 10); return { q: "One level <b>up</b> from <b>" + LEVELS[i] + "</b>?", a: LEVELS[i + 1] }; } },
+      { make() { const i = rint(1, 11); return { q: "One level <b>down</b> from <b>" + LEVELS[i] + "</b>?", a: LEVELS[i - 1] }; } },
       C("Keeping conditions steady inside, such as salt and water balance.", "homeostasis"),
       C("The chemical reactions that free energy to pay for homeostasis, growth and reproduction.", "metabolism"),
       C("Reproduction in which copies carry on the parent's features. What is the carrying-on called?", "heredity"),

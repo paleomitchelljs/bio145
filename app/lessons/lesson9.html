@@ -40,7 +40,7 @@
   <div class="stage-body grid">
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The walker<span class="tip"><span>Grey beads: the microtubule track, one bead every 8 nm. Two heads joined by a neck to the cargo (the box).</span><span>A head's colour: what it is holding. Empty (white), ATP (blue), ADP + phosphate (purple), ADP (pale). A head drawn sitting on the track is gripping it.</span><span>As in Lessons 2 and 13: ATP's three phosphates each carry negative charge on their oxygens, crowded together; splitting one off releases free energy.</span></span></span></h3>
+        <h3><span class="info" tabindex="0">The walker<span class="tip"><span>Gray beads: the microtubule track, one bead every 8 nm. Two heads joined by a neck to the cargo (the box).</span><span>A head's color: what it is holding. Empty (white), ATP (blue), ADP + phosphate (purple), ADP (pale). A head drawn sitting on the track is gripping it.</span><span>As in Lessons 2 and 13: ATP's three phosphates each carry negative charge on their oxygens, crowded together; splitting one off releases free energy.</span></span></span></h3>
         <canvas id="A_walk" width="780" height="260"></canvas>
         <div class="readout" id="A_read"></div>
       </div>
@@ -343,7 +343,7 @@ const D_CARDS = EV.map((e, k) => ({ q: "What happens next? One word: ATP (binds)
   { q: "The track kinesin walks on.", a: ["microtubule", "microtubules"] },
   { q: "The motor protein that pulls on actin in muscle.", a: "myosin" },
   { q: "The thin filaments myosin pulls.", a: "actin" },
-  { q: "The unit of a muscle fibre between two Z lines.", a: "sarcomere" },
+  { q: "The unit of a muscle fiber between two Z lines.", a: "sarcomere" },
   { q: "The ion that uncovers actin's binding sites and lets muscle contract.", a: ["calcium", "ca2+", "ca", "calcium ion"] },
   { q: "Without ATP, myosin heads cannot let go of actin. The stiffness this causes after death.", a: ["rigor mortis", "rigor"] },
   { q: "The myosin head's pulling movement (two words).", a: "power stroke" },
@@ -372,10 +372,10 @@ const KX = Kit.extra({ before: "stageD", off: 13 + D_CARDS.length, prev: "C", ne
     solved: "Motors and cilia run on microtubules; crawling, streaming and muscle run on actin; intermediate filaments hold against tension and differ by cell type (keratin in skin).",
     bins: ["Microtubules", "Microfilaments (actin)", "Intermediate filaments"],
     items: [["Hollow, 13 protofilaments of α and β tubulin", 0], ["Kinesin and dynein walk on them", 0], ["The 9+2 core of cilia and flagella", 0], ["The spindle that moves chromosomes", 0], ["Myosin pulls on them in muscle", 1], ["A crawling cell grows them at its leading edge", 1], ["Cytoplasmic streaming in plant cells", 1], ["The ring that pinches an animal cell in two", 1], ["Keratin in skin, hair and scales", 2], ["Neurofilaments in nerve axons", 2], ["Different proteins in different cell types", 2]] },
-  { key: "X2", label: "E", type: "order", title: "A plant cell wall, from the inside out", tip: "The primary wall is laid down while the cell grows and stays flexible; the secondary wall goes on inside it once growth stops, stiffened with lignin. Pectin glues neighbours together.",
+  { key: "X2", label: "E", type: "order", title: "A plant cell wall, from the inside out", tip: "The primary wall is laid down while the cell grows and stays flexible; the secondary wall goes on inside it once growth stops, stiffened with lignin. Pectin glues neighbors together.",
     voice: ["Like a growing bone: flexible while it grows, rigid once it stops. Plasmodesmata run through all of it."],
-    solved: "Membrane, then the rigid secondary wall laid down last on the inside, then the flexible primary wall, then the pectin of the middle lamella shared with the neighbour.",
-    items: ["Cytoplasm", "Plasma membrane", "Secondary wall (rigid, with lignin)", "Primary wall (flexible, growing)", "Middle lamella (pectin, shared)", "The neighbour's primary wall"] }
+    solved: "Membrane, then the rigid secondary wall laid down last on the inside, then the flexible primary wall, then the pectin of the middle lamella shared with the neighbor.",
+    items: ["Cytoplasm", "Plasma membrane", "Secondary wall (rigid, with lignin)", "Primary wall (flexible, growing)", "Middle lamella (pectin, shared)", "The neighbor's primary wall"] }
 ] });
 const KEYS = ["A", "B", "C"].concat(KX.keys, ["D"]);
 Lesson.init({ id: "b145_lesson9", version: 2, stages: KEYS, required: "D", bits: 13 + D_CARDS.length + KX.bits,

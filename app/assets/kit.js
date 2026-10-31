@@ -25,7 +25,7 @@ const Kit = (function () {
   const tipH = (t, tip) => tip ? '<span class="info" tabindex="0">' + t + '<span class="tip"><span>' + tip + "</span></span></span>" : t;
 
 
-  /* one stage's section markup. prev/next are the neighbouring stages' visible labels (null at the ends) */
+  /* one stage's section markup. prev/next are the neighboring stages' visible labels (null at the ends) */
   function sectionHtml(st, prev, next, num) {
     const lab = st.label || st.k;
     return '<section class="stage stage-locked" id="stage' + st.k + '"><h2 class="stage-h">' + lab + "</h2>" +
@@ -255,7 +255,7 @@ const Kit = (function () {
 
   /* Add kit stages into a hand-built lesson. opts: before (id of the stage element they go in front of, e.g. "stageC"),
      off (first free scoring bit), stages (each with a unique key and a visible label), prev / next (visible labels of the
-     neighbouring stages, for the banners). Returns { keys, bits, open(s), reveal(), resize() } for the lesson's own Lesson.init. */
+     neighboring stages, for the banners). Returns { keys, bits, open(s), reveal(), resize() } for the lesson's own Lesson.init. */
   function extra(opts) {
     const S = opts.stages; let off = opts.off; S.forEach(st => { st.k = st.key || st.k; });
     (window.__kitExtras = window.__kitExtras || []).push(S);

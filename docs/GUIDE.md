@@ -9,13 +9,13 @@ matches the 2026 outlines). `o` marks a slot that has a lesson now; a dash is an
 
 | Lec | Lecture | Book ch. | Lesson | Note |
 |---|---|---|---|---|
-| 1 | Introduction: Life and Science | 1 | [1: Is it alive? Heredity, metabolism, and how science reasons](../app/lessons/lesson1.html) |  |
+| 1 | Introduction: Life and Science | 1 | [1: Is it alive? Heredity, metabolism, and how science reasons](../app/lessons/lesson1.html) | the levels-of-life ladder (book ch. 1) moved here from lesson 7 |
 | 2 | Atoms, Bonds, and Redox | 2 | [2: Greedy oxygen: who gets the electrons, and what shape does with it](../app/lessons/lesson2.html) | also covers lecture 3's polar/nonpolar and hydrogen bonds (stage B) |
 | 3 | Water, pH, and the Shape Principle | 2 | [3: Water, buffers and shape: pH, isomers and functional groups](../app/lessons/lesson3.html) |  |
 | 4 | Carbohydrates and Lipids | 3 | [4: Building molecules: functional groups and the joins between monomers](../app/lessons/lesson4.html) | functional groups are introduced in lecture 3; the joins are lecture 4 |
 | 5 | Steroids, Proteins, and Protein Structure | 3 | [5: Proteins: jobs, side chains, four levels, steroids](../app/lessons/lesson5.html) |  |
 | 6 | Protein Folding, Nucleic Acids, and Exam 1 Review | 3 | [6: Folding a chain in water: proteins](../app/lessons/lesson6.html) |  |
-| 7 | Cell Size, Diffusion, and Endosymbiosis | 4 | [7: Scale and the levels of life](../app/lessons/lesson7.html) | scale is lecture 7's first topic; the ×10 ruler and the levels ladder |
+| 7 | Cell Size, Diffusion, and Endosymbiosis | 4 | [7: Scale and the levels of life](../app/lessons/lesson7.html) | scale is lecture 7's first topic (the ×10 ruler); surface to volume; endosymbiosis |
 | 8 | Organelles and the Endomembrane System | 4 | [8: The cell's rooms: organelles and the endomembrane route](../app/lessons/lesson8.html) |  |
 | 9 | Cytoskeleton and Extracellular Structures | 4 | [9: Motors: kinesin walks on ATP, filaments slide](../app/lessons/lesson9.html) |  |
 | 10 | Biological Membranes and Passive Transport | 5 | [10: Jiggling across a membrane: diffusion and osmosis](../app/lessons/lesson10.html) | diffusion also appears in lecture 7; osmosis is split with lecture 11 |

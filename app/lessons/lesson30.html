@@ -55,7 +55,7 @@
     </div>
     <div class="col">
       <div class="panel">
-        <h3><span class="info" tabindex="0">The code<span class="tip"><span>Read from the centre out: first base, second base, third base, then the amino acid. Click the codon (or its amino acid) for the highlighted mRNA codon.</span></span></span></h3>
+        <h3><span class="info" tabindex="0">The code<span class="tip"><span>Read from the center out: first base, second base, third base, then the amino acid. Click the codon (or its amino acid) for the highlighted mRNA codon.</span></span></span></h3>
         <canvas id="A_wheel" width="460" height="460"></canvas>
       </div>
       <div class="panel tcard">
@@ -310,7 +310,7 @@ const KX = Kit.extra({ before: "stageC", off: 13 + C_CARDS.length, prev: "B", ne
   { key: "X3", label: "E", type: "pick", title: "Processing the message", tip: "A pre-mRNA has exons (kept, expressed) and introns (removed). The spliceosome cuts the introns out and joins the exons. Cap on the 5′ end, poly-A tail on the 3′ end.",
     voice: ["Exons are expressed; introns are in between. The naming is confusing; that is how to keep it straight.", "Promoters are a big target because the start codon is only three bases."],
     qs: [
-      { q: "Exons 1 to 4 (coloured) with introns between (grey). Which is the mature mRNA?", ok: "cap – E1 E2 E3 E4 – AAAA", no: ["cap – E1 i E2 i E3 i E4 – AAAA", "E1 E2 E3 E4 (no cap, no tail)", "cap – i i i – AAAA"], w: 380, h: 70,
+      { q: "Exons 1 to 4 (colored) with introns between (gray). Which is the mature mRNA?", ok: "cap – E1 E2 E3 E4 – AAAA", no: ["cap – E1 i E2 i E3 i E4 – AAAA", "E1 E2 E3 E4 (no cap, no tail)", "cap – i i i – AAAA"], w: 380, h: 70,
         draw(ctx, w, h) { let x = 10; [["E1", 1], ["i", 0], ["E2", 1], ["i", 0], ["E3", 1], ["i", 0], ["E4", 1]].forEach(([n, e]) => { const ww = e ? 52 : 34; ctx.fillStyle = e ? "#2f6b8f" : "#d0d0cc"; ctx.fillRect(x, 20, ww, 26); ctx.fillStyle = e ? "#fff" : "#6b6b68"; ctx.font = "12px sans-serif"; ctx.fillText(n, x + ww / 2 - 7, 38); x += ww + 2; }); } },
       { q: "Exons 1 and 4 are always kept; exons 2 and 3 can each be kept or skipped. How many different mature mRNAs can one gene make?", ok: "4", no: ["2", "3", "8"], why: "2 × 2: E1E2E3E4, E1E2E4, E1E3E4, E1E4." },
       { q: "Why is a promoter much bigger than a start codon?", ok: "A three-base target is too small to find; a large protein-covered promoter is easy to hit", no: ["The promoter codes for the first amino acids", "Ribosomes need the extra length", "It stores the poly-A tail"], why: "The small-target problem; the archery analogy." },

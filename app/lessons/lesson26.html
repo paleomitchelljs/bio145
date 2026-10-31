@@ -159,11 +159,11 @@ const line = (name, short, g, n) => ({ name, short, inds: Array.from({ length: n
 /* ====== A: six traits; each mode drawn at random so a class does not share answers ====== */
 /* invented organisms, so a randomly drawn pattern never contradicts a real species (snapdragons are incomplete, roan cattle codominant) */
 const TRAITS = [
-  { org: "a newly found orchid's petal colour", a: ["red", "#c92a2a"], b: ["white", "#f7f6f1"], blend: ["pink", "#f2a6b5"] },
-  { org: "a cave beetle's shell", a: ["black", "#2b2b2b"], b: ["white", "#f7f6f1"], blend: ["grey", "#8a8a88"] },
+  { org: "a newly found orchid's petal color", a: ["red", "#c92a2a"], b: ["white", "#f7f6f1"], blend: ["pink", "#f2a6b5"] },
+  { org: "a cave beetle's shell", a: ["black", "#2b2b2b"], b: ["white", "#f7f6f1"], blend: ["gray", "#8a8a88"] },
   { org: "a lizard's throat patch", a: ["magenta", "#a61e70"], b: ["yellow", "#f2d14b"], blend: ["orange", "#e8913a"] },
   { org: "a moth's wings", a: ["blue", "#2f6b8f"], b: ["white", "#f7f6f1"], blend: ["pale blue", "#9cc0d6"] },
-  { org: "a sea slug's colour", a: ["green", "#3f8a3a"], b: ["yellow", "#ecd34a"], blend: ["yellow-green", "#a7c24a"] },
+  { org: "a sea slug's color", a: ["green", "#3f8a3a"], b: ["yellow", "#ecd34a"], blend: ["yellow-green", "#a7c24a"] },
   { org: "a desert mouse's coat", a: ["brown", "#7a4b28"], b: ["cream", "#efe2c4"], blend: ["tan", "#b8936a"] }
 ];
 const MODES = shuffle(["domA", "domB", "incomplete", "codominant", pick(["domA", "domB"]), pick(["incomplete", "codominant"])]);

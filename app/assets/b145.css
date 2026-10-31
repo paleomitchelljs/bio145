@@ -52,7 +52,7 @@ ul.tasks li.done .hint { color:#54703a; }
 .done-banner h2 { margin:0 0 3px; font-size:22px; color:#2e4410; }
 .done-banner p { margin:0; font-size:13.5px; color:#3f5a1d; }
 @keyframes pop { from { transform:scale(0.97); opacity:0; } to { transform:none; opacity:1; } }
-/* a hit and a miss read by ✓ / ✗ and the word as well as colour (colourblind students, JM 2026-10-20) */
+/* a hit and a miss read by ✓ / ✗ and the word as well as color (colorblind students, JM 2026-10-20) */
 .ok { color:var(--good); font-weight:600; }
 .off { color:var(--bad); font-weight:600; }
 .tbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 7px; font-size:13px; }
