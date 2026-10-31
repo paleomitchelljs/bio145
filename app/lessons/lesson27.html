@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 </head>
 <body>
 <header><h1>Lesson 27</h1></header>
@@ -15,7 +16,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">D</a>
 </nav>
 
 <!-- ========== STAGES A and B — set the parents to hit a ratio (JM: "students shown a pair of parents, try to set their alleles to
@@ -79,8 +80,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">D</h2>
+  <div class="lock-banner">Finish Stage C to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Answer fractions like 3/16.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
@@ -99,6 +100,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/cross.js"></script>
 <script>
 /* bits: A 0-4, B 5-8, C 9+ */
@@ -200,13 +202,42 @@ const C_CARDS = [
   { q: "The F2 ratio of a dihybrid cross with complete dominance (type it like a:b:c:d).", a: ["9:3:3:1", "9 3 3 1"] }
 ];
 const C_BANK = ["X-linked", "linked genes", "crossing over", "recombinant", "parental type", "centimorgan", "independent assortment", "dihybrid cross", "hemizygous"];
+C_CARDS.push(
+  { q: "A–B is 12 cM and B–C is 7 cM, with B in the middle. A–C is…", a: ["19", "19 cm", "19 cM"] },
+  { q: "Of three genes on a line, the one in the middle is the one whose two distances add up to the ___ one.", a: ["largest", "longest", "biggest"] });
+C_BANK.push("19", "largest");
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(9 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson27", version: 1, stages: ["A", "B", "C"], required: "C", bits: 9 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") RB.paint(); },
-  onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
+/* stage-C map data: three crosses' pairwise recombination (cM); a map matches when every distance is within 1 cM */
+const MAPS = { "1": { ab: 12, bc: 7, ac: 19 }, "2": { ab: 20, ac: 8, bc: 12 }, "3": { ab: 5, ac: 9, bc: 14 } };
+const mapD = S => ({ ab: Math.abs(S.b), ac: Math.abs(S.c), bc: Math.abs(S.b - S.c) });
+const mapOK = S => { const d = MAPS[S.set], m = mapD(S); return ["ab", "ac", "bc"].every(k => Math.abs(m[k] - d[k]) <= 1); };
+const KX = Kit.extra({ before: "stageC", off: 9 + C_CARDS.length, prev: "B", next: "D", stages: [
+  { key: "X1", label: "C", type: "sim", title: "Draw the map", tip: "Gene A sits at 0. Slide B and C to where they belong. Recombination between two genes (the percent of offspring with a new combination) is their distance in centimorgans. On a line, the two short distances add up to the long one.",
+    voice: ["Genetic mapping is geometry: three pairwise distances fix an order. Morgan's students mapped genes this way before anyone knew what DNA was.", "Pythagoras with your fingers."],
+    solved: "The largest distance tells you which two genes sit at the ends; the gene in the middle is the one whose two distances add up to it.",
+    w: 640, h: 200,
+    controls: [{ id: "set", label: "Cross data", type: "select", opts: [["1", "Set 1: A–B 12%, B–C 7%, A–C 19%"], ["2", "Set 2: A–B 20%, A–C 8%, B–C 12%"], ["3", "Set 3: A–B 5%, A–C 9%, B–C 14%"]], val: "1" },
+      { id: "b", label: "Gene B", min: -30, max: 30, step: 1, val: 5, fmt: v => v + " cM" }, { id: "c", label: "Gene C", min: -30, max: 30, step: 1, val: -5, fmt: v => v + " cM" }],
+    readout: S => { const d = MAPS[S.set], m = mapD(S); return "your map: A–B " + m.ab + ", A–C " + m.ac + ", B–C " + m.bc + " &nbsp;·&nbsp; crosses: A–B " + d.ab + ", A–C " + d.ac + ", B–C " + d.bc; },
+    draw(ctx, w, h, S) {
+      const X = v => w / 2 + v * (w - 80) / 60; ctx.strokeStyle = "#6b6b68"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(30, 100); ctx.lineTo(w - 30, 100); ctx.stroke(); ctx.lineWidth = 1;
+      for (let v = -30; v <= 30; v += 10) { ctx.fillStyle = "#6b6b68"; ctx.font = "11px sans-serif"; ctx.fillText(v, X(v) - 6, 130); }
+      [["A", 0, "#1d1d1b"], ["B", S.b, "#2f6b8f"], ["C", S.c, "#b23a48"]].forEach(([n, v, col]) => { ctx.fillStyle = col; ctx.fillRect(X(v) - 3, 80, 6, 40); ctx.font = "600 15px sans-serif"; ctx.fillText(n, X(v) - 5, 72); });
+      const ok = mapOK(S); ctx.fillStyle = ok ? "#4a7a2a" : "#6b6b68"; ctx.font = "13px sans-serif"; ctx.fillText(ok ? "every distance matches" : "", 30, 175);
+    },
+    goals: [
+      { text: "Map set 1: all three distances within 1 cM", test: S => S.set === "1" && mapOK(S) },
+      { text: "Map set 2", test: S => S.set === "2" && mapOK(S) },
+      { text: "Map set 3", test: S => S.set === "3" && mapOK(S) }] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson27", version: 2, stages: KEYS, required: "C", bits: 9 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") RB.paint(); },
+  onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
 window.addEventListener("resize", () => { RA.paint(); RB.paint(); });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .tubes { display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end; }
   .tube { display:flex; flex-direction:column; align-items:center; gap:4px; }
@@ -28,7 +29,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — predict the bands for each idea (JM: "Semi-conservative DNA replication classic experiment interactive to
@@ -112,8 +113,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Number cards come back with a new generation; answer with a fraction like 1/4.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
@@ -132,6 +133,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script>
 /* bits: A 0-2, B 3-5, C 6+ */
 /* density spots, bottom to top: 4 all heavy, 3 three-quarters, 2 half (hybrid), 1 one-quarter, 0 all light.
@@ -275,13 +277,46 @@ const C_CARDS = [
   { q: "After generation 2, there were two bands, hybrid and light. Which idea did that rule out?", a: "dispersive" }
 ];
 const C_BANK = ["semiconservative", "conservative", "dispersive", "Meselson and Stahl", "15N", "hybrid", "density gradient centrifugation"];
+C_CARDS.push(
+  { q: "The two strands run in opposite directions: they are…", a: ["antiparallel"] },
+  { q: "UV light fuses two neighbouring thymines into a thymine…", a: ["dimer"] },
+  { q: "The repair that cuts out a bulky, helix-kinking lesion.", a: ["nucleotide excision repair", "nucleotide excision", "ner"] },
+  { q: "A purine swapped for a purine (or pyrimidine for pyrimidine).", a: ["transition"] },
+  { q: "A purine swapped for a pyrimidine.", a: ["transversion"] },
+  { q: "The repeated sequence at human chromosome ends.", a: ["ttaggg", "telomere", "telomeres"] },
+  { q: "The enzyme that rebuilds telomeres.", a: ["telomerase"] });
+C_BANK.push("antiparallel", "dimer", "nucleotide excision repair", "transition", "transversion", "TTAGGG", "telomerase");
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(6 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson28", version: 1, stages: ["A", "B", "C"], required: "C", bits: 6 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paintSpin(); },
-  onReveal: () => { AX.solved.fill(true); [0, 1, 2].forEach(i => AX.kept[i] = true); BX.solved.fill(true); BX.spun = true; A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "3 of 3"); Lesson.tick("B", "rounds", true, "3 of 3"); } });
+const KX = Kit.extra({ before: "stageC", off: 6 + C_CARDS.length, prev: "B", next: "F", stages: [
+  { key: "X1", label: "C", type: "classify", title: "Damage and repair", tip: "Base excision repair cuts out one damaged base. Nucleotide excision repair cuts out a stretch around a bulky lesion that kinks the helix. Mismatch repair fixes a wrong pair just after copying, using the old strand as the reference (in bacteria, the old strand is the methylated one).",
+    voice: ["The enzyme has no cognition: it doesn't know adenine. It makes the right pair likelier, and it still gets some wrong.", "Error detection needs a reference. After S phase the error is on both strands, and it becomes an allele."],
+    solved: "Each repair needs an undamaged strand to copy. Once a mismatch is copied into both strands at the next S phase there is no reference left, and the change is permanent.",
+    bins: ["Base excision repair", "Nucleotide excision repair", "Mismatch repair"],
+    items: [["A single base damaged by reactive oxygen", 0], ["A base chemically altered by a mutagen, helix still straight", 0], ["A thymine dimer from UV light, kinking the helix", 1], ["A bulky lesion spanning several bases", 1], ["A G paired with a T just after replication", 2], ["The polymerase put in a wrong base and moved on", 2]] },
+  { key: "X2", label: "D", type: "classify", title: "Transitions and transversions", tip: "Purines (A, G) have two rings; pyrimidines (C, T) one. A transition swaps a base for one of the same shape (A↔G, C↔T). A transversion swaps a purine for a pyrimidine or back.",
+    voice: ["Substitution, insertion, deletion. Everyone is a mutant: wild type is an allele too. Each of us carries hundreds of new mutations."],
+    solved: "Same shape, transition; different shape, transversion. Transitions are the commoner kind: a two-ring base for a two-ring base fits the helix more easily.",
+    bins: ["Transition", "Transversion"], n: 12,
+    make: () => { const b = pick(["A", "G", "C", "T"]), pur = x => x === "A" || x === "G", to = pick(["A", "G", "C", "T"].filter(x => x !== b));
+      return { q: "<b class='mono'>" + b + " → " + to + "</b>", bin: pur(b) === pur(to) ? 0 : 1 }; } },
+  { key: "X3", label: "E", type: "pick", title: "Structure and the ends", tip: "The two strands run in opposite directions (antiparallel), and every pair is a purine with a pyrimidine, so the helix is one width all along. The lagging strand cannot be finished at the very end of a linear chromosome.",
+    voice: ["Telomeres: TTAGGG repeated as padding, like the aglet on a shoelace. Telomerase rebuilds them in the germline."],
+    qs: [
+      { q: "The two strands of a double helix run…", ok: "In opposite directions (antiparallel)", no: ["In the same direction", "At right angles", "In either direction at random"], why: "One strand 5′→3′, its partner 3′→5′." },
+      { q: "Why can a mismatched pair be spotted at all?", ok: "It distorts the helix's constant width", no: ["It changes the sugar to ribose", "It removes a phosphate", "It makes the strand longer"], why: "Shape again." },
+      { q: "Why does a linear chromosome get a little shorter each time it is copied?", ok: "The lagging strand cannot be finished at the very end", no: ["Helicase cuts the end off", "Telomerase removes the end", "The leading strand stops early"], why: "The last primer's gap has no upstream 3′ end to build from." },
+      { q: "Why don't bacteria need telomeres?", ok: "Their chromosome is a circle, with no ends", no: ["They copy DNA in both directions at once", "They have telomerase everywhere", "Their DNA never shortens because they don't divide"], why: "No end, no end problem." },
+      { q: "Which cells keep telomerase on?", ok: "Germline and stem cells", no: ["Every cell", "Only neurons", "Only red blood cells"], why: "Telomere length can estimate age, noisily before 40." },
+      { q: "After the next S phase, an unrepaired mismatch becomes…", ok: "A permanent change on both strands: a new allele", no: ["Repaired automatically", "A single-stranded error forever", "A deletion"], why: "No reference strand is left." }] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson28", version: 2, stages: KEYS, required: "C", bits: 6 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") B_paintSpin(); },
+  onReveal: () => { AX.solved.fill(true); [0, 1, 2].forEach(i => AX.kept[i] = true); BX.solved.fill(true); BX.spun = true; A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "3 of 3"); Lesson.tick("B", "rounds", true, "3 of 3"); } });
 window.addEventListener("resize", () => { A_paintModel(); B_paintSpin(); });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

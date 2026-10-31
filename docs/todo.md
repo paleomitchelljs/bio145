@@ -19,13 +19,15 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [x] 2: redox, which the outline calls the "Semester throughline". Valence counts ("H 1, O 2, N 3, C 4"). The elements of life.
 - [ ] 4: the lipid half. Phospholipid bilayer self-assembly, saturation, HDL and LDL. Enzyme naming ("cellulase", "lactase", lactose intolerance). The new polysaccharide stages are text only.
 - [x] 6: the second half of lecture 6. Nucleotides, ribose versus deoxyribose, purines and pyrimidines ("Cut pie"), pairing geometry, tRNA's "Frozen accident", ATP and cAMP.
-- [ ] 7: surface area to volume ("Area squared, volume cubed"), with a cube slider. Large-cell exceptions. Prokaryote versus eukaryote. Endosymbiosis evidence, as a classify. Move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7).
-- [ ] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
-- [ ] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.
+- [x] 7: surface area to volume ("Area squared, volume cubed"), with a cube slider. Large-cell exceptions. Prokaryote versus eukaryote. Endosymbiosis evidence, as a classify.
+- [ ] 7: move the levels-of-life ladder to lesson 1 (it is book ch. 1, not lecture 7). Lesson 7 now has 5 stages before its drill.
+- [x] 9: the three filament types, tubulin and plus/minus ends, the 9+2 arrangement, intermediate filaments, extracellular matrix and integrins, plant cell walls. Consider trimming B's energy budget, which runs past the lecture.
+- [x] 10: membrane fluidity (saturation, temperature, cholesterol, warm-blooded versus cold-blooded) as a sim. Fluid-mosaic protein types.
 - [ ] 23: cut Stage E (polygenic trait under selection; already open in PLAN.md). Move or trim Stage D (dominance rules, lecture 25–26 material). Add cost of sex and when sex pays, ploidy and anisogamy, and alternation of generations.
 - [x] 26: epistasis, with Labrador B and E loci making 9:3:4, best as a classify. Phenotypic plasticity. ABO as a stage, not just cards. (Three classify stages, C–E.)
-- [ ] 27: map-building from pairwise distances ("Pythagoras with fingers"). Decide on male-fly recombination (PLAN.md).
-- [ ] 28: DNA structure, damage and repair ("Repair window closes after S phase"), transitions versus transversions, telomeres.
+- [x] 27: map-building from pairwise distances ("Pythagoras with fingers").
+- [ ] 27: decide on male-fly recombination (PLAN.md).
+- [x] 28: DNA structure, damage and repair ("Repair window closes after S phase"), transitions versus transversions, telomeres.
 
 ## Kit lessons
 
