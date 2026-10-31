@@ -39,16 +39,16 @@
       ],
       items: [
         { kind: 'cube', id: 'c1', box: [40, 110, 1520, 600], builds: [0, 1, 2, 3] },
-        { kind: 'photo', box: [300, 110, 1000, 600], builds: [4], src: 'ch04/crushed-ice.jpg', alt: 'A drink full of crushed ice' }
+        { kind: 'fig', box: [100, 110, 1400, 600], builds: [4], fig: 'iceCompare', all: true }
       ]
     },
     {
       id: 'big', title: 'The exceptions: big cells', mins: [25, 31],
       builds: [{ prompt: 'Long and skinny' }, { prompt: 'A nerve that loops around the heart' }, { prompt: 'Short and flat' }, { prompt: 'Full of stored food: an ostrich egg is one cell' }],
       items: [
-        { kind: 'photo', box: L, builds: [0], src: 'ch04/squid-axon.png', alt: 'A squid and its giant axon, about 1 mm across', diagram: true },
-        { kind: 'photo', box: L, builds: [1], src: 'ch04/giraffe-nerve.jpg', alt: 'The recurrent laryngeal nerve: down the neck, around the heart, and back up', diagram: true },
-        { kind: 'photo', box: L, builds: [2, 3], src: 'ch04/gromia.png', alt: 'Gromia sphaerica, a single cell about an inch across' },
+        { kind: 'fig', box: L, builds: [0], fig: 'squidAxon' },
+        { kind: 'fig', box: L, builds: [1], fig: 'nerveLoop' },
+        { kind: 'fig', box: L, builds: [2, 3], fig: 'gromia' },
         { kind: 'points', box: R, at: 0, lines: [{ t: 'Squid giant axon', sub: 'long, about a millimeter wide' }, { t: 'Recurrent laryngeal nerve', sub: 'in a giraffe, or a sauropod: meters' }, { t: 'Valonia, Gromia', sub: 'big, but their contents spread thin' }, { t: 'Eggs', sub: 'mostly stored food' }] }
       ]
     },
@@ -57,9 +57,9 @@
       builds: [{ prompt: 'Light' }, { prompt: 'Electrons through a slice' }, { prompt: 'Electrons off the surface' }, { prompt: 'What they show' }],
       items: [
         { kind: 'fig', box: [80, 110, 1440, 600], fig: 'scopes', builds: [0, 1, 2] },
-        { kind: 'photo', box: [60, 110, 480, 640], builds: [3], src: 'ch04/stained-cell.jpg', alt: 'A stained cell under the light microscope' },
-        { kind: 'photo', box: [560, 110, 480, 640], builds: [3], src: 'ch04/tem-cell.jpg', alt: 'A transmission electron micrograph of a cell' },
-        { kind: 'photo', box: [1060, 110, 480, 640], builds: [3], src: 'ch04/sem-surface.jpg', alt: 'A scanning electron micrograph of a surface' }
+        { kind: 'photo', box: [60, 110, 480, 640], builds: [3], img: 'os-4-01a-nasal-cells-light.jpg', credit: 'OpenStax Biology 2e, Fig. 4.1a (Ed Uthman), CC BY 4.0', alt: 'Nasal sinus cells under the light microscope, stained purple and pink' },
+        { kind: 'photo', box: [560, 110, 480, 640], builds: [3], img: 'os-4-19-pancreas-rough-er-tem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.19 (Louisa Howard), CC BY 4.0', alt: 'A transmission electron micrograph: nucleus and rough ER in a pancreatic cell' },
+        { kind: 'photo', box: [1060, 110, 480, 640], builds: [3], img: 'os-4-03b-salmonella-sem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.3b (NIAID, NIH), CC BY 4.0', alt: 'A scanning electron micrograph: Salmonella (red) invading human cells (yellow)' }
       ]
     },
     {

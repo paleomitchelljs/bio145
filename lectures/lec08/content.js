@@ -27,7 +27,7 @@
       builds: [{ prompt: '"Big inside net"' }, { prompt: 'Rough: studded with ribosomes' }, { prompt: 'Smooth: lipids and detox' }],
       items: [
         { kind: 'points', box: L, lines: [{ t: 'Rough ER', sub: 'ribosomes on the outside; makes proteins; continuous with the nuclear envelope', at: 1 }, { t: 'Smooth ER', sub: 'tubes; makes phospholipids, fats, steroid hormones; detoxifies; lots in liver', at: 2 }, { t: 'Most membranes are first assembled here', at: 0 }] },
-        { kind: 'photo', box: R, src: 'ch04/rough-er-tem.jpg', alt: 'Rough ER in an electron micrograph: stacked sheets dotted with ribosomes' }
+        { kind: 'photo', box: R, img: 'os-4-19-pancreas-rough-er-tem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.19 (Louisa Howard), CC BY 4.0', alt: 'Rough ER and the nucleus in a pancreatic cell, electron micrograph' }
       ]
     },
     {
@@ -61,7 +61,7 @@
       builds: [{ prompt: 'The mine' }, { prompt: 'Gold' }, { prompt: 'The exchange' }, { prompt: 'Dollars' }, { prompt: 'Next time: inside them' }],
       items: [
         { kind: 'fig', box: [40, 140, 1520, 500], fig: 'money', builds: [0, 1, 2, 3] },
-        { kind: 'photo', box: [300, 110, 1000, 640], builds: [4], src: 'ch04/mito-tem.jpg', alt: 'A mitochondrion in an electron micrograph, its folded inner membrane visible' }
+        { kind: 'photo', box: [300, 110, 1000, 640], builds: [4], img: 'os-4-14-mitochondrion-tem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.14 (Matthew Britton), CC BY 4.0', alt: 'A mitochondrion in an electron micrograph: matrix, cristae, two membranes' }
       ]
     },
     {
@@ -69,7 +69,7 @@
       builds: [{ prompt: 'Highways' }, { prompt: 'mRNA next to its ribosomes' }, { prompt: 'Logistics that catch errors' }],
       items: [
         { kind: 'points', box: L, cls: 'big', lines: ['Delivery highways: vesicles ride between rooms', 'mRNA made near the ribosomes that read it', 'Error-correcting logistics: tags checked at each stop'] },
-        { kind: 'photo', box: R, src: 'ch04/pancreas-cell-tem.jpg', alt: 'A pancreas cell in an electron micrograph, packed with rough ER and secretory granules' }
+        { kind: 'photo', box: R, img: 'os-4-20-golgi-tem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.20 (Louisa Howard), CC BY 4.0', alt: 'The Golgi in a white blood cell, with vesicles beside it' }
       ]
     }
   ];

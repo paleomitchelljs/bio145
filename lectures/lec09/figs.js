@@ -60,6 +60,15 @@
       st(5, `<rect class="f-accsoft" x="1090" y="160" width="370" height="150" rx="16"/><text class="f-t2" x="1110" y="215">like a growing bone:</text><text class="f-t2" x="1110" y="260">flexible while it grows,</text><text class="f-t2" x="1110" y="300">rigid once it stops</text>`));
   };
 
+  /* a crawling cell: actin built at the front, taken apart at the back */
+  F.crawl = () => {
+    let mesh = '';
+    for (let i = 0; i < 26; i++) { const a = -0.9 + i * 0.07, r = 200 + (i % 3) * 8; mesh += `<path class="f-ink2 k2l" style="stroke-width:3" d="M${380 + (r - 70) * Math.cos(a)} ${300 + (r - 70) * Math.sin(a)}L${380 + r * Math.cos(a)} ${300 + r * Math.sin(a)}"/>`; }
+    return svg(760, 620,
+      st(0, `<path class="k5s" d="M120 300c0-120 120-170 260-170 140 0 220 70 220 170s-80 170-220 170c-140 0-260-50-260-170z"/><circle class="k1s" cx="300" cy="300" r="60"/>` + mesh +
+        D.chem.arrow(620, 300, 720, 300, 'f-ink') + `<text class="f-t2" x="40" y="70">actin built at the leading edge pushes it forward</text><text class="f-tm" x="40" y="560">and taken apart at the back: no motor needed to crawl</text>`));
+  };
+
   /* ---------------- kinesin walks: one ATP a step ---------------- */
   D.parts.kinesin = function (def, host) {
     const box = D.el('div', 'dm', host), pic = D.svg('svg', { viewBox: '0 0 1500 460', width: 1500, height: 460 }, box);

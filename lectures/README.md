@@ -43,16 +43,15 @@ arrow (clicked twice) clears them.
     shared/lecture.css      science colors as tokens, redefined for the chalkboard
 
 Every diagram is drawn as SVG with colors taken from CSS tokens, so it recolors with the theme. The textbook figures
-in the PowerPoints are redrawn (simplified), not copied. Three diagrams are still shown from local media instead of
-redrawn: the cow's stomach (lecture 4), the squid axon and the giraffe's nerve (lecture 7).
+in the PowerPoints are redrawn (simplified), not copied.
 
-Photos and micrographs (a water strider, crushed ice, TEMs of organelles) come from the PowerPoints into `media/`,
-which is gitignored because most are someone else's copyright. Make it with:
+The photos and micrographs (a water strider, sweat evaporating, electron micrographs of organelles) are OpenStax
+_Biology 2e_ figures, CC BY 4.0, in `img/`, committed, so the decks work from the website in any room. Each carries
+its credit under it; `img/CREDITS.md` lists them all and says how to add another. A `photo` item marked
+`diagram: true` (line art on white) is inverted on the chalkboard; a photo is left alone.
 
-    python3 lectures/tools/pull_media.py
-
-A photo that isn't there shows as a dashed box with its description. A `photo` item marked `diagram: true` is inverted
-on the chalkboard; a photo is left alone.
+`media/` (gitignored) and `tools/pull_media.py` remain for a picture with no open equivalent that should stay off the
+public site. No deck uses it now; a missing local photo shows as a dashed box with its description.
 
 ## Interactive pieces, by lecture
 

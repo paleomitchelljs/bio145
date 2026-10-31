@@ -53,8 +53,8 @@
       items: [
         { kind: 'fig', box: [40, 110, 1520, 600], fig: 'polysacc', builds: [0, 1, 2, 3] },
         { kind: 'points', box: L, builds: [4, 5], at: 4, lines: [{ t: 'Amylase breaks starch; lactase breaks lactose', sub: 'no lactase as an adult: lactose intolerance' }, { t: 'No animal makes cellulase', sub: 'cows and termites carry microbes that do' }] },
-        { kind: 'photo', box: R, builds: [4, 5], src: 'ch03/cow-gut.png', alt: 'A cow\'s four-chambered stomach', diagram: true },
-        { kind: 'photo', box: [260, 110, 1080, 600], builds: [6], src: 'ch03/cicada-molt.jpg', alt: 'A cicada\'s shed exoskeleton, made of chitin' }
+        { kind: 'photo', box: R, builds: [4, 5], img: 'os-34-08-ruminant-stomachs.jpg', credit: 'OpenStax Biology 2e, Fig. 34.8, CC BY 4.0', alt: 'A ruminant\'s four stomachs: rumen, reticulum, omasum, abomasum', diagram: true },
+        { kind: 'photo', box: [260, 110, 1080, 600], builds: [6], img: 'os-3-11-chitin-bee.jpg', credit: 'OpenStax Biology 2e, Fig. 3.11 (Louise Docker), CC BY 4.0', alt: 'A bee: an insect, its exoskeleton made of chitin' }
       ]
     },
     {

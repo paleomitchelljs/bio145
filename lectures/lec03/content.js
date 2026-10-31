@@ -27,8 +27,8 @@
       items: [
         { kind: 'fig', box: [80, 110, 1440, 600], fig: 'hbonds', builds: [0], all: true },
         { kind: 'points', box: L, builds: [1, 2, 3], at: 1, cls: 'big', lines: [{ t: 'Surface tension', sub: 'surface molecules hold tighter to the ones beside and below' }, { t: 'High specific heat', sub: 'temperature is how fast molecules move; sticky ones are hard to speed up. Three-year-olds linked by arms.' }, { t: 'Evaporative cooling', sub: 'only the fastest escape; the rest are cooler' }] },
-        { kind: 'photo', box: R, builds: [1], src: 'ch02/water-strider.jpg', alt: 'A water strider on the surface of a pond' },
-        { kind: 'photo', box: R, builds: [2, 3], src: 'ch02/hot-spring.jpg', alt: 'Steam rising off a hot spring' },
+        { kind: 'photo', box: R, builds: [1], img: 'os-2-18-water-strider.jpg', credit: 'OpenStax Biology 2e, Fig. 2.18 (Tim Vickers), CC BY 4.0', alt: 'A water strider standing on the surface of the water' },
+        { kind: 'photo', box: R, builds: [2, 3], img: 'os-33-22b-evaporation.jpg', credit: 'OpenStax Biology 2e, Fig. 33.22b (Kullez/Flickr), CC BY 4.0', alt: 'Sweat beading on a shoulder: evaporation carries heat away' },
         { kind: 'fig', box: [40, 110, 1520, 600], fig: 'ice', builds: [4, 5] }
       ]
     },

@@ -6,7 +6,8 @@
  *            cls: 'big' | 'small' | 'plain'
  *   fig      fig: a name in Deck.figs, opts; the figure's elements with class st and data-s="n" show from local step n
  *            (local step = build - from, or the item's nth build), data-u="n" hides them again from step n; all: every step at once
- *   photo    src (under ../media, local only), alt, credit, diagram (inverts on the chalkboard)
+ *   photo    img (under ../img, committed: openly licensed, see img/CREDITS.md) or src (under ../media, local only),
+ *            alt, credit, diagram (inverts on the chalkboard)
  *   vote     id, q, opts, ans (index), why. Keys 1-n add a hand, shift takes one back; P shows the answer
  *   cmp      cols: [{ h, cls, lines: ['text' | { t, sub, at }] }]; lines arrive one per build from at, column by column
  *   sort     id, bins: [{ t, box }], tray: box, chips: [{ t, bin }]. Drag chips; P marks them right or wrong
@@ -117,10 +118,11 @@
     img.alt = def.alt || ''; img.draggable = false;
     img.addEventListener('error', () => {
       img.remove();
-      const m = D.el('div', 'photo-miss', null, `${D.esc(def.alt || def.src)}<br><span style="font-size:19px">media/${D.esc(def.src)} (local only: run tools/pull_media.py)</span>`);
+      const m = D.el('div', 'photo-miss', null, def.img ? `${D.esc(def.alt || def.img)}<br><span style="font-size:19px">img/${D.esc(def.img)} is missing</span>`
+        : `${D.esc(def.alt || def.src)}<br><span style="font-size:19px">media/${D.esc(def.src)} (local only: run tools/pull_media.py)</span>`);
       fig.insertBefore(m, fig.firstChild);
     });
-    img.src = '../media/' + def.src;
+    img.src = def.img ? '../img/' + def.img : '../media/' + def.src;
     if (def.credit) D.el('figcaption', '', fig, D.esc(def.credit));
   };
 

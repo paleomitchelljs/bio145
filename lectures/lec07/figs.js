@@ -27,6 +27,38 @@
       st(3, `<rect class="f-accsoft" x="980" y="20" width="460" height="70" rx="14"/><text class="f-tacc" x="1000" y="68">a second time: a chloroplast</text>`));
   };
 
+  /* one big cube of ice against the same ice crushed */
+  F.iceCompare = () => {
+    let crushed = '';
+    const pts = [[880, 220], [960, 180], [1040, 230], [920, 300], [1010, 320], [1100, 270], [860, 360], [970, 400], [1080, 380], [1160, 330], [900, 440], [1030, 460], [1150, 430], [1200, 380], [1120, 190]];
+    pts.forEach(([x, y], i) => { const s = 34 + (i % 3) * 8; crushed += `<rect class="k1s" x="${x}" y="${y}" width="${s}" height="${s}" rx="5" transform="rotate(${(i * 23) % 40 - 20} ${x + s / 2} ${y + s / 2})"/>`; });
+    return svg(1400, 560,
+      st(0, `<rect class="k1s" x="180" y="160" width="300" height="300" rx="10"/><text class="f-tb f-mid" x="330" y="520">one big cube</text>`) +
+      st(1, crushed + `<text class="f-tb f-mid" x="1030" y="520">the same ice, crushed</text><text class="f-t2 f-mid" x="1030" y="120">far more surface: it melts faster</text>`));
+  };
+
+  /* a squid and its giant axon */
+  F.squidAxon = () => svg(760, 640,
+    st(0, `<path class="k5s" d="M380 40c90 60 120 200 90 330l-180 0c-30-130 0-270 90-330z"/><ellipse class="k5s" cx="380" cy="400" rx="80" ry="40"/>` +
+      [0, 1, 2, 3, 4].map((k) => `<path class="f-ink2 k5l" style="stroke-width:6" d="M${330 + k * 25} 430c-10 60 ${k * 10 - 20} 120 ${k * 8 - 16} 170"/>`).join('') +
+      `<path class="f-ink k6l" style="stroke-width:7" d="M360 380C350 280 350 160 372 70"/><text class="f-tacc" x="480" y="200">giant axon</text>${arrow(476, 192, 380, 220, 'f-ink2')}`) +
+    st(0, `<circle class="f-card" cx="620" cy="470" r="110"/><circle class="k6s" cx="620" cy="470" r="70"/><text class="f-t2 f-mid" x="620" y="476">~1 mm</text><text class="f-tm f-mid" x="620" y="610">a typical axon: ~1 µm</text>`));
+
+  /* the recurrent laryngeal nerve: down to the heart and back up */
+  F.nerveLoop = () => svg(760, 660,
+    st(0, `<path class="f-ink2" style="stroke-width:5" d="M300 40q60 -10 90 30l-10 40h-70z"/><path class="f-thin" d="M330 110v430M370 110v430"/><text class="f-tm" x="410" y="70">brain</text>` +
+      `<rect class="k1s" x="320" y="150" width="60" height="40" rx="10"/><text class="f-t2" x="400" y="180">larynx</text>` +
+      `<path class="k2s" d="M300 560c-20-60 40-80 60-40 20-40 80-20 60 40l-60 60z"/><path class="f-ink2 k2l" style="stroke-width:10;fill:none" d="M380 545c0-60 70-60 70 0"/><text class="f-t2" x="470" y="560">aorta, by the heart</text>` +
+      `<path class="f-ink k6l" style="stroke-width:6;fill:none" d="M345 100V570c0 40 70 40 70 0 0-30-20-40-40-40V190"/>${arrow(375, 240, 375, 200, 'f-ink k6l')}` +
+      `<text class="f-tacc" x="40" y="320">down,</text><text class="f-tacc" x="40" y="360">around,</text><text class="f-tacc" x="40" y="400">and back up</text>`) +
+    st(0, `<text class="f-tm" x="40" y="630">in a giraffe: meters of nerve to cross a few centimeters</text>`));
+
+  /* Gromia: one cell you can hold */
+  F.gromia = () => svg(760, 600,
+    st(0, `<circle class="k3s" cx="380" cy="260" r="190"/>` + [[300, 180], [430, 200], [360, 300], [460, 320], [280, 320], [380, 160]].map(([x, y]) => `<circle class="f-thin" cx="${x}" cy="${y}" r="26"/>`).join('') +
+      `<path class="f-ink" d="M190 520h380"/>` + [0, 1, 2, 3].map((k) => `<path class="f-ink" d="M${190 + k * 126.7} 505v30"/><text class="f-tm f-mid" x="${190 + k * 126.7}" y="570">${k} cm</text>`).join('') +
+      `<text class="f-t2" x="40" y="40">Gromia sphaerica: one cell, about an inch across</text>`));
+
   /* ---------------- diffusion: dots in two chambers ---------------- */
   D.parts.diffuse = function (def, host) {
     const W = 1000, H = 520, box = D.el('div', 'dm', host), pic = D.svg('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H }, box);

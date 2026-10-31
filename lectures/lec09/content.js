@@ -41,7 +41,7 @@
       items: [
         { kind: 'fig', box: [80, 110, 1440, 560], fig: 'cilium', builds: [0, 1, 2] },
         { kind: 'points', box: L, builds: [3], at: 3, lines: [{ t: 'Cilia in the embryo\'s node beat one way', sub: 'and set which side the heart goes on' }, { t: 'Van Gogh proteins', sub: 'cells lining up their cilia the same way' }, { t: 'Centrosome: two centrioles', sub: 'where microtubule minus ends meet' }] },
-        { kind: 'photo', box: R, builds: [3], src: 'ch04/urchin-sperm.jpg', alt: 'Sea urchin sperm, each with a flagellum' }
+        { kind: 'photo', box: R, builds: [3], img: 'os-4-26-flagella-9plus2-tem.jpg', credit: 'OpenStax Biology 2e, Fig. 4.26 (Dartmouth EM Facility), CC BY 4.0', alt: 'Two flagella in cross section: nine pairs around two' }
       ]
     },
     {
@@ -49,7 +49,7 @@
       builds: [{ prompt: 'Twisted actin' }, { prompt: 'Crawl: build at the front' }, { prompt: 'Contract: myosin walks on actin' }, { prompt: 'Cytoplasmic streaming' }],
       items: [
         { kind: 'points', box: L, lines: ['Two twisted strands of actin beads', 'Amoeboid movement: polymerize at the leading edge', 'Muscle: in each sarcomere, myosin walks along actin', 'Cytoplasmic streaming in plant cells'] },
-        { kind: 'photo', box: R, src: 'ch04/actin-fluorescence.jpg', alt: 'Cells stained so their actin fluoresces' }
+        { kind: 'fig', box: R, fig: 'crawl' }
       ]
     },
     {
