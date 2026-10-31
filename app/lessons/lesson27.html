@@ -16,7 +16,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">D</a>
+  <a href="#stageC" id="tocC" class="locked">E</a>
 </nav>
 
 <!-- ========== STAGES A and B — set the parents to hit a ratio (JM: "students shown a pair of parents, try to set their alleles to
@@ -80,8 +80,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">D</h2>
-  <div class="lock-banner">Finish Stage C to unlock this section.</div>
+  <h2 class="stage-h">E</h2>
+  <div class="lock-banner">Finish Stage D to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card. Answer fractions like 3/16.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
@@ -203,9 +203,11 @@ const C_CARDS = [
 ];
 const C_BANK = ["X-linked", "linked genes", "crossing over", "recombinant", "parental type", "centimorgan", "independent assortment", "dihybrid cross", "hemizygous"];
 C_CARDS.push(
+  { q: "In a test cross, 17 of 100 offspring are recombinant. How far apart are the genes, in cM?", a: ["17", "17 cm", "17 cM"] },
+  { q: "The percent recombinant you expect for two genes on different chromosomes.", a: ["50", "50%"] },
   { q: "A–B is 12 cM and B–C is 7 cM, with B in the middle. A–C is…", a: ["19", "19 cm", "19 cM"] },
   { q: "Of three genes on a line, the one in the middle is the one whose two distances add up to the ___ one.", a: ["largest", "longest", "biggest"] });
-C_BANK.push("19", "largest");
+C_BANK.push("17", "50", "19", "largest");
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(9 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
@@ -213,7 +215,7 @@ function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), ba
 const MAPS = { "1": { ab: 12, bc: 7, ac: 19 }, "2": { ab: 20, ac: 8, bc: 12 }, "3": { ab: 5, ac: 9, bc: 14 } };
 const mapD = S => ({ ab: Math.abs(S.b), ac: Math.abs(S.c), bc: Math.abs(S.b - S.c) });
 const mapOK = S => { const d = MAPS[S.set], m = mapD(S); return ["ab", "ac", "bc"].every(k => Math.abs(m[k] - d[k]) <= 1); };
-const KX = Kit.extra({ before: "stageC", off: 9 + C_CARDS.length, prev: "B", next: "D", stages: [
+const KX = Kit.extra({ before: "stageC", off: 9 + C_CARDS.length, prev: "B", next: "E", stages: [
   { key: "X1", label: "C", type: "sim", title: "Draw the map", tip: "Gene A sits at 0. Slide B and C to where they belong. Recombination between two genes (the percent of offspring with a new combination) is their distance in centimorgans. On a line, the two short distances add up to the long one.",
     voice: ["Genetic mapping is geometry: three pairwise distances fix an order. Morgan's students mapped genes this way before anyone knew what DNA was.", "Pythagoras with your fingers."],
     solved: "The largest distance tells you which two genes sit at the ends; the gene in the middle is the one whose two distances add up to it.",
@@ -230,10 +232,16 @@ const KX = Kit.extra({ before: "stageC", off: 9 + C_CARDS.length, prev: "B", nex
     goals: [
       { text: "Map set 1: all three distances within 1 cM", test: S => S.set === "1" && mapOK(S) },
       { text: "Map set 2", test: S => S.set === "2" && mapOK(S) },
-      { text: "Map set 3", test: S => S.set === "3" && mapOK(S) }] }
+      { text: "Map set 3", test: S => S.set === "3" && mapOK(S) }] },
+  { key: "X2", label: "D", type: "classify", title: "Count the recombinants", tip: "Morgan's cross. An F1 female got grey body and long wings (b⁺ vg⁺) from her mother and black body and vestigial wings (b vg) from her father. She is mated to a black, vestigial male, so each offspring shows exactly which combination her egg carried. Offspring with the combinations she inherited are parental; mixed ones are recombinant: a crossover between the two genes.",
+    voice: ["Linked genes are inherited together unless a crossover falls between them. Parental types are overrepresented.", "The centimorgan: the percent of offspring that are recombinant."],
+    solved: "Recombinants came out near 17%: body colour and wing shape sit about 17 cM apart. Unlinked genes would give 50%.",
+    bins: ["Parental type", "Recombinant"], n: 40, ratio: 100,
+    make: () => { const rec = Math.random() < 0.17, flip = Math.random() < 0.5, body = rec ? (flip ? "grey" : "black") : (flip ? "grey" : "black"), wing = rec ? (flip ? "vestigial" : "long") : (flip ? "long" : "vestigial");
+      return { q: "Offspring: <b>" + body + " body, " + wing + " wings</b>", bin: rec ? 1 : 0 }; } }
 ] });
 const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
-Lesson.init({ id: "b145_lesson27", version: 2, stages: KEYS, required: "C", bits: 9 + C_CARDS.length + KX.bits,
+Lesson.init({ id: "b145_lesson27", version: 3, stages: KEYS, required: "C", bits: 9 + C_CARDS.length + KX.bits,
   onOpen: s => { KX.open(s); if (s === "C") C_start(); if (s === "B") RB.paint(); },
   onReveal: () => { RA.solved.fill(true); RB.solved.fill(true); RA.open(0); RB.open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "4 of 4"); } });
 window.addEventListener("resize", () => { RA.paint(); RB.paint(); });

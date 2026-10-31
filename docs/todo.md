@@ -49,8 +49,8 @@ From the review of 2026-10-31: all 35 lessons against their 2026 outlines and fo
 - [x] 35: make "read top to bottom" one of the Sanger distractors.
 - [x] 36: the editing sim is two checkboxes. Predict first.
 - [x] Every kit lesson: titles that name the move; solved banners that state the finding; palette colours in canvases. Every kit `sort` is now a `classify`.
-- [ ] 25: an F2 classify whose counts build 3:1 (the counts are the data).
-- [ ] 27: a recombinant-count classify that gives a map distance.
+- [x] 25: an F2 classify whose counts build 3:1 (the counts are the data).
+- [x] 27: a recombinant-count classify that gives a map distance.
 
 ## Across lessons
 

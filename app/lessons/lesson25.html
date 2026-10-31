@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   .gam { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:4px; }
   .gam span { font:12px ui-monospace,Menlo,monospace; padding:2px 6px; border:1px dashed #b4a06a; border-radius:10px; background:#fbf7ea; }
@@ -20,7 +21,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">D</a>
 </nav>
 
 <!-- ========== STAGE A — set the parents, watch the offspring (JM: "after meiosis interactive, one where students set parent
@@ -110,8 +111,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">D</h2>
+  <div class="lock-banner">Finish Stage C to unlock this section.</div>
   <div class="panel stage-intro"><div class="voice"><ul><li>Cross cards come back with new parents; answer as a fraction like 3/4. Two right in a row masters a card.</li></ul></div></div>
   <div class="stage-body grid">
     <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
@@ -130,6 +131,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/cross.js"></script>
 <script>
 /* bits: A 0-4, B 5-9, C 10+ */
@@ -247,12 +249,24 @@ const C_CARDS = [
   { q: "The grid used to work out a cross.", a: ["punnett square", "punnet square"] }
 ];
 const C_BANK = ["alleles", "no", "allele", "homozygous", "heterozygous", "dominant", "recessive", "genotype", "phenotype", "true-breeding", "F1", "F2", "test cross", "segregation", "Punnett square"];
+C_CARDS.push(
+  { q: "Selfing a Pp plant, what fraction of the offspring are pp?", a: ["1/4", "one quarter", "0.25", "25%"] });
+C_BANK.push("1/4");
 let C_D = null;
 function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(10 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
 
-Lesson.init({ id: "b145_lesson25", version: 2, stages: ["A", "B", "C"], required: "C", bits: 10 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+const KX = Kit.extra({ before: "stageC", off: 10 + C_CARDS.length, prev: "B", next: "D", stages: [
+  { key: "X1", label: "C", type: "classify", title: "Count an F2", tip: "The F1 plants were all Pp. Selfed, they give these offspring, one at a time. Each card is one offspring's genotype; sort it by the flower it will have. Purple pigment shows whenever at least one P is present.",
+    voice: ["Mendel counted: F2 about 3:1. His real counts ran from 2.82:1 to 3.15:1.", "Count them yourself, and watch the ratio settle."],
+    solved: "About 3 purple to 1 white, and rarely exactly: forty plants can easily give 2.5:1 or 3.5:1. One Pp in four selfings is pp.",
+    bins: ["Purple", "White"], n: 40, ratio: 4,
+    make: () => { const a = pick(["P", "p"]), b = pick(["P", "p"]), g = [a, b].sort().join(""); return { q: "Offspring <b class='mono'>" + g + "</b>", bin: g === "pp" ? 1 : 0 }; } }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson25", version: 3, stages: KEYS, required: "C", bits: 10 + C_CARDS.length + KX.bits,
+  onOpen: s => { KX.open(s); if (s === "C") C_start(); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "5 of 5"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+window.addEventListener("resize", () => KX.resize());
 </script>
 </body>
 </html>

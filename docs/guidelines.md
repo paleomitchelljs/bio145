@@ -56,7 +56,7 @@ What exists:
 - Rolls: lesson 25's 48 offspring, lesson 10's diffusion chamber.
 - Hit-the-ratio: lesson 27.
 - Kit stages (`app/assets/kit.js`): `classify`, `order`, `pick`, `sim`, `drill`. `Kit.extra` adds kit stages to a hand-built lesson.
-- `classify`, after evo lesson 17's Stage D: one card at a time (text, drawn, or generated), dragged or clicked into a bin, right or wrong at once, a row of dots, and a count on each bin. It replaced every kit `sort`. It earns the most where the counts are the data: Labrador puppies building 9:3:4 (26), root-tip cells giving the mitotic index (21). F2 counts in 25 and recombinants in 27 are still to do.
+- `classify`, after evo lesson 17's Stage D: one card at a time (text, drawn, or generated), dragged or clicked into a bin, right or wrong at once, a row of dots, and a count on each bin. It replaced every kit `sort`. It earns the most where the counts are the data: F2 offspring building 3:1 (25), Labrador puppies building 9:3:4 (26), recombinants giving a map distance (27), root-tip cells giving the mitotic index (21).
 - `pick` takes an `after` drawing, shown once the answer is right: predict, then see (16, 22, 33, 36).
 - Any kit stage takes `solved`, the finding shown in its banner once the stage is beaten.
 - `sort` (all cards placed, then checked) still works but no lesson uses it.
