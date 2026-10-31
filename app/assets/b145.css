@@ -115,3 +115,22 @@ ul.tasks li.done .hint { color:#54703a; }
 .slot .tile { cursor:grab; }
 .chip.right { border-color:var(--good); background:#eef5e4; }
 .chip.wrong { border-color:var(--bad); background:#f8e3df; }
+
+/* ---- parents as chromosome pairs (cross.js) --------------------------- */
+.pcard { display:inline-flex; flex-direction:column; align-items:center; gap:6px; padding:10px 12px; border:1px solid var(--rule); border-radius:6px; background:#fff; min-width:120px; }
+.pcard .sex { font-size:18px; color:var(--muted); line-height:1; }
+.pcard .pairs { display:flex; gap:12px; }
+.pcard .pair { display:flex; gap:4px; align-items:flex-start; position:relative; padding-bottom:16px; }
+.pcard .pair > .cl { position:absolute; bottom:0; left:0; right:0; text-align:center; font:11px ui-monospace,Menlo,monospace; color:var(--muted); }
+.pcard .chrom { width:26px; min-height:64px; background:#e9e4d6; border-radius:13px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:6px 0; gap:6px; }
+.pcard .chrom.ychrom { min-height:34px; background:#efe9ec; justify-content:center; }
+.pcard .chrom .cl { font:11px ui-monospace,Menlo,monospace; color:var(--muted); }
+.pcard button.al { width:22px; height:22px; border-radius:50%; border:1px solid #1d1d1b; background:#fff; font:600 13px ui-monospace,Menlo,monospace; padding:0; cursor:pointer; color:var(--ink); }
+.pcard button.al:disabled { cursor:default; border-color:#c9c5b8; }
+.pcard button.al:not(:disabled):hover { background:#d0e1ed; }
+.pcard .pph { font-size:12.5px; text-align:center; max-width:150px; }
+.parents { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+.parents .x { font-size:20px; color:var(--muted); }
+.kids { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+.kid { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font:10px ui-monospace,Menlo,monospace; border:1px solid rgba(0,0,0,.25); cursor:pointer; }
+.kid.sel { outline:3px solid var(--ink); outline-offset:1px; }

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 11</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<style>
+  .stock { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid #f2f0e8; font-size:13px; flex-wrap:wrap; }
+  .stock:last-child { border-bottom:0; }
+  .stock .nm { min-width:150px; font-weight:600; }
+  .stock .cls { display:flex; gap:6px; flex-wrap:wrap; }
+  .cls button { display:flex; align-items:center; gap:5px; background:#fff; border:1px solid var(--rule); border-radius:14px; padding:3px 9px 3px 4px; font-size:12.5px; cursor:pointer; color:var(--ink); }
+  .cls button.on { border-color:var(--ink); background:#efeee8; }
+  .dot { width:16px; height:16px; border-radius:50%; border:1px solid rgba(0,0,0,.3); display:inline-block; }
+  .crossrow { display:flex; align-items:center; gap:10px; margin-top:10px; font-size:13px; flex-wrap:wrap; }
+  .crossrow .slotp { min-width:150px; padding:5px 8px; border:1px dashed var(--rule); border-radius:4px; color:var(--muted); }
+  .answers { display:flex; flex-direction:column; gap:5px; margin-top:6px; }
+  .answers button { text-align:left; background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:6px 9px; font-size:13px; cursor:pointer; }
+  .answers button.on { border-color:var(--ink); background:#efeee8; }
+</style>
+</head>
+<body>
+<header><h1>Lesson 11</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc">
+  <a href="#stageA" id="tocA">A</a>
+  <a href="#stageB" id="tocB" class="locked">B</a>
+  <a href="#stageC" id="tocC" class="locked">C</a>
+</nav>
+
+<!-- ========== STAGE A — mystery traits (JM: "one where students cross fixed phenotypes and the back cross and such to try and
+     discern recessive/dominant/etc") ========== -->
+<section class="stage stage-locked" id="stageA">
+  <h2 class="stage-h">A</h2>
+  <div class="lock-banner">Enter your name above to start.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>You can't see alleles. You can only breed things and look at what comes out.</li>
+      <li>Pick two stocks (and a look within each), <b>Cross</b>, and keep crossing what you get until you can say how the trait is inherited.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0"><span id="A_title">Stocks</span><span class="tip"><span>Lines 1 and 2: true-breeding, so all of each line look alike and breed true. Every cross you make becomes a new stock below them.</span><span>Click a look in a stock to put an individual with that look in the next empty parent box; click a filled box to empty it. Then <b>Cross</b>: 40 offspring.</span></span></span></h3>
+        <div id="A_stocks"></div>
+        <div class="crossrow"><span class="slotp" id="A_p1">parent 1</span> × <span class="slotp" id="A_p2">parent 2</span><button id="A_cross" class="accent" style="background:var(--accent); color:#fff; border:0; border-radius:4px; padding:6px 10px; cursor:pointer;">Cross</button></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Mystery<span class="tip"><span>Six traits, in any order. Cross at least once, pick how the trait is inherited, then <b>Lock in</b>. A wrong answer is recorded once; keep crossing and try again.</span></span></span> <span class="pips" id="A_pips"></span></h3>
+        <p class="ttext" id="A_ttext"></p>
+        <div class="answers" id="A_ans"></div>
+        <div class="buttons"><button id="A_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="A_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksA"><li data-task="rounds">Solve six mysteries <span class="hint" id="A_rounds_now">0 of 6</span></li></ul>
+        <div class="solved-banner" id="solvedA">Stage B is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE B — test crosses: is this one carrying the hidden allele? ========== -->
+<section class="stage stage-locked" id="stageB">
+  <h2 class="stage-h">B</h2>
+  <div class="lock-banner">Finish Stage A to unlock this section.</div>
+  <div class="panel stage-intro">
+    <div class="voice"><ul>
+      <li>A purple flower might be hiding a white allele. Its own look can't tell you.</li>
+      <li>Cross the mystery plant with whatever will tell you most, then say what it carries.</li>
+    </ul></div>
+  </div>
+  <div class="stage-body grid">
+    <div class="col">
+      <div class="panel">
+        <h3><span class="info" tabindex="0">Stocks<span class="tip"><span>Purple is dominant over white. The mystery plant is purple. Crosses work as in Stage A; the mystery plant can be crossed with itself.</span></span></span></h3>
+        <div id="B_stocks"></div>
+        <div class="crossrow"><span class="slotp" id="B_p1">parent 1</span> × <span class="slotp" id="B_p2">parent 2</span><button id="B_cross" style="background:var(--accent); color:#fff; border:0; border-radius:4px; padding:6px 10px; cursor:pointer;">Cross</button></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel tcard">
+        <h3><span class="info" tabindex="0">Mystery plant<span class="tip"><span>Five plants in any order.</span></span></span> <span class="pips" id="B_pips"></span></h3>
+        <p class="ttext">Is the mystery plant PP or Pp?</p>
+        <div class="answers" id="B_ans"><button data-a="PP">PP: no white allele</button><button data-a="Pp">Pp: carries a white allele</button></div>
+        <div class="buttons"><button id="B_lock" class="accent">Lock in</button></div>
+        <div class="verdict" id="B_verdict"></div>
+      </div>
+      <div class="panel">
+        <h3>To finish</h3>
+        <ul class="tasks" id="tasksB"><li data-task="rounds">Call five mystery plants <span class="hint" id="B_rounds_now">0 of 5</span></li></ul>
+        <div class="solved-banner" id="solvedB">Stage C is open.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE C — the drill ========== -->
+<section class="stage stage-locked" id="stageC">
+  <h2 class="stage-h">C</h2>
+  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <div class="panel stage-intro"><div class="voice"><ul><li>Two right in a row masters a card.</li></ul></div></div>
+  <div class="stage-body grid">
+    <div class="col"><div class="panel"><h3>Card</h3><div id="C_drill"></div></div></div>
+    <div class="col">
+      <div class="panel"><h3>Word bank</h3><div id="C_bank"></div></div>
+      <div class="panel"><h3>To finish</h3><ul class="tasks" id="tasksC"><li data-task="m">Master every card <span class="hint" id="C_m_now"></span></li></ul><div class="solved-banner" id="solvedC">Lesson 11 is done.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="done-banner" id="done-banner"><h2>Good job!</h2><p>That is all of Lesson 11. Your completion code is below: copy it and hand it in.</p></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/cross.js"></script>
+<script>
+/* bits: A 0-5, B 6-10, C 11+ */
+/* ====== the stock bench, shared by A and B: a list of stocks, each a list of individuals; a look is a phenotype class ====== */
+function Bench(o) {
+  const B = { stocks: [], sel: [null, null], spec: null, look: o.look };
+  const classes = st => { const c = {}; for (const k of st.inds) { const p = Cross.pheno(B.spec, k); (c[p] = c[p] || []).push(k); } return c; };
+  B.render = () => {
+    $(o.mount).innerHTML = B.stocks.map((st, si) => {
+      const c = classes(st);
+      return '<div class="stock"><span class="nm">' + st.name + '</span><span class="cls">' + Object.keys(c).map(p => '<button data-s="' + si + '" data-p="' + p + '">' + B.look(p) + p + " " + (st.n > 1 ? "<b>" + c[p].length + "</b>" : "") + "</button>").join("") + "</span></div>";
+    }).join("");
+    [0, 1].forEach(k => { const s = B.sel[k]; $(o.slots[k]).innerHTML = s ? B.look(s.p) + " " + B.stocks[s.s].short + ", " + s.p : "parent " + (k + 1); });
+  };
+  $(o.mount).addEventListener("click", e => { const b = e.target.closest("button[data-s]"); if (!b) return; const k = B.sel[0] ? (B.sel[1] ? 0 : 1) : 0; B.sel[k] = { s: +b.dataset.s, p: b.dataset.p }; B.render(); });
+  o.slots.forEach((id, k) => $(id).addEventListener("click", () => { B.sel[k] = null; B.render(); }));
+  B.cross = () => {
+    if (!B.sel[0] || !B.sel[1]) return false;
+    const pickOne = s => pick(classes(B.stocks[s.s])[s.p]), m = pickOne(B.sel[0]), d = pickOne(B.sel[1]);
+    const kids = Cross.sample(Cross.offspring(B.spec, { sex: "F", c: m.c }, { sex: "M", c: d.c }), 40);
+    const nm = B.stocks[B.sel[0].s].short + " " + B.sel[0].p + " × " + B.stocks[B.sel[1].s].short + " " + B.sel[1].p;
+    B.stocks.push({ name: "Cross " + (B.stocks.length - B.base + 1) + ": " + nm, short: "cross " + (B.stocks.length - B.base + 1), inds: kids, n: 40 });
+    B.sel = [null, null]; B.render(); return true;
+  };
+  B.reset = (spec, stocks) => { B.spec = spec; B.stocks = stocks; B.base = stocks.length; B.sel = [null, null]; B.render(); };
+  return B;
+}
+const line = (name, short, g, n) => ({ name, short, inds: Array.from({ length: n || 20 }, () => ({ sex: "F", c: [[g[0]], [g[1]]] })), n: n || 20 });
+
+/* ====== A: six traits; each mode drawn at random so a class does not share answers ====== */
+/* invented organisms, so a randomly drawn pattern never contradicts a real species (snapdragons are incomplete, roan cattle codominant) */
+const TRAITS = [
+  { org: "a newly found orchid's petal colour", a: ["red", "#c92a2a"], b: ["white", "#f7f6f1"], blend: ["pink", "#f2a6b5"] },
+  { org: "a cave beetle's shell", a: ["black", "#2b2b2b"], b: ["white", "#f7f6f1"], blend: ["grey", "#8a8a88"] },
+  { org: "a lizard's throat patch", a: ["magenta", "#a61e70"], b: ["yellow", "#f2d14b"], blend: ["orange", "#e8913a"] },
+  { org: "a moth's wings", a: ["blue", "#2f6b8f"], b: ["white", "#f7f6f1"], blend: ["pale blue", "#9cc0d6"] },
+  { org: "a sea slug's colour", a: ["green", "#3f8a3a"], b: ["yellow", "#ecd34a"], blend: ["yellow-green", "#a7c24a"] },
+  { org: "a desert mouse's coat", a: ["brown", "#7a4b28"], b: ["cream", "#efe2c4"], blend: ["tan", "#b8936a"] }
+];
+const MODES = shuffle(["domA", "domB", "incomplete", "codominant", pick(["domA", "domB"]), pick(["incomplete", "codominant"])]);
+const AX = { cur: 0, solved: Array(6).fill(false), crossed: false, ans: null, bench: null, specs: [], col: {} };
+TRAITS.forEach((t, i) => {
+  const m = MODES[i], dom = m === "domB" ? "b" : "a";
+  const het = m === "incomplete" ? t.blend[0] : m === "codominant" ? t.a[0] + " and " + t.b[0] + " patches" : (dom === "a" ? t.a[0] : t.b[0]);
+  const loc = dom === "a" ? { dom: "A", rec: "a", ph: [t.a[0], t.b[0]] } : { dom: "a", rec: "A", ph: [t.b[0], t.a[0]] };
+  loc.mode = m === "incomplete" || m === "codominant" ? m : "complete"; loc.het = het;
+  AX.specs.push({ loci: [loc] });
+  const C = AX.col[i] = {}; C[t.a[0]] = t.a[1]; C[t.b[0]] = t.b[1]; C[t.blend[0]] = t.blend[1];
+  C[t.a[0] + " and " + t.b[0] + " patches"] = "linear-gradient(90deg," + t.a[1] + " 0 33%," + t.b[1] + " 33% 66%," + t.a[1] + " 66%)";
+});
+const lookA = p => '<span class="dot" style="background:' + (AX.col[AX.cur][p] || "#ccc") + '"></span>';
+AX.bench = Bench({ mount: "A_stocks", slots: ["A_p1", "A_p2"], look: lookA });
+function A_answers() {
+  const t = TRAITS[AX.cur];
+  const opts = [["domA", t.a[0] + " is dominant"], ["domB", t.b[0] + " is dominant"], ["incomplete", "neither: the two blend (incomplete dominance)"], ["codominant", "neither: both show at once (codominance)"]];
+  $("A_ans").innerHTML = opts.map(([k, l]) => '<button data-a="' + k + '"' + (AX.ans === k ? ' class="on"' : "") + ">" + l + "</button>").join("");
+}
+function A_open(i) {
+  AX.cur = i; AX.crossed = false; AX.ans = null; const t = TRAITS[i];
+  AX.bench.reset(AX.specs[i], [line("Line 1 (true-breeding)", "line 1", ["A", "A"]), line("Line 2 (true-breeding)", "line 2", ["a", "a"])]);
+  $("A_title").textContent = "Stocks: " + t.org; $("A_ttext").textContent = "How is " + t.org + " inherited?";
+  A_answers(); $("A_verdict").innerHTML = AX.solved[i] ? '<span class="ok">✓ Correct.</span>' : ""; $("A_pips").innerHTML = Pips.html(6, j => AX.solved[j], i);
+}
+$("A_cross").addEventListener("click", () => { if (AX.bench.cross()) { AX.crossed = true; Lesson.bump("A"); } else $("A_verdict").textContent = "Fill both parent boxes first."; });
+$("A_ans").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; AX.ans = b.dataset.a; A_answers(); });
+$("A_lock").addEventListener("click", () => {
+  const i = AX.cur; if (AX.solved[i]) return;
+  if (!AX.crossed) { $("A_verdict").textContent = "Make at least one cross first."; return; }
+  if (!AX.ans) { $("A_verdict").textContent = "Pick an answer first."; return; }
+  const ok = AX.ans === MODES[i]; Lesson.record(i, ok); Lesson.bump("A");
+  if (ok) { AX.solved[i] = true; $("A_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const n = AX.solved.filter(Boolean).length; Lesson.tick("A", "rounds", n === 6, n + " of 6"); if (n === 6) Lesson.finish("A"); else setTimeout(() => A_open(AX.solved.indexOf(false)), 1300); }
+  else $("A_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> Cross more and look again.';
+  $("A_pips").innerHTML = Pips.html(6, j => AX.solved[j], i);
+});
+Pips.wire($("A_pips"), A_open);
+A_open(0);
+
+/* ====== B: test crosses. The mystery plant is PP or Pp at even odds ====== */
+const BSPEC = { loci: [{ dom: "P", rec: "p", ph: ["purple", "white"], mode: "complete" }] };
+const BX = { cur: 0, solved: Array(5).fill(false), truth: Array.from({ length: 5 }, () => pick(["PP", "Pp"])), ans: null, crossed: false };
+const lookB = p => '<span class="dot" style="background:' + (p === "purple" ? "#7c5cc4" : "#f7f6f1") + '"></span>';
+BX.bench = Bench({ mount: "B_stocks", slots: ["B_p1", "B_p2"], look: lookB });
+function B_open(i) {
+  BX.cur = i; BX.ans = null; BX.crossed = false; const g = BX.truth[i];
+  BX.bench.reset(BSPEC, [{ name: "Mystery plant " + (i + 1), short: "mystery", inds: [{ sex: "F", c: [[g[0]], [g[1]]] }], n: 1 }, line("Purple line (true-breeding)", "purple line", ["P", "P"]), line("White line (true-breeding)", "white line", ["p", "p"])]);
+  for (const b of $("B_ans").children) b.classList.remove("on");
+  $("B_verdict").innerHTML = BX.solved[i] ? '<span class="ok">✓ Correct: ' + g + ".</span>" : ""; $("B_pips").innerHTML = Pips.html(5, j => BX.solved[j], i);
+}
+$("B_cross").addEventListener("click", () => { if (BX.bench.cross()) { BX.crossed = true; Lesson.bump("B"); } else $("B_verdict").textContent = "Fill both parent boxes first."; });
+$("B_ans").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; BX.ans = b.dataset.a; for (const x of $("B_ans").children) x.classList.toggle("on", x === b); });
+$("B_lock").addEventListener("click", () => {
+  const i = BX.cur; if (BX.solved[i]) return;
+  if (!BX.crossed) { $("B_verdict").textContent = "Make at least one cross first."; return; }
+  if (!BX.ans) { $("B_verdict").textContent = "Pick an answer first."; return; }
+  const ok = BX.ans === BX.truth[i]; Lesson.record(6 + i, ok); Lesson.bump("B");
+  if (ok) { BX.solved[i] = true; $("B_verdict").innerHTML = '<span class="ok">✓ Correct.</span>'; const n = BX.solved.filter(Boolean).length; Lesson.tick("B", "rounds", n === 5, n + " of 5"); if (n === 5) Lesson.finish("B"); else setTimeout(() => B_open(BX.solved.indexOf(false)), 1300); }
+  else $("B_verdict").innerHTML = '<span class="off">✗ Incorrect.</span> Which cross would show a hidden white allele every time?';
+  $("B_pips").innerHTML = Pips.html(5, j => BX.solved[j], i);
+});
+Pips.wire($("B_pips"), B_open);
+B_open(0);
+
+/* ====== C: the drill ====== */
+const ABO = { "IᴬIᴬ": "A", "Iᴬi": "A", "IᴮIᴮ": "B", "Iᴮi": "B", "IᴬIᴮ": "AB", "ii": "O" };
+const C_CARDS = [
+  { make() { const g = pick(Object.keys(ABO)); return { q: "Genotype <b class='mono'>" + g + "</b>: which blood type?", a: [ABO[g], "type " + ABO[g]] }; } },
+  { make() { const k = pick(["incomplete", "codominant", "complete"]), ex = { incomplete: ["red", "white", "pink"], codominant: ["red", "white", "red and white patches"], complete: ["purple", "white", "purple"] }[k];
+      return { q: ex[0] + " × " + ex[1] + " (both true-breeding) gives all " + ex[2] + " offspring. Name the pattern.", a: k === "complete" ? ["complete dominance", "dominance"] : k === "incomplete" ? "incomplete dominance" : ["codominance", "codominant"] }; } },
+  { q: "A heterozygote looks in between its two parents.", a: "incomplete dominance" },
+  { q: "A heterozygote shows both parents' traits at once, side by side.", a: ["codominance", "codominant"] },
+  { q: "A heterozygote looks just like one homozygous parent.", a: ["complete dominance", "dominance"] },
+  { q: "Crossing an individual with the recessive homozygote to reveal its genotype (two words).", a: ["test cross", "testcross"] },
+  { q: "Crossing an F1 back to one of its parents' lines.", a: ["backcross", "back cross"] },
+  { q: "A heterozygote that shows the dominant trait but passes on a recessive allele.", a: "carrier" },
+  { q: "A gene with more than two alleles in the population (like ABO) has…", a: "multiple alleles" },
+  { q: "A test cross gives half purple, half white. The purple parent was…", a: "heterozygous" },
+  { q: "A test cross gives all purple (many offspring). The purple parent was most likely…", a: ["homozygous", "homozygous dominant"] },
+  { q: "Pink × pink snapdragons (incomplete dominance): what fraction of offspring are pink?", a: ["1/2", "0.5", "50%"] },
+  { q: "One gene affecting many traits.", a: "pleiotropy" },
+  { q: "Many genes adding up to one trait, like height.", a: ["polygenic inheritance", "polygenic"] }
+];
+const C_BANK = ["incomplete dominance", "codominance", "complete dominance", "test cross", "backcross", "carrier", "multiple alleles", "heterozygous", "homozygous", "pleiotropy", "polygenic inheritance"];
+let C_D = null;
+function C_start() { if (C_D) return; C_D = Drill.make({ mount: $("C_drill"), bankMount: $("C_bank"), bank: C_BANK, cards: C_CARDS, onFirst: (i, ok) => Lesson.record(11 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") }); }
+
+Lesson.init({ id: "b145_lesson11", version: 1, stages: ["A", "B", "C"], required: "C", bits: 11 + C_CARDS.length,
+  onOpen: s => { if (s === "C") C_start(); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish); Lesson.tick("A", "rounds", true, "6 of 6"); Lesson.tick("B", "rounds", true, "5 of 5"); } });
+</script>
+</body>
+</html>
