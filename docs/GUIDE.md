@@ -73,6 +73,8 @@ matches the 2026 outlines). `o` marks a slot that has a lesson now; a dash is an
 - **Lecture 20 is "Not Recorded"**, so it has no topic; I left the slot in so lecture numbers stay aligned.
 - **Lectures with no obvious homework** (1, 14-16, 20, 31-36 so far) may want a different kind of homework than the drill pattern.
 
+Lessons 2 and 4 are hand-built; the new isotope and polysaccharide stages are kit stages inserted before their drills (`Kit.extra`).
+
 ## Lessons 1, 3, 5, 8, 11, 12, 14-19, 21, 22, 24, 31-36 (drafted from the 2026 outlines)
 
 Built with `app/assets/kit.js`: each lesson is a config of stages (sort, order, pick, sim, drill) and the typed drill comes last.
@@ -83,6 +85,9 @@ The voice blocks are draft bullets taken from the outline's own phrases, for JM 
 | Lesson | Added from Biology 2e |
 |---|---|
 | 1 | Inductive versus deductive reasoning; basic versus applied science (ch. 1) |
+| 2 | Atomic structure and isotopes: carbon-14 dating, half-life (ch. 2) |
+| 3 | The pH scale and the log relation to [H⁺] (ch. 2) |
+| 4 | Starch, glycogen, cellulose, chitin; mono-, di- and polysaccharides (ch. 3) |
 | 5 | Protein denaturation; the four-ring steroid core (ch. 3) |
 | 11 | Electrochemical gradient, secondary active transport (ch. 5) |
 | 12 | Second messengers, apoptosis, quorum sensing (ch. 9) |
@@ -91,8 +96,7 @@ The voice blocks are draft bullets taken from the outline's own phrases, for JM 
 | 34 | DNA fingerprinting; reading a gel against a ladder (ch. 17) |
 | 36 | Transgenic organisms versus cloning (ch. 17) |
 
-**Book material still not covered anywhere** (lessons for lectures that already existed were not changed): isotopes and pH in the atomic-structure
-lesson (2), polysaccharides (starch, glycogen, cellulose, chitin) in lesson 4, ECM, and the full gene-therapy and cloning sections of ch. 17.
+**Book material still not covered anywhere:** ECM, and the full gene-therapy and cloning sections of ch. 17.
 
 **Checked with jsdom, not a browser.** Every new lesson loads and opens all stages under the instructor bypass with no script errors, and every sim goal is reachable.
 Nothing has been looked at in a real browser; drawing and dragging are untested.

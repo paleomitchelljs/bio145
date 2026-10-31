@@ -18,26 +18,21 @@ const Kit = (function () {
   const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   const tipH = (t, tip) => tip ? '<span class="info" tabindex="0">' + t + '<span class="tip"><span>' + tip + "</span></span></span>" : t;
 
-  function run(cfg) {
-    const S = cfg.stages, N = S.length; window.__kit = cfg;
-    let off = 0;
-    S.forEach((st, i) => { st.k = LET[i]; st.i = i; });
-    /* ---------- DOM ---------- */
-    $("toc").innerHTML = S.map((st, i) => '<a href="#stage' + st.k + '" id="toc' + st.k + '"' + (i ? ' class="locked"' : "") + ">" + st.k + "</a>").join(" ");
-    $("kit").innerHTML = S.map((st, i) => {
-      const lastS = i === N - 1;
-      return '<section class="stage stage-locked" id="stage' + st.k + '"><h2 class="stage-h">' + st.k + "</h2>" +
-        '<div class="lock-banner">' + (i ? "Finish Stage " + S[i - 1].k + " to unlock this section." : "Enter your name above to start.") + "</div>" +
-        '<div class="panel stage-intro"><div class="voice"><ul>' + (st.voice || []).map(v => "<li>" + v + "</li>").join("") + "</ul></div></div>" +
-        '<div class="stage-body grid"><div class="col"><div class="panel"><h3>' + tipH(st.title || "", st.tip) + '</h3><div id="' + st.k + '_main"></div></div></div>' +
-        '<div class="col">' + (st.type === "drill" ? '<div class="panel"><h3>Word bank</h3><div id="' + st.k + '_bank"></div></div>' : "") +
-        '<div class="panel"><h3>To finish</h3><ul class="tasks" id="tasks' + st.k + '"></ul><div class="solved-banner" id="solved' + st.k + '">' +
-        (lastS ? "Lesson " + cfg.num + " is done." : "Stage " + S[i + 1].k + " is open.") + "</div></div></div></div></section>";
-    }).join("");
-    $("done-banner").innerHTML = "<h2>Good job!</h2><p>That is all of Lesson " + cfg.num + ". Your completion code is below: copy it and hand it in.</p>";
 
+  /* one stage's section markup. prev/next are the neighbouring stages' visible labels (null at the ends) */
+  function sectionHtml(st, prev, next, num) {
+    const lab = st.label || st.k;
+    return '<section class="stage stage-locked" id="stage' + st.k + '"><h2 class="stage-h">' + lab + "</h2>" +
+      '<div class="lock-banner">' + (prev ? "Finish Stage " + prev + " to unlock this section." : "Enter your name above to start.") + "</div>" +
+      '<div class="panel stage-intro"><div class="voice"><ul>' + (st.voice || []).map(v => "<li>" + v + "</li>").join("") + "</ul></div></div>" +
+      '<div class="stage-body grid"><div class="col"><div class="panel"><h3>' + tipH(st.title || "", st.tip) + '</h3><div id="' + st.k + '_main"></div></div></div>' +
+      '<div class="col">' + (st.type === "drill" ? '<div class="panel"><h3>Word bank</h3><div id="' + st.k + '_bank"></div></div>' : "") +
+      '<div class="panel"><h3>To finish</h3><ul class="tasks" id="tasks' + st.k + '"></ul><div class="solved-banner" id="solved' + st.k + '">' +
+      (next ? "Stage " + next + " is open." : "Lesson " + num + " is done.") + "</div></div></div></div></section>";
+  }
+
+  const T = {};
     const task = (st, id, text) => $("tasks" + st.k).insertAdjacentHTML("beforeend", '<li data-task="' + id + '">' + text + ' <span class="hint" id="' + st.k + "_" + id + '_now"></span></li>');
-    const T = {};
 
     /* ---------- sort: drag cards into bins ---------- */
     T.sort = function (st) {
@@ -164,11 +159,38 @@ const Kit = (function () {
       st.reveal = () => { st.start(); D.reveal(); };
     };
 
+
+  function run(cfg) {
+    const S = cfg.stages, N = S.length; window.__kit = cfg;
+    let off = 0;
+    S.forEach((st, i) => { st.k = LET[i]; st.i = i; });
+    /* ---------- DOM ---------- */
+    $("toc").innerHTML = S.map((st, i) => '<a href="#stage' + st.k + '" id="toc' + st.k + '"' + (i ? ' class="locked"' : "") + ">" + (st.label || st.k) + "</a>").join(" ");
+    $("kit").innerHTML = S.map((st, i) => sectionHtml(st, i ? S[i - 1].label || S[i - 1].k : null, i < N - 1 ? S[i + 1].label || S[i + 1].k : null, cfg.num)).join("");
+    $("done-banner").innerHTML = "<h2>Good job!</h2><p>That is all of Lesson " + cfg.num + ". Your completion code is below: copy it and hand it in.</p>";
+
     S.forEach(st => { st.off = off; T[st.type](st); off += st.bits; });
     Lesson.init({ id: cfg.id, version: cfg.version || 1, stages: S.map(s => s.k), required: S[N - 1].k, bits: off,
       onOpen: s => { const st = S.find(x => x.k === s); if (st.start) st.start(); if (st.paint) st.paint(); },
       onReveal: () => { S.forEach(st => st.reveal && st.reveal()); S.forEach(st => Lesson.finish(st.k)); } });
     window.addEventListener("resize", () => S.forEach(st => st.paint && st.paint()));
   }
-  return { run };
+
+  /* Add kit stages into a hand-built lesson. opts: before (id of the stage element they go in front of, e.g. "stageC"),
+     off (first free scoring bit), stages (each with a unique key and a visible label), prev / next (visible labels of the
+     neighbouring stages, for the banners). Returns { keys, bits, open(s), reveal(), resize() } for the lesson's own Lesson.init. */
+  function extra(opts) {
+    const S = opts.stages; let off = opts.off; S.forEach(st => { st.k = st.key || st.k; });
+    const before = $(opts.before), tocBefore = $("toc" + opts.before.slice(5));
+    S.forEach((st, i) => {
+      st.i = i; before.insertAdjacentHTML("beforebegin", sectionHtml(st, i ? S[i - 1].label || S[i - 1].k : opts.prev, i < S.length - 1 ? S[i + 1].label || S[i + 1].k : opts.next, 0));
+      tocBefore.insertAdjacentHTML("beforebegin", '<a href="#stage' + st.k + '" id="toc' + st.k + '" class="locked">' + (st.label || st.k) + "</a> ");
+      st.off = off; T[st.type](st); off += st.bits;
+    });
+    return { keys: S.map(s => s.k), bits: off - opts.off,
+      open: s => { const st = S.find(x => x.k === s); if (st) { if (st.start) st.start(); if (st.paint) st.paint(); } },
+      reveal: () => S.forEach(st => st.reveal && st.reveal()),
+      resize: () => S.forEach(st => st.paint && st.paint()) };
+  }
+  return { run, extra };
 })();

@@ -29,6 +29,26 @@ const BI = 24; /* blood bicarbonate, mM */
 const phBlood = (pco2, acid) => 6.1 + Math.log10(Math.max(0.5, BI - acid) / (0.03 * pco2));
 const phPlain = acid => acid <= 0 ? 7 : Math.max(1, -Math.log10(acid / 1000 + 1e-7));
 Kit.run({ id: "b145_lesson3", num: 3, stages: [
+  { type: "sim", title: "The pH scale", tip: "pH = −log₁₀[H⁺] (in mol/L). Each pH unit is a tenfold change in free protons. Pure water has 10⁻⁷ M H⁺ and 10⁻⁷ M OH⁻ from its own auto-ionization.",
+    voice: ["Acids donate protons, bases accept them. Pure water ionizes a little: equal H⁺ and OH⁻ at pH 7.", "A log scale: pH 3 has a hundred times more H⁺ than pH 5."],
+    w: 640, h: 190,
+    controls: [{ id: "ph", label: "pH", min: 0, max: 14, step: 0.1, val: 7, fmt: v => v.toFixed(1) }],
+    readout: S => { const h = Math.pow(10, -S.ph), oh = Math.pow(10, -(14 - S.ph)); return "[H⁺] = <b>" + h.toExponential(1) + "</b> M · [OH⁻] = <b>" + oh.toExponential(1) + "</b> M · " + (S.ph < 6.9 ? "acidic" : S.ph > 7.1 ? "basic" : "neutral") + " · <b>" + (h / 1e-7 >= 1 ? (h / 1e-7).toPrecision(2) + "×" : "1/" + (1e-7 / h).toPrecision(2) + "×") + "</b> the H⁺ of pure water"; },
+    draw(ctx, w, h, S) {
+      const X = v => 20 + v / 14 * (w - 40), grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#d9534f"); grd.addColorStop(0.5, "#6cae5c"); grd.addColorStop(1, "#3a5fa8");
+      ctx.fillStyle = grd; ctx.fillRect(20, 70, w - 40, 26); ctx.fillStyle = "#222"; ctx.font = "11px sans-serif";
+      [[0, "battery acid"], [2, "lemon juice"], [3, "vinegar"], [5, "black coffee"], [7, "pure water"], [7.4, "blood"], [10, "soapy water"], [12.5, "bleach"], [14, "drain cleaner"]].forEach(([v, n], i) => ctx.fillText(n, Math.min(X(v) - 20, w - 80), i % 2 ? 128 : 144));
+      ctx.fillStyle = "#fff"; ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(S.ph), 66); ctx.lineTo(X(S.ph) - 8, 46); ctx.lineTo(X(S.ph) + 8, 46); ctx.closePath(); ctx.fill(); ctx.stroke();
+    },
+    goals: [
+      { text: "Find the pH where H⁺ equals OH⁻ (neutral)", test: S => Math.abs(S.ph - 7) < 0.15 },
+      { text: "Make a solution with 100 times more H⁺ than pure water", test: S => Math.abs(S.ph - 5) < 0.15 },
+      { text: "Make one with 1,000 times less H⁺ than pure water (a base)", test: S => Math.abs(S.ph - 10) < 0.15 },
+      { text: "Find lemon-juice acidity (about pH 2) and see how many times more H⁺ it has than water", test: S => Math.abs(S.ph - 2) < 0.15 }] },
+  { type: "sort", title: "Acid, base, or neutral?", tip: "Below 7 is acidic, above 7 is basic. The body keeps blood within 7.35 to 7.45.",
+    voice: ["Poisons and medicines both react chemically, pulling you away from homeostasis. The dose makes the difference."],
+    bins: ["Acidic (pH below 7)", "Neutral (about 7)", "Basic (pH above 7)"],
+    items: [["Stomach acid (about pH 2)", 0], ["Lemon juice", 0], ["Black coffee", 0], ["Pure water", 1], ["Human blood is slightly basic (7.4)", 2], ["Baking soda in water", 2], ["Household bleach", 2], ["Soapy water", 2], ["Milk is slightly acidic (6.5)", 0]] },
   { type: "sim", title: "A buffer holds the pH", tip: "Blood is buffered by carbonic acid and bicarbonate: CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. Breathing sets the CO₂. The pH is 6.1 + log([HCO₃⁻] / 0.03·pCO₂).",
     voice: ["Acids donate protons, bases accept them. pH is the log scale of how many protons float free.", "A buffer is a weak acid and its partner sitting in equilibrium: add acid, the partner soaks it up. Hyperventilate and you blow off CO₂, so the pH rises."],
     w: 640, h: 190,
@@ -61,7 +81,7 @@ Kit.run({ id: "b145_lesson3", num: 3, stages: [
     bins: ["Hydroxyl (–OH): alcohol", "Carbonyl (C=O): aldehyde or ketone", "Amino (–NH₂): amine", "Phosphate (–OPO₃²⁻)", "Sulfhydryl (–SH): thiol"],
     items: [["Ethanol's polar end", 0], ["The sugar in a sugar's ring corners", 0], ["Acetone's central C=O", 1], ["The end carbon of an aldehyde", 1], ["The N-terminal end of an amino acid", 2], ["The group on an amine base", 2], ["The tail of ATP", 3], ["The backbone link in DNA", 3], ["Cysteine's side chain", 4], ["Forms disulfide bridges", 4]] },
   { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
-    bank: ["hydrogen bond", "cohesion", "specific heat", "evaporative cooling", "acid", "base", "buffer", "bicarbonate", "pH", "structural isomer", "geometric isomer", "cis", "trans", "chiral", "hydroxyl", "carbonyl", "amino", "phosphate", "sulfhydryl", "carbon"],
+    bank: ["acidic", "log", "hydrogen bond", "cohesion", "specific heat", "evaporative cooling", "acid", "base", "buffer", "bicarbonate", "pH", "structural isomer", "geometric isomer", "cis", "trans", "chiral", "hydroxyl", "carbonyl", "amino", "phosphate", "sulfhydryl", "carbon"],
     cards: [
       C("The bond between a hydrogen on one water and the oxygen of another.", ["hydrogen bond", "hydrogen bonds"]),
       C("Water molecules sticking to each other.", "cohesion"),
@@ -73,6 +93,10 @@ Kit.run({ id: "b145_lesson3", num: 3, stages: [
       C("Hyperventilation blows off CO₂, so blood pH goes… (up or down)", ["up", "rises"]),
       C("The pH scale is logarithmic: one unit means a ___-fold change in H⁺.", ["10", "ten", "tenfold"]),
       C("Pure water has a pH of…", "7"),
+      C("A solution of pH 3 has ___ times more H⁺ than a solution of pH 5.", ["100", "one hundred", "a hundred"]),
+      C("The pH of a neutral solution at which H⁺ equals OH⁻.", ["7", "seven"]),
+      C("pH is the negative ___ of the H⁺ concentration.", ["log", "logarithm", "log10", "base 10 log"]),
+      C("A solution with pH below 7 is…", ["acidic", "an acid", "acid"]),
       C("Same atoms, different connections, such as butane and isobutane.", ["structural isomer", "structural isomers", "structural"]),
       C("Same connections, different arrangement around a double bond.", ["geometric isomer", "geometric isomers", "geometric", "cis-trans", "cis trans"]),
       C("Both groups on the same side of a double bond.", "cis"), C("Groups on opposite sides of a double bond.", "trans"),

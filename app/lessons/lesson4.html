@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   #A_mol, #B_bench { touch-action:none; }
   .palette { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
@@ -20,7 +21,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">E</a>
 </nav>
 
 <!-- ========== STAGE A — build the target molecule (JM: "Give students a molecule diagram & options to click bonds to change
@@ -103,8 +104,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">E</h2>
+  <div class="lock-banner">Finish Stage D to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul><li>Name the group, the join, the building block. Two right in a row masters a card; drawn cards come back with new molecules.</li></ul></div>
   </div>
@@ -129,6 +130,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/atoms.js"></script>
 <script>
 /* bits: A 0-7, B 8-13, C 14+ */
@@ -426,6 +428,19 @@ const C_CARDS = [
 const C_BANK = ["hydroxyl", "carbonyl", "carboxyl", "amino", "sulfhydryl", "phosphate", "methyl", "aldehyde", "ketone", "hydrophilic", "hydrophobic",
   "dehydration synthesis", "hydrolysis", "glycosidic linkage", "peptide bond", "ester linkage", "phosphodiester linkage", "amino acid", "nucleotide", "monosaccharide",
   "polypeptide", "triglyceride", "unsaturated", "saturated", "lipids"];
+C_CARDS.push(
+  { q: "A single sugar such as glucose.", a: ["monosaccharide", "a monosaccharide"] },
+  { q: "Two sugars joined, such as sucrose.", a: ["disaccharide", "a disaccharide"] },
+  { q: "Many sugars joined in a chain.", a: ["polysaccharide", "a polysaccharide"] },
+  { q: "The sugar that joins glucose to make sucrose.", a: "fructose" },
+  { q: "The sugar that joins glucose to make lactose.", a: "galactose" },
+  { q: "The storage polysaccharide of plants.", a: "starch" },
+  { q: "The storage polysaccharide of animals.", a: "glycogen" },
+  { q: "The structural polysaccharide of plant cell walls.", a: "cellulose" },
+  { q: "The structural polysaccharide of fungal walls and insect exoskeletons.", a: "chitin" },
+  { q: "Starch has α linkages and cellulose has ___ linkages.", a: ["beta", "β"] },
+  { q: "Dietary fiber is mostly which polysaccharide?", a: "cellulose" });
+C_BANK.push("disaccharide", "polysaccharide", "fructose", "galactose", "starch", "glycogen", "cellulose", "chitin", "beta", "alpha");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -433,11 +448,28 @@ function C_start() {
     onFirst: (i, ok) => Lesson.record(14 + i, ok), onProgress: (k, n) => Lesson.tick("C", "m", k === n, k + " of " + n), onDone: () => Lesson.finish("C") });
 }
 
-Lesson.init({ id: "b145_lesson4", version: 1, stages: ["A", "B", "C"], required: "C", bits: 14 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish);
+const KX = Kit.extra({ before: "stageC", off: 14 + C_CARDS.length, prev: "B", next: "E", stages: [
+  { key: "X1", label: "C", type: "sort", title: "Starch, glycogen, cellulose, chitin (book, chapter 3)", tip: "All four are long chains of sugar joined by glycosidic bonds. They differ in the monomer, the linkage (α or β) and the branching.",
+    voice: ["Polysaccharides: storage in plants (starch), storage in animals (glycogen), structure in plants (cellulose), structure in fungi and arthropods (chitin).", "Starch and cellulose are both chains of glucose. The difference is which way each ring is turned: α or β."],
+    bins: ["Starch", "Glycogen", "Cellulose", "Chitin"],
+    items: [["Energy store of plants (potatoes, grains)", 0], ["Helical chains of α-glucose; amylose and amylopectin", 0], ["Energy store of animals, kept in liver and muscle", 1], ["Very highly branched, so many ends can be cut at once", 1], ["Makes plant cell walls; the most abundant organic molecule on Earth", 2], ["β-glucose chains lie straight and bundle by hydrogen bonds", 2], ["Dietary fiber: humans cannot digest it", 2], ["Termites need gut microbes to digest it", 2], ["Cell walls of fungi and the exoskeletons of insects", 3], ["Monomer is a glucose with a nitrogen-containing group (N-acetylglucosamine)", 3]] },
+  { key: "X2", label: "D", type: "pick", title: "Sugars, sizes and linkages", tip: "Monosaccharides are single sugars; a disaccharide is two joined by a glycosidic bond (releasing water); a polysaccharide is many.",
+    voice: ["Glucose, fructose, galactose. Sucrose, lactose, maltose. Why we digest starch but not cellulose: our enzymes fit one linkage and not the other."],
+    qs: [
+      { q: "Sucrose is glucose joined to fructose. It is a…", ok: "Disaccharide", no: ["Monosaccharide", "Polysaccharide", "Lipid"], why: "Table sugar." },
+      { q: "Lactose, the sugar in milk, is glucose joined to…", ok: "Galactose", no: ["Fructose", "Another glucose", "Ribose"], why: "Maltose is two glucoses." },
+      { q: "Joining two sugars into a disaccharide releases…", ok: "A molecule of water", no: ["A molecule of CO₂", "ATP", "Nothing"], why: "Dehydration synthesis; hydrolysis reverses it." },
+      { q: "Starch and cellulose are both polymers of glucose. They differ in…", ok: "The orientation of the linkage between glucoses (α or β)", no: ["The element in the monomer", "Whether they contain nitrogen", "The number of rings per glucose"], why: "Same monomer, different join." },
+      { q: "Humans digest starch but not cellulose because…", ok: "Our enzymes fit the α linkage, not the β linkage", no: ["Cellulose is made of a different sugar", "Cellulose has no bonds to break", "Starch is hydrophobic"], why: "Cows and termites rely on microbes that make the right enzyme." },
+      { q: "After a meal, excess glucose is stored in the liver and muscles as…", ok: "Glycogen", no: ["Starch", "Cellulose", "Chitin"], why: "Plants store starch instead." },
+      { q: "Which polysaccharide is the most highly branched?", ok: "Glycogen", no: ["Cellulose", "Chitin", "Amylose"], why: "More ends means faster release of glucose." }] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson4", version: 1, stages: KEYS, required: "C", bits: 14 + C_CARDS.length + KX.bits,
+  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "8 of 8"); Lesson.tick("B", "rounds", true, "6 of 6"); } });
-window.addEventListener("resize", () => { A_paint(); B_paint(); });
+window.addEventListener("resize", () => { A_paint(); B_paint(); KX.resize(); });
 </script>
 </body>
 </html>

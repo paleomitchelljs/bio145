@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/b145.css">
 <link rel="stylesheet" href="../assets/score.css">
 <link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
 <style>
   #B_mol { touch-action:none; }
   .pickrow { display:flex; align-items:center; gap:8px; margin:4px 0; font-size:13px; }
@@ -21,7 +22,7 @@
 <nav class="toc" id="toc">
   <a href="#stageA" id="tocA">A</a>
   <a href="#stageB" id="tocB" class="locked">B</a>
-  <a href="#stageC" id="tocC" class="locked">C</a>
+  <a href="#stageC" id="tocC" class="locked">F</a>
 </nav>
 
 <!-- ========== STAGE A — the tug of war over a shared pair (JM: "Electronegativity interactive to show how oxygen is greedy";
@@ -105,8 +106,8 @@
 
 <!-- ========== STAGE C — the drill ========== -->
 <section class="stage stage-locked" id="stageC">
-  <h2 class="stage-h">C</h2>
-  <div class="lock-banner">Finish Stage B to unlock this section.</div>
+  <h2 class="stage-h">F</h2>
+  <div class="lock-banner">Finish Stage E to unlock this section.</div>
   <div class="panel stage-intro">
     <div class="voice"><ul><li>Type each name until it is automatic. Two right in a row masters a card.</li></ul></div>
   </div>
@@ -131,6 +132,7 @@
 <script src="../assets/hover.js"></script>
 <script src="../assets/stage.js"></script>
 <script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
 <script src="../assets/atoms.js"></script>
 <script>
 /* bits: A 0-6, B targets 7-10, B sorting 11-20 (first answer per molecule), C 21+ */
@@ -366,6 +368,18 @@ const C_CARDS = [
       return { q: "Which atom gets the pair? Type its name.", a: [Atoms.NAME[g], g.toLowerCase()], w: 340, h: 150, draw: (ctx, w, h) => { ctx.strokeStyle = "#1d1d1b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(w * 0.3, 85); ctx.lineTo(w * 0.7, 85); ctx.stroke(); Atoms.atom(ctx, w * 0.3, 85, a, 26); Atoms.atom(ctx, w * 0.7, 85, b, 26); } }; } }
 ];
 const C_BANK = ["electronegativity", "oxygen", "nitrogen", "carbon", "hydrogen", "chlorine", "sodium", "potassium", "nonpolar covalent", "polar covalent", "ionic bond", "covalent bond", "partial negative", "partial positive", "hydrogen bond", "hydrophilic", "hydrophobic", "polar", "nonpolar", "ionic"];
+C_CARDS.push(
+  { q: "The number of protons in an atom is its ___ number.", a: ["atomic", "atomic number"] },
+  { q: "Protons plus neutrons is the ___ number.", a: ["mass", "mass number"] },
+  { q: "Atoms of one element with different numbers of neutrons.", a: ["isotopes", "isotope"] },
+  { q: "An atom that has gained or lost electrons.", a: ["ion", "an ion"] },
+  { q: "A particle in the nucleus with no charge.", a: ["neutron", "neutrons"] },
+  { q: "Isotopes of one element have the same chemistry because they have the same number of…", a: ["electrons", "protons and electrons"] },
+  { q: "An unstable isotope that gives off radiation is…", a: ["radioactive"] },
+  { q: "The time for half of a radioactive sample to decay.", a: ["half-life", "half life"] },
+  { q: "Carbon-14 has a half-life of about how many years?", a: ["5730", "5,730", "5700"] },
+  { make() { const n = rint(2, 4); return { q: "A sample has 1/" + Math.pow(2, n) + " of its original radioactive atoms. How many half-lives have passed?", a: String(n) }; } });
+C_BANK.push("atomic number", "mass number", "isotope", "ion", "neutron", "electron", "proton", "radioactive", "half-life");
 let C_D = null;
 function C_start() {
   if (C_D) return;
@@ -375,11 +389,44 @@ function C_start() {
     onDone: () => Lesson.finish("C") });
 }
 
-Lesson.init({ id: "b145_lesson2", version: 1, stages: ["A", "B", "C"], required: "C", bits: 21 + C_CARDS.length,
-  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); },
-  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); ["A", "B", "C"].forEach(Lesson.finish);
+const KX = Kit.extra({ before: "stageC", off: 21 + C_CARDS.length, prev: "B", next: "F", stages: [
+  { key: "X1", label: "C", type: "sort", title: "Inside the atom", tip: "Protons define the element. Neutrons add mass. Electrons make the chemistry.",
+    voice: ["Protons set the element (the atomic number). Neutrons add mass and change from isotope to isotope. Electrons are what bonds are made of."],
+    bins: ["Proton", "Neutron", "Electron"],
+    items: [["Charge +1, in the nucleus", 0], ["No charge, in the nucleus", 1], ["Charge −1, in shells around the nucleus", 2], ["Its number is the atomic number: change it and you change the element", 0], ["Its number differs between isotopes of one element", 1], ["Gaining or losing these makes an ion", 2], ["Valence ones decide how an atom bonds", 2], ["Mass number = protons plus these", 1]] },
+  { key: "X2", label: "D", type: "pick", title: "Isotopes (book, chapter 2)", tip: "Isotopes are atoms of one element with different numbers of neutrons. Carbon-12 and carbon-14 both have 6 protons.",
+    voice: ["Same protons, different neutrons. Same electrons, so the same chemistry. Some isotopes are unstable and decay: that is how carbon dating and medical tracers work."],
+    qs: [
+      { q: "An atom has 6 protons and 8 neutrons. It is…", ok: "Carbon-14", no: ["Carbon-12", "Carbon-13", "Nitrogen-14"], why: "6 + 8 = mass number 14; six protons makes it carbon." },
+      { q: "Carbon-12, carbon-13 and carbon-14 are…", ok: "Isotopes: same protons, different neutrons", no: ["Ions: different electrons", "Different elements", "Isomers: same atoms, different bonds"], why: "Not to be confused with isomers (lesson 3)." },
+      { q: "Why do isotopes of one element react the same way?", ok: "They have the same number of electrons", no: ["They have the same neutrons", "They have the same mass", "They are all radioactive"], why: "Chemistry is electrons." },
+      { q: "An atom of sodium loses an electron. It is now…", ok: "An ion with a +1 charge", no: ["A different element", "An isotope", "A neutron-rich atom"], why: "Protons are unchanged." },
+      { q: "Iodine-131 is used to treat thyroid disease because…", ok: "The thyroid takes up iodine, so the radioactive isotope goes where it is needed", no: ["It makes the thyroid heavier", "It has more electrons", "It is not radioactive"], why: "Radioactive tracers and treatments exploit the same chemistry as the stable isotope." },
+      { make: () => { const n = rint(2, 4), age = n * 5730; return { q: "A fossil has 1/" + Math.pow(2, n) + " of the carbon-14 of a living organism. The half-life of carbon-14 is 5,730 years. How old is the fossil?", ok: age.toLocaleString() + " years", no: [((n - 1) * 5730).toLocaleString() + " years", ((n + 1) * 5730).toLocaleString() + " years", (Math.pow(2, n) * 5730).toLocaleString() + " years"], why: n + " half-lives." }; } }] },
+  { key: "X3", label: "E", type: "sim", title: "Carbon-14 dating", tip: "Carbon-14 decays with a half-life of 5,730 years: half is left after 5,730 years, a quarter after 11,460, and so on.",
+    voice: ["Half-life: the time for half of the atoms to decay. After ten half-lives almost nothing is left, so the method runs out at about 50,000 years."],
+    w: 620, h: 230,
+    controls: [{ id: "age", label: "Age of the sample", min: 0, max: 40000, step: 100, val: 0, fmt: v => v.toLocaleString() + " years" }],
+    readout: S => "Carbon-14 left: <b>" + (100 * Math.pow(0.5, S.age / 5730)).toFixed(1) + "%</b> · " + (S.age / 5730).toFixed(2) + " half-lives",
+    draw(ctx, w, h, S) {
+      const X = a => 30 + a / 40000 * (w - 50), Y = f => 200 - 170 * f; ctx.strokeStyle = "#2e6da4"; ctx.lineWidth = 2; ctx.beginPath();
+      for (let a = 0; a <= 40000; a += 400) { const y = Y(Math.pow(0.5, a / 5730)); a ? ctx.lineTo(X(a), y) : ctx.moveTo(X(a), y); } ctx.stroke();
+      ctx.strokeStyle = "#ccc"; ctx.lineWidth = 1; [0.5, 0.25, 0.125].forEach(f => { ctx.beginPath(); ctx.moveTo(30, Y(f)); ctx.lineTo(w - 20, Y(f)); ctx.stroke(); });
+      ctx.fillStyle = "#222"; ctx.font = "11px sans-serif"; ctx.fillText("1/2", 6, Y(0.5) + 4); ctx.fillText("1/4", 6, Y(0.25) + 4); ctx.fillText("1/8", 6, Y(0.125) + 4);
+      ctx.fillStyle = "#c0392b"; ctx.beginPath(); ctx.arc(X(S.age), Y(Math.pow(0.5, S.age / 5730)), 6, 0, 7); ctx.fill();
+    },
+    goals: [
+      { text: "Find one half-life: half the carbon-14 is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.47 && f < 0.53; } },
+      { text: "Find the age at which a quarter is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.23 && f < 0.27; } },
+      { text: "Find the age at which about 5% is left", test: S => { const f = Math.pow(0.5, S.age / 5730); return f > 0.04 && f < 0.06; } },
+      { text: "Go past the useful range: under 1% left", test: S => Math.pow(0.5, S.age / 5730) < 0.01 }] }
+] });
+const KEYS = ["A", "B"].concat(KX.keys, ["C"]);
+Lesson.init({ id: "b145_lesson2", version: 1, stages: KEYS, required: "C", bits: 21 + C_CARDS.length + KX.bits,
+  onOpen: s => { if (s === "C") C_start(); if (s === "B") B_paint(); KX.open(s); },
+  onReveal: () => { AX.solved.fill(true); BX.solved.fill(true); A_open(0); B_open(0); C_start(); C_D.reveal(); KX.reveal(); KEYS.forEach(Lesson.finish);
     Lesson.tick("A", "rounds", true, "7 of 7"); Lesson.tick("B", "rounds", true, "4 of 4"); Lesson.tick("B", "sort", true, "10 of 10"); } });
-window.addEventListener("resize", () => { A_paint(); B_paint(); });
+window.addEventListener("resize", () => { A_paint(); B_paint(); KX.resize(); });
 </script>
 </body>
 </html>
