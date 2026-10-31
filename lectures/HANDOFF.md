@@ -9,12 +9,15 @@ for lectures 10 onward. Read this, then `lectures/README.md` (how the decks work
   jonsmitchell.com/bio145/.
 - **Lecture 1 is rebuilt from its transcript, then reworked so the screen illustrates what JM says instead of repeating
   it** (2026-10-31, second pass; see "The rule"). It is the model for the rest.
-- **Lectures 2–9 are first drafts** written from the 2026 outlines and the PowerPoint text. JM on the lecture 1 first
+- **Lectures 2 and 3 are rebuilt the same way** (2026-10-31), uncommitted at first, for JM to review alongside lecture 1
+  and look for common issues. Their decisions and open questions are under "Lectures 2 and 3" below.
+- **Lectures 4–9 are first drafts** written from the 2026 outlines and the PowerPoint text. JM on the lecture 1 first
   draft, which was written the same way: *"It's a lot of words that aren't actually my verbiage, and some of it is
-  weirdly out of order (why does the fire example come after the sorting exercise?)"*. Expect the same faults in 2–9.
-- JM has looked at lecture 1 (first draft) in a browser. Lecture 2 he hasn't commented on yet.
-- Nothing has been checked in a browser by the agent; the sandbox blocks Chrome. `tools/check_decks.js` (jsdom) only
-  catches script errors and missing parts. Layout, overlap and text length are unverified.
+  weirdly out of order (why does the fire example come after the sorting exercise?)"*. Expect the same faults in 4–9.
+- The sandbox blocks Chrome, so the agent can't open a deck in a browser. `tools/check_decks.js` (jsdom) catches script
+  errors and missing parts. For layout, this session rendered every build to PNG with resvg (`@resvg/resvg-js`) and the
+  Source Sans 3 fonts (npm `source-sans`), both installed in the session scratchpad, not the repo: figures render
+  exactly, HTML parts (points, photos, demos' controls) approximately. Worth adding to `tools/` if JM wants it.
 - The course page (`index.html` at the repo root) lists each lecture's deck beside its homework, by chapter. Each deck
   has a `lecNN` row in `LOCKS.txt` (all `o`).
 - Every picture in a deck is an OpenStax _Biology 2e_ figure (CC BY 4.0) in `lectures/img/`, credited in
@@ -76,28 +79,28 @@ All of these are outside git (`refs/` is gitignored; the transcripts are elsewhe
 6. `node lectures/tools/check_decks.js NN` (needs `npm install` at the repo root once). Commit. Push only when JM asks.
 7. Ask JM to look at it in a browser, and say what changed and why.
 
-## Lecture 2 specifically
+## Lectures 2 and 3 (rebuilt 2026-10-31)
 
-- Transcript: `2026_exam01_lec02_transcript.txt` (about 48 KB). Outline topics: elements of life; atomic structure
-  (protons change the element, neutrons the weight, electrons the charge; cations and anions; the paddleball; a cloud,
-  not Bohr rings; valence electrons); bond types (covalent as co-presidents; electronegativity as roommates sharing
-  groceries; ionic as a balloon stuck on a wall, latex wallpaper, disrupted by water; hydrogen bonds: "hydrogen cannot
-  stand up for itself", weak alone and strong together; ranking bond strength; polar and nonpolar, methane, oil and
-  water); redox (OIL RIG, the backwards naming, always paired, the semester throughline).
-- Current deck: 9 segments, 39 builds. Demos: `atomBuilder` (protons, neutrons, electrons), `tug` (electronegativity
-  tug of war). Figures in `lec02/figs.js`: `bodyEarth`, `paddle`, `covalent`, `waterMethane`, `redox`; from
-  `shared/figs-common.js`: `saltWater`, `hbonds`. Ends with three room votes.
-- Things to check against the transcript:
-  - The ionic-bond figure shows "dry: strong; in water: weak". That is lecture 3's opening correction ("a student
-    caught me oversimplifying"). Lecture 2 should say what lecture 2 said; ask JM whether he wants the corrected
-    version in lecture 2 instead.
-  - The body-against-Earth composition bars come from the PowerPoint; keep them only if he used that comparison.
-  - The closing votes are the agent's, not his; keep a vote only where he asked the room something.
-  - The PowerPoint's hybrid-orbital slide (chapter 2, slide 12) was left out; leave it out unless the transcript has it.
+- Built from the transcripts with lecture 1's rules; pictures after `lec_chpt02.pptx` (lecture 2: slides 2-27;
+  lecture 3: slides 27-44) and homework 2 and 3. Lecture 2: 15 segments, 56 builds. Lecture 3: 18 segments, 52 builds.
+- Interactives: lecture 2 keeps the atom builder (now starts on helium, his example) and the tug of war (starts on O-H),
+  adds `bend` (drag a hydrogen: straight water's two pulls cancel, bent water's add up; after homework 2, stage B) and
+  ends on a sort, bonds strongest to weakest (his closing activity). Lecture 3 keeps the pH scale and the blood buffer.
+- Decided, and flagged for JM:
+  - The ionic-bond correction he made at the start of lecture 3 is built into lecture 2 ("ionic, in water"; a dry
+    crystal is stronger than covalent). Lecture 3 keeps a two-build reminder.
+  - Left out because the transcript doesn't support them, or they are wrong: OIL RIG (he never said it); the agent's
+    closing votes; the body-against-Earth bars; the "an-ion means not-ion" etymology (anion is from Greek _ana_, up,
+    Faraday's coinage; cation from _kata_, down).
+  - Linalool: the slide's left = orange, right = lavender is drawn only as "one hand smells like orange, its mirror
+    image like lavender", with no left/right or R/S labels, because the assignment looks reversed ((R)-(−)-linalool is
+    the lavender one) and his claim that linalool isn't found in lavender is wrong (lavender oil is rich in it).
+  - SI logistics are kept generic (no room or times).
+- Shared change: `saltWater` in `shared/figs-common.js` takes `opts.dry` and `opts.wet` for its two captions.
 
-## Lectures 3–9, then 10 onward
+## Lectures 4–9, then 10 onward
 
-- Same procedure for 3–9. Lecture 3 opens with the ionic-bond correction and reuses `saltWater`.
+- Same procedure for 4–9, after JM has reviewed 1–3 for common issues.
 - New decks (10–36): `python3 lectures/tools/make_page.py NN "Title" "description"`, write `content.js` and
   `figs.js`, add a `lecNN` row to `LOCKS.txt`, and replace the lecture's "deck not built yet" placeholder on the course
   page with a link (copy lecture 9's card). `docs/GUIDE.md` maps lectures to book chapters.

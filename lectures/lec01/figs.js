@@ -37,7 +37,7 @@
       st(3, arrow(885, 250, 1065, 250) + txt(975, 232, 'have', 'f-t2 f-mid') + node(1230, 250, 'organelles', 320)) +
       st(4, loop('M1230 302C1230 430 750 430 750 320', 750, 330, 303) + txt(990, 455, 'an organelle: a part of a cell', 'f-t f-mid')) +
       st(5, arrow(250, 305, 250, 486) + txt(270, 405, 'contains', 'f-t2') + node(250, 540, 'DNA', 260)) +
-      st(6, txt(415, 530, 'one way of encoding proteins') + txt(415, 568, 'the chemical life on Earth uses', 'f-t2')) +
+      st(6, txt(415, 550, 'the way life on Earth encodes proteins')) +
       st(7, `<rect class="f-accsoft" x="930" y="500" width="500" height="88" rx="18"/>` + txt(1180, 556, 'describing, not defining', 'f-tacc f-mid', 'font-size:34px')));
   };
 
@@ -56,10 +56,10 @@
       st(0, `<path class="f-ink2" style="stroke-width:8" d="M70 360L158 282"/><ellipse class="k2" cx="164" cy="277" rx="13" ry="10"/>` + flame(168, 272, 0.65, 'k4') + txt(60, 410, 'a match', 'f-t2')) +
       st(1, fire(fires[0])) +
       st(2, `<path class="f-thin" d="M770 40V640"/>` + page(820) + arrow(980, 210, 1050, 210) + page(1060) + txt(895, 350, 'the original', 'f-t2 f-mid') + txt(1135, 350, 'a copy', 'f-t2 f-mid')) +
-      st(4, fires.slice(1).map(fire).join('') + row(40, 590, 'n', 'heredity: traits from what it\'s burning')) +
-      st(5, arrow(1220, 210, 1290, 210) + page(1300) + txt(1375, 350, 'a copy', 'f-t2 f-mid') + row(810, 590, 'y', 'heredity: traits from the original')) +
-      st(7, row(810, 645, 'n', 'does anything else')) +
-      st(8, row(40, 645, 'y', 'does other things: grows, consumes')));
+      st(4, fires.slice(1).map(fire).join('') + row(40, 590, 'n', 'heredity: traits come from the fuel')) +
+      st(5, arrow(1220, 210, 1290, 210) + page(1300) + txt(1375, 350, 'a copy', 'f-t2 f-mid') + row(810, 590, 'y', 'heredity: traits come from the original')) +
+      st(7, row(810, 645, 'n', 'grows, consumes')) +
+      st(8, row(40, 645, 'y', 'grows, consumes')));
   };
 
   /* the code evolved here, once: start over (or look on Mars) and you get a different one */
@@ -76,7 +76,7 @@
         txt(430, 568, 'RNA copying itself, in a bubble of lipids', 'f-t2') + txt(400, 450, 'a genetic code evolves', 'f-t2') + txt(400, 355, 'DNA', 'f-t2') +
         txt(130, 115, 'you', 'f-t f-mid') + txt(380, 115, 'a bacterium', 'f-t f-mid') + txt(630, 115, 'a mushroom', 'f-t f-mid')) +
       st(1, tree(1100, [900, 1100, 1300], 'k1') + bubble(1100, 'k1s') + txt(1100, 115, 'start life over', 'f-tb f-mid') + tag(1100, 'a different code', 'f-card')) +
-      st(2, rover(1370, 470) + txt(1370, 600, 'Mars: not our code', 'f-t2 f-mid')) +
+      st(2, rover(1370, 470) + txt(1370, 600, 'or on Mars', 'f-t2 f-mid')) +
       st(3, earth.map((x) => tag(x, 'ACT → threonine', 'f-accsoft')).join('')));
   };
 
@@ -96,7 +96,7 @@
       st(1, line(up) + line(down) + [up, down].map((p) => p.slice(1, 4).map(([x, y]) => c(x, y, 20)).join('')).join('') +
         c(150, 300, 30) + c(870, 190, 30) + c(870, 410, 30) + arrow(902, 190, 974, 190) + arrow(902, 410, 1022, 410) +
         txt(870, 140, 'your father', 'f-t2 f-mid') + txt(870, 478, 'your mother', 'f-t2 f-mid') +
-        txt(60, 375, 'the origin of life', 'f-t2') + txt(60, 407, '3,500 million years ago', 'f-t2')) +
+        txt(60, 375, 'the origin of life', 'f-t2') + txt(60, 407, '3.5 billion years ago', 'f-t2')) +
       st(2, txt(560, 560, 'never not alive', 'f-tacc f-mid', 'font-size:36px')) +
       st(3, arrow(1282, 300, 1384, 300) + c(1416, 300, 30) + txt(1416, 360, 'a kid', 'f-t2 f-mid')));
   };
@@ -144,7 +144,7 @@
     const rows = [['a bacterium', 'yyyy', 'yes'], ['fire', 'nssy', 'no'], ['a photocopy', 'ynnn', 'no'], ['a virus', 'ynnn', 'not really'], ['a program that copies itself', 'yqyy', '?']];
     const marks = (i) => txt(40, ys[i] + 10, rows[i][0]) + [...rows[i][1]].map((m, j) => mark[m](cols[j], ys[i])).join('');
     const verdict = (i) => txt(V, ys[i] + 11, rows[i][2], 'f-tb f-mid', rows[i][2] === 'yes' ? 'fill:var(--k3)' : '');
-    const head = txt(520, 52, 'reproduces,', 'f-t2 f-mid') + txt(520, 82, 'with heredity', 'f-t2 f-mid') + txt(760, 82, 'metabolism', 'f-t2 f-mid') +
+    const head = txt(520, 52, 'reproduces', 'f-t2 f-mid') + txt(520, 82, 'with heredity', 'f-t2 f-mid') + txt(760, 82, 'metabolism', 'f-t2 f-mid') +
       txt(980, 82, 'homeostasis', 'f-t2 f-mid') + txt(1180, 82, 'growth', 'f-t2 f-mid') + txt(V, 82, 'alive?', 'f-t2 f-mid') + `<path class="f-thin" d="M30 106H1470M1270 30V590"/>`;
     return svg(1500, 610,
       st(0, head + marks(0) + verdict(0)) + st(1, marks(1) + verdict(1)) + st(2, marks(2) + verdict(2)) +
@@ -170,13 +170,13 @@
 
   /* where the mass could come from, struck off one at a time */
   F.suspects = () => {
-    const rows = [['Light', 'no mass: you can\'t weigh light'], ['Soil', 'weigh the soil before and after: no change'], ['Water', 'harder: it evaporates'], ['Air', 'what\'s left']];
+    const rows = [['light', 'no mass'], ['soil', 'weigh the soil before and after: no change'], ['water', 'harder: it evaporates'], ['air', 'what\'s left']];
     const ys = [100, 225, 350, 475], w = (s) => s.length * 27 + 20;
     return svg(1500, 560,
       st(5, `<rect class="f-accsoft" x="30" y="${ys[3] - 58}" width="520" height="84" rx="16"/>`) +
       st(0, rows.map(([s], i) => txt(60, ys[i], s, 'f-tb', 'font-size:52px')).join('')) +
-      st(1, strike(50, 60 + w('Light'), ys[0] - 16) + txt(330, ys[0] - 4, rows[0][1])) +
-      st(3, strike(50, 60 + w('Soil'), ys[1] - 16) + txt(330, ys[1] - 4, rows[1][1])) +
+      st(1, strike(50, 60 + w('light'), ys[0] - 16) + txt(330, ys[0] - 4, rows[0][1])) +
+      st(3, strike(50, 60 + w('soil'), ys[1] - 16) + txt(330, ys[1] - 4, rows[1][1])) +
       st(4, txt(330, ys[2] - 4, rows[2][1])) +
       st(5, txt(330, ys[3] - 4, rows[3][1], 'f-tacc', 'font-size:34px')));
   };
@@ -222,7 +222,7 @@
 
   /* a smaller and smaller pool: soil and light out, air left; then the gas tanks: oxygen and nitrogen out, CO2 left */
   F.pool = () => {
-    const xs = [220, 520, 820, 1120], names = ['Light', 'Soil', 'Water', 'Air'];
+    const xs = [220, 520, 820, 1120], names = ['light', 'soil', 'water', 'air'];
     const J = [[360, 'O₂', 'all oxygen: dies'], [760, 'N₂', 'all nitrogen: dies'], [1160, 'CO₂', 'all carbon dioxide: lives']];
     const jar = (c, gas, alive) => `<rect class="f-card" x="${c - 95}" y="240" width="190" height="230" rx="26"/>` + txt(c, 290, gas, 'f-tb f-mid') +
       (alive ? `<path class="f-ink k3l" style="stroke-width:5" d="M${c} 462V380"/><ellipse class="k3s" cx="${c - 18}" cy="405" rx="20" ry="9"/><ellipse class="k3s" cx="${c + 18}" cy="388" rx="20" ry="9"/>`

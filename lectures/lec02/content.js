@@ -1,109 +1,127 @@
-/* Lecture 2: Atoms, bonds, and redox. Pacing from refs/outlines/2026_lec02_outline.tex; slide text from
- * lec_chpt02.pptx slides 1-26 and 34, reworded toward the outline. */
+/* Lecture 2: atoms, bonds, and redox. Order from the 2026 recording
+ * (Courses/transcripts/145/transcripts/raw/2026_exam01_lec02_transcript.txt); pictures after lec_chpt02.pptx slides
+ * 2-27 and homework 2. The screen follows lecture 1's rules (see the top of lec01/content.js): the slide shows what JM
+ * would draw or point at, a prompt is only a question he puts to the room, words on a slide are labels.
+ *
+ * One change from the 2026 recording: there JM ranked ionic bonds below covalent, and corrected it at the start of
+ * lecture 3 (ionic bonds are stronger in a dry crystal; dissolved in water they just come apart). This deck says the
+ * corrected version: "ionic, in water".
+ */
 (function (root) {
   'use strict';
-  const L = [60, 110, 760, 660], R = [860, 110, 700, 660], WIDE = [60, 110, 1480, 660];
+  const FULL = [40, 100, 1520, 680];
+  const none = (n) => Array.from({ length: n }, () => ({}));
   const segments = [
     {
       id: 'title', title: 'Atoms, bonds, and redox', noHead: true, mins: [0, 1],
       builds: [{}],
-      items: [{ kind: 'title', box: [100, 180, 1400, 460], kick: 'BIO 145 · Lecture 2 · Chapter 2', text: 'Atoms, bonds, and redox', sub: 'Life is chemistry with a history' }]
+      items: [{ kind: 'title', box: [100, 180, 1400, 460], kick: 'BIO 145 · Lecture 2 · Chapter 2', text: 'Atoms, bonds, and redox' }]
     },
     {
-      id: 'elements', title: 'Elements of life', mins: [1, 8],
-      builds: [
-        { prompt: 'About 25 elements matter to life' },
-        { prompt: 'Earth is mostly *iron and rock*. You aren\'t.' },
-        { prompt: 'Hydrogen from the Big Bang; heavier elements from supernovae' },
-        { prompt: 'How many bonds each one makes: *valence*' }
-      ],
+      id: 'origins', title: 'Where the elements came from', mins: [1, 4.5],
+      builds: none(5),
+      items: [{ kind: 'fig', box: FULL, fig: 'ptable', opts: { mode: 'origin' } }]
+    },
+    {
+      id: 'life', title: 'The elements of life', mins: [4.5, 8.5],
+      builds: none(6),
       items: [
-        { kind: 'fig', box: [40, 110, 1520, 640], fig: 'bodyEarth', builds: [0, 1] },
-        { kind: 'points', box: L, builds: [2, 3], at: 2, cls: 'big', lines: ['Hydrogen: made in the Big Bang', 'Heavier elements: made in stars and supernovae'] },
-        { kind: 'cmp', box: [880, 160, 660, 440], builds: [3], at: 3, together: true, cols: [{ h: 'Valence', lines: ['H: 1', 'O: 2', 'N: 3', 'C: 4'] }] }
+        { kind: 'fig', box: FULL, fig: 'ptable', opts: { mode: 'life' }, builds: [0, 1, 5] },
+        { kind: 'fig', box: FULL, fig: 'valence', builds: [2, 3, 4] }
       ]
     },
     {
-      id: 'atom', title: 'Inside an atom', mins: [8, 17],
-      builds: [
-        { prompt: 'Protons (+), neutrons (0), electrons (−)' },
-        { prompt: 'Change the protons: a *different element*' },
-        { prompt: 'Change the neutrons: an *isotope*' },
-        { prompt: 'Change the electrons: an *ion*' },
-        { prompt: 'Cations (+) and anions (−)' }
-      ],
+      id: 'element', title: 'What is an element?', mins: [8.5, 11],
+      builds: [{ prompt: 'Did we know the elements before or after we could see atoms?' }, {}, {}, {}],
+      items: [{ kind: 'fig', box: FULL, fig: 'alchemy' }]
+    },
+    {
+      id: 'atom', title: 'Inside an atom', mins: [11, 15.5],
+      builds: none(2),
       items: [
-        { kind: 'atomBuilder', id: 'a1', box: [40, 110, 1520, 660] }
+        { kind: 'atomBuilder', id: 'a1', box: [40, 110, 1520, 660], builds: [0], start: { p: 2, n: 2, e: 2 } },
+        { kind: 'fig', box: [100, 140, 1400, 520], fig: 'particles', builds: [1] }
       ]
     },
     {
-      id: 'orbitals', title: 'Where the electrons are', mins: [17, 21],
-      builds: [{ prompt: 'Not a perfect analogy: a paddleball' }, { prompt: 'Add energy: farther from the nucleus' }, { prompt: 'An average distance, not a fixed ring' }],
+      id: 'orbit', title: 'Where the electrons are', mins: [15.5, 22],
+      builds: [{}, {}, {}, { prompt: 'What if I add a ton of energy?' }, {}, {}, {}, {}],
       items: [
-        { kind: 'fig', box: [40, 110, 1520, 560], fig: 'paddle', builds: [0, 1] },
-        { kind: 'points', box: WIDE, builds: [2], at: 2, cls: 'big', lines: [{ t: 'Shells: roughly how far an electron gets', sub: 'its exact position is unknowable' }, { t: 'A cloud, not the Bohr rings', sub: 'the rings are a bookkeeping device' }, { t: 'Outermost electrons: most energy, weakest held', sub: 'the valence electrons, the ones that bond' }] }
+        { kind: 'fig', box: FULL, fig: 'paddle', builds: [0, 1, 2, 3, 4] },
+        { kind: 'fig', box: FULL, fig: 'ringCloud', builds: [5] },
+        { kind: 'fig', box: FULL, fig: 'shells', builds: [6, 7] }
       ]
     },
     {
-      id: 'covalent', title: 'Covalent bonds', mins: [21, 26],
-      builds: [{ prompt: 'Co-presidents share the office: *co-valence*' }, { prompt: 'Two pairs: a double bond' }, { prompt: 'A real bond: it has to be *broken*' }],
-      items: [{ kind: 'fig', box: [40, 120, 1520, 560], fig: 'covalent', builds: [0, 1, 2] }]
+      id: 'covalent', title: 'Covalent bonds', mins: [22, 25.5],
+      builds: none(4),
+      items: [{ kind: 'fig', box: FULL, fig: 'share' }]
     },
     {
-      id: 'en', title: 'Electronegativity', mins: [26, 34],
-      builds: [
-        { prompt: 'Roommates sharing groceries' },
-        { prompt: 'Who gets the pair?' },
-        { prompt: 'Uneven sharing: partial charges' },
-        { prompt: 'Water is bent: a + end and a − end' },
-        { prompt: 'Methane is symmetric: no poles' },
-        { prompt: 'Oil and water' }
-      ],
+      id: 'en', title: 'Electronegativity', mins: [25.5, 29],
+      builds: [{ prompt: 'Do they eat the same amount of food?' }, {}],
       items: [
-        { kind: 'tug', id: 't1', box: [40, 110, 1520, 660], builds: [0, 1, 2] },
-        { kind: 'fig', box: [80, 120, 1440, 560], fig: 'waterMethane', builds: [3, 4, 5] },
-        { kind: 'points', box: [80, 690, 1440, 80], builds: [5], cls: 'small plain', lines: [{ t: 'Polar dissolves polar ("like with like"); polar and nonpolar stay apart.', at: 5 }] }
+        { kind: 'fig', box: FULL, fig: 'roommates', builds: [0] },
+        { kind: 'tug', id: 't1', box: [40, 110, 1520, 660], builds: [1], start: { a: 'O', b: 'H' } }
       ]
     },
     {
-      id: 'ionic', title: 'Ionic and hydrogen bonds', mins: [34, 42],
-      builds: [
-        { prompt: 'A balloon stuck to a wall' },
-        { prompt: 'In water: pulled apart' },
-        { prompt: 'Hydrogen can\'t stand up for itself' },
-        {}, {}, {},
-        { prompt: 'Weak alone, strong *together*' },
-        { prompt: 'Rank them: strongest first?' }
-      ],
+      id: 'polar', title: 'Polar and nonpolar', mins: [29, 32],
+      builds: none(3),
       items: [
-        { kind: 'fig', box: [40, 110, 1520, 600], fig: 'saltWater', builds: [0, 1] },
-        { kind: 'fig', box: [80, 110, 1440, 600], fig: 'hbonds', builds: [2, 3, 4, 5, 6] },
-        { kind: 'vote', id: 'rank', box: [160, 110, 1280, 660], builds: [7], q: 'In a cell (in water), the strongest is…', opts: ['a covalent bond', 'an ionic bond', 'a hydrogen bond'], ans: 0, why: 'Covalent, by far. Ionic bonds are strong only when dry; in water they\'re weak, near hydrogen bonds.' }
+        { kind: 'bend', id: 'w1', box: [40, 110, 1520, 660], builds: [0] },
+        { kind: 'fig', box: FULL, fig: 'waterMethane', builds: [1, 2] }
       ]
     },
     {
-      id: 'redox', title: 'Redox', mins: [42, 50],
-      builds: [
-        { prompt: 'Sodium and chlorine' },
-        { prompt: 'One electron moves' },
-        { prompt: '*OIL RIG*: oxidation is loss, reduction is gain' },
-        { prompt: 'The names are backwards' },
-        { prompt: 'Always paired' },
-        { prompt: 'All semester: electrons moving' }
-      ],
+      id: 'redox', title: 'Redox', mins: [32, 37],
+      builds: none(5),
       items: [
-        { kind: 'fig', box: [40, 110, 1520, 640], fig: 'redox', builds: [0, 1, 2] },
-        { kind: 'points', box: WIDE, builds: [3, 4, 5], at: 3, cls: 'big', lines: [{ t: 'Backwards because early electricity assumed the + charges moved', sub: 'the electrons move; a "reduced" atom gained one' }, 'Whatever loses electrons hands them to something that gains them', { t: 'Photosynthesis, respiration, electron transport chains, ATP', sub: 'every one of them is electrons moving between molecules' }] }
+        { kind: 'fig', box: FULL, fig: 'redox', builds: [0, 2, 3] },
+        { kind: 'fig', box: [100, 160, 1400, 460], fig: 'backwards', builds: [1] },
+        { kind: 'fig', box: FULL, fig: 'throughline', builds: [4] }
       ]
     },
     {
-      id: 'check', title: 'Check yourself', mins: [50, 55],
-      builds: [{ prompt: 'What makes an atom carbon?' }, { prompt: 'An atom of sodium loses an electron. It is now…' }, { prompt: 'Carbon-12 and carbon-14 are…' }],
+      id: 'ions', title: 'Ions', mins: [37, 40],
+      builds: none(4),
       items: [
-        { kind: 'vote', id: 'q1', box: [160, 110, 1280, 660], builds: [0], q: 'What decides which element an atom is?', opts: ['the number of protons', 'the number of neutrons', 'the number of electrons'], ans: 0, why: 'Protons. Change them and it is a different element.' },
-        { kind: 'vote', id: 'q2', box: [160, 110, 1280, 660], builds: [1], q: 'Sodium loses an electron. It is now…', opts: ['an ion, charge +1', 'an isotope', 'a different element'], ans: 0, why: 'An ion: a cation. It was oxidized.' },
-        { kind: 'vote', id: 'q3', box: [160, 110, 1280, 660], builds: [2], q: 'Carbon-12 and carbon-14 are…', opts: ['isotopes: different neutrons', 'ions: different electrons', 'different elements'], ans: 0, why: 'Same protons, same chemistry, different mass.' }
+        { kind: 'fig', box: [150, 160, 1300, 460], fig: 'ions', builds: [0] },
+        { kind: 'fig', box: FULL, fig: 'balloon', builds: [1, 2] },
+        { kind: 'fig', box: [100, 140, 1400, 520], fig: 'ladder', builds: [3] }
       ]
+    },
+    {
+      id: 'dissolve', title: 'Dissolving', mins: [40, 45],
+      builds: none(5),
+      items: [
+        { kind: 'fig', box: FULL, fig: 'saltWater', opts: { dry: 'salt: the solute', wet: 'water: the solvent' }, builds: [0, 1] },
+        { kind: 'fig', box: FULL, fig: 'likeLike', builds: [2, 3, 4] }
+      ]
+    },
+    {
+      id: 'hbond', title: 'Hydrogen bonds', mins: [45, 48],
+      builds: none(4),
+      items: [
+        { kind: 'fig', box: FULL, fig: 'hbond', builds: [0, 1] },
+        { kind: 'fig', box: FULL, fig: 'fold', builds: [2] },
+        { kind: 'fig', box: [100, 140, 1400, 520], fig: 'ladder', builds: [3], all: true }
+      ]
+    },
+    {
+      id: 'heat', title: 'Heat', mins: [48, 49.3],
+      builds: none(2),
+      items: [{ kind: 'fig', box: FULL, fig: 'heat' }]
+    },
+    {
+      id: 'rank', title: 'Strongest to weakest', mins: [49.3, 50],
+      builds: [{ prompt: 'On a scrap of paper, with your name: strongest to weakest' }],
+      items: [{
+        kind: 'sort', id: 'rank', box: [0, 100, 1600, 690],
+        bins: [{ t: '1 · strongest', box: [60, 20, 350, 380] }, { t: '2', box: [430, 20, 350, 380] }, { t: '3', box: [800, 20, 350, 380] }, { t: '4 · weakest', box: [1170, 20, 370, 380] }],
+        tray: [60, 440, 1480, 200],
+        chips: [{ t: 'hydrogen', bin: 3 }, { t: 'single covalent', bin: 1 }, { t: 'ionic, in water', bin: 2 }, { t: 'double covalent', bin: 0 }]
+      }]
     }
   ];
   root.LECTURE = { id: 'lec02', short: 'Lecture 2', title: 'Atoms, bonds, and redox', segments };

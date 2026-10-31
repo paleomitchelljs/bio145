@@ -10,8 +10,9 @@
       `<rect class="k4s" x="40" y="-90" width="140" height="56" rx="28"/><rect class="k4s" x="70" y="30" width="120" height="50" rx="25"/><path class="f-ink2" d="M-30 100c40-20 80 20 120 0s80 20 120 0"/>` +
       `<text class="f-tb f-mid" y="200">Eukaryote</text><text class="f-t2 f-mid" y="245">rooms with walls: a house</text></g>`));
 
-  /* salt: a dry crystal, then ions pulled apart by water */
-  F.saltWater = () => {
+  /* salt: a dry crystal, then ions pulled apart by water. opts.dry, opts.wet: the two captions */
+  F.saltWater = (o) => {
+    o = o || {};
     let crystal = '';
     for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const na = (i + j) % 2 === 0, x = 120 + i * 62, y = 170 + j * 62; crystal += `<circle class="ch-ball ${na ? 'el-Na' : 'el-Cl'}" cx="${x}" cy="${y}" r="${na ? 22 : 28}"/>`; }
     const shell = (cx, cy, ion) => {
@@ -20,8 +21,8 @@
       return o;
     };
     return svg(1440, 520,
-      st(0, `${crystal}<text class="f-t2 f-mid" x="213" y="460">dry: strong</text>`) +
-      st(1, arrow(450, 260, 580, 260) + shell(760, 200, 'Na') + shell(1060, 330, 'Cl') + `<text class="f-t2 f-mid" x="910" y="500">in water: each ion wrapped in waters</text>`));
+      st(0, `${crystal}<text class="f-t2 f-mid" x="213" y="460">${o.dry || 'dry: strong'}</text>`) +
+      st(1, arrow(450, 260, 580, 260) + shell(760, 200, 'Na') + shell(1060, 330, 'Cl') + `<text class="f-t2 f-mid" x="910" y="500">${o.wet || 'in water: each ion wrapped in waters'}</text>`));
   };
 
   /* water molecules held by hydrogen bonds */
