@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 32</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 32</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const CODONS = { GCU: "Ala", GCC: "Ala", GAA: "Glu", GAG: "Glu", AAA: "Lys", AAG: "Lys", UUU: "Phe", UUC: "Phe", UAU: "Tyr", UAC: "Tyr", UGG: "Trp", CAU: "His", CAC: "His", UAA: "stop", UAG: "stop", UGA: "stop", CUU: "Leu", CUC: "Leu", UCU: "Ser", UCC: "Ser", GGU: "Gly", GGC: "Gly", AUG: "Met", GUU: "Val", GUC: "Val", CCU: "Pro", CCC: "Pro", ACU: "Thr", ACC: "Thr", GAU: "Asp", GAC: "Asp" };
+const mutQ = () => {
+  const keys = Object.keys(CODONS).filter(k => CODONS[k] !== "stop"), cod = pick(keys), kind = pick(["silent", "missense", "nonsense", "frameshift"]);
+  let mut, a;
+  if (kind === "frameshift") { mut = cod.slice(0, 2); a = "frameshift"; return { q: "A codon <b>" + cod + "</b> (" + CODONS[cod] + ") loses its last base: <b>" + mut + "</b>… and everything after shifts. This is…", a: "frameshift" }; }
+  const opts = [];
+  for (let i = 0; i < 3; i++) for (const b of "ACGU") { if (b === cod[i]) continue; const m = cod.slice(0, i) + b + cod.slice(i + 1); if (CODONS[m]) opts.push(m); }
+  const want = opts.filter(m => kind === "nonsense" ? CODONS[m] === "stop" : kind === "silent" ? CODONS[m] === CODONS[cod] : CODONS[m] !== CODONS[cod] && CODONS[m] !== "stop");
+  if (!want.length) return mutQ();
+  mut = pick(want);
+  return { q: "A codon changes from <b>" + cod + "</b> (" + CODONS[cod] + ") to <b>" + mut + "</b> (" + CODONS[mut] + "). This point mutation is…", a: kind };
+};
+Kit.run({ id: "b145_lesson32", num: 32, stages: [
+  { type: "sim", title: "Counting somites", tip: "The segmentation clock: each cycle of an oscillating mRNA lays down one body segment. Faster decay means a faster clock, and more segments in the same time.",
+    voice: ["Segmenting without a counter or supervisor. A temporal signal (an oscillating mRNA) and a spatial signal (two opposing gradients).", "Snakes: faster decay, more vertebrae. Frogs: slower decay, five. Same genes, different expression rates."],
+    w: 640, h: 200,
+    controls: [{ id: "dec", label: "mRNA decay rate (clock speed)", min: 1, max: 100, step: 1, val: 20, fmt: v => v + " per hour" }, { id: "t", label: "Growth time", min: 1, max: 30, step: 1, val: 10, fmt: v => v + " h" }],
+    readout: S => "Somites made: <b>" + Math.round(S.dec * S.t / 10) + "</b>",
+    draw(ctx, w, h, S) {
+      const n = Math.round(S.dec * S.t / 10), shown = Math.min(n, 120), bw = (w - 40) / Math.max(shown, 8);
+      for (let i = 0; i < shown; i++) { ctx.fillStyle = i % 2 ? "#b5651d" : "#d9a066"; ctx.fillRect(20 + i * bw, 60, bw - 1, 70); }
+      ctx.fillStyle = "#222"; ctx.font = "13px sans-serif"; ctx.fillText(n + " segments" + (n > 120 ? " (first 120 shown)" : ""), 20, 40);
+    },
+    goals: [
+      { text: "A frog: build a body of about 5 segments", test: S => Math.round(S.dec * S.t / 10) === 5 },
+      { text: "A human-like embryo: about 30 somites", test: S => Math.abs(Math.round(S.dec * S.t / 10) - 33) <= 3 },
+      { text: "A snake: more than 200 segments", test: S => Math.round(S.dec * S.t / 10) > 200 }] },
+  { type: "pick", title: "Classify the mutation", tip: "Silent: same amino acid. Missense: different amino acid. Nonsense: becomes stop. Frameshift: an insertion or deletion not in multiples of three.",
+    voice: ["Silent, missense, nonsense, frameshift. Inversion and duplication change bigger pieces. Silent is not always neutral."],
+    qs: [0, 1, 2, 3, 4, 5].map(() => ({ make: () => { const m = mutQ(); return { q: m.q, ok: m.a, no: ["silent", "missense", "nonsense", "frameshift"].filter(x => x !== m.a), why: "" }; } })) },
+  { type: "sort", title: "Somatic or germline", tip: "Somatic mutations die with the person; germline mutations are heritable.",
+    voice: ["Mosaicism: half the body can differ from the other half. Germ cells are set aside early; meiotic arrest limits the number of divisions."],
+    bins: ["Somatic mutation", "Germline mutation"],
+    items: [["A mutation in a skin cell from sunburn", 0], ["A mutation in a developing sperm", 1], ["Passed to children", 1], ["A mosaic patch of different-colored fur", 0], ["Not inherited", 0], ["A mutation in an egg precursor", 1], ["Epithelia divide more, so these accumulate more", 0]] },
+  { type: "order", title: "A retrovirus takes over", tip: "Reverse transcriptase copies RNA into DNA.",
+    voice: ["The central dogma has exceptions: RNA to DNA. A retrovirus carjacks an idling car: it inserts at an expressed gene and steals the host promoter."],
+    items: ["The virus binds the cell and its RNA genome enters", "Reverse transcriptase copies the RNA into DNA", "The DNA enters the nucleus and integrates into a host chromosome", "The host's own machinery transcribes the viral genes", "Viral proteins and RNA assemble into new virus particles", "New viruses bud from the cell"] },
+  { type: "pick", title: "Duplicates and model organisms", tip: "A spare copy is free to change.",
+    voice: ["Heir and a spare: silence the spare, free to mutate, a chance of a new function. Model organisms were chosen by accident: zebrafish from a pet store."],
+    qs: [
+      { q: "Why is a gene duplication useful?", ok: "One copy keeps the old job and the spare is free to evolve a new one", no: ["It doubles every protein forever", "It deletes the gene", "It silences the genome"], why: "Heir and a spare." },
+      { q: "Zebrafish, Xenopus and fancy mice became model organisms because…", ok: "Of historical accident and ease of study", no: ["They are closest to humans", "They have the simplest genomes", "They were chosen by the NIH"], why: "They are better known than humans." },
+      { q: "A frameshift is more damaging than a missense because…", ok: "It changes every codon after the mutation", no: ["It always makes a stop", "It adds an amino acid", "It changes only one codon"], why: "Reading frame." },
+      { q: "A silent mutation changes the DNA but not the amino acid. It is not always neutral because…", ok: "Synonymous codons are translated at different rates", no: ["It changes the protein", "It deletes the gene", "It makes a stop"], why: "Not all codons are equal." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["silent", "missense", "nonsense", "frameshift", "inversion", "duplication", "somatic", "germline", "mosaic", "reverse transcriptase", "retrovirus", "integrase", "somite", "model organism"],
+    cards: [
+      { make: () => { const m = mutQ(); return { q: m.q, a: m.a }; } },
+      { make: () => { const m = mutQ(); return { q: m.q, a: m.a }; } },
+      { make: () => { const m = mutQ(); return { q: m.q, a: m.a }; } },
+      { make: () => { const m = mutQ(); return { q: m.q, a: m.a }; } },
+      C("A change that gives the same amino acid.", ["silent", "silent mutation"]), C("A change that gives a different amino acid.", ["missense", "missense mutation"]),
+      C("A change that gives a stop codon.", ["nonsense", "nonsense mutation"]), C("An insertion or deletion not in multiples of three.", ["frameshift", "frameshift mutation"]),
+      C("A segment of DNA flipped end to end.", ["inversion"]), C("An extra copy of a segment.", ["duplication", "gene duplication"]),
+      C("Mutations in body cells are…", ["somatic"]), C("Mutations in the cells that make gametes are…", ["germline", "germ line"]),
+      C("A person with two genetically different populations of cells.", ["mosaic", "a mosaic", "mosaicism"]),
+      C("The enzyme that copies RNA into DNA.", ["reverse transcriptase"]), C("A virus with an RNA genome that makes DNA.", ["retrovirus", "a retrovirus"]),
+      C("A block of tissue that becomes vertebrae and muscle.", ["somite", "somites"]),
+      C("An organism studied to learn about others, such as the zebrafish.", ["model organism", "a model organism"])] }
+] });
+
+</script>
+</body>
+</html>

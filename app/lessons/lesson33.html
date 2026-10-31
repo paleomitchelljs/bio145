@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 33</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 33</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const lac = S => { const rep = !S.lactose; const cap = !S.glucose; const base = rep ? 0.02 : 0.2, tx = rep ? 0.02 : (cap ? 1 : 0.2); return { rep, cap, tx }; };
+Kit.run({ id: "b145_lesson33", num: 33, stages: [
+  { type: "sim", title: "The lac operon", tip: "lacZ, lacY and lacA are transcribed together from one promoter. The repressor blocks the operator unless lactose binds it. CAP with cAMP boosts transcription when glucose is low.",
+    voice: ["Two inputs, one output: two-input logic. Repressor as a roadblock; lactose pulls it off.", "A reporter gene (lacZ) turns cells blue."],
+    w: 640, h: 220,
+    controls: [{ id: "lactose", label: "Lactose present", type: "check", val: false }, { id: "glucose", label: "Glucose present", type: "check", val: true }],
+    readout: S => { const l = lac(S); return l.rep ? "Repressor sits on the operator: <b>off</b>" : l.cap ? "Repressor off, CAP-cAMP helping: <b>fully on</b> (blue cells)" : "Repressor off, but glucose keeps CAP away: <b>low</b>"; },
+    draw(ctx, w, h, S) {
+      const l = lac(S); ctx.font = "12px sans-serif";
+      const parts = [["CAP site", 40, 60, "#8e6bb0"], ["promoter", 110, 70, "#3a5fa8"], ["operator", 190, 70, "#b5651d"], ["lacZ", 280, 90, "#2e7d32"], ["lacY", 380, 90, "#2e7d32"], ["lacA", 480, 90, "#2e7d32"]];
+      parts.forEach(([n, x, ww, c]) => { ctx.fillStyle = c; ctx.fillRect(x, 130, ww, 30); ctx.fillStyle = "#222"; ctx.fillText(n, x + 4, 178); });
+      if (l.rep) { ctx.fillStyle = "#c0392b"; ctx.beginPath(); ctx.arc(225, 110, 22, 0, 7); ctx.fill(); ctx.fillStyle = "#fff"; ctx.fillText("repressor", 204, 114); }
+      if (l.cap && !l.rep) { ctx.fillStyle = "#8e6bb0"; ctx.beginPath(); ctx.arc(70, 110, 18, 0, 7); ctx.fill(); ctx.fillStyle = "#fff"; ctx.fillText("CAP", 58, 114); }
+      ctx.fillStyle = "#222"; ctx.fillText("transcription", 280, 60); ctx.fillStyle = "#eee"; ctx.fillRect(360, 50, 200, 12); ctx.fillStyle = "#2e7d32"; ctx.fillRect(360, 50, 200 * l.tx, 12);
+      if (l.tx > 0.9) { ctx.fillStyle = "#3a5fa8"; ctx.beginPath(); ctx.arc(w - 60, 200, 10, 0, 7); ctx.fill(); }
+    },
+    goals: [
+      { text: "No lactose: the operon is off whether or not glucose is there", test: S => !S.lactose && lac(S).tx < 0.05 },
+      { text: "Lactose with glucose: only a trickle of transcription", test: S => S.lactose && S.glucose && lac(S).tx > 0.1 && lac(S).tx < 0.3 },
+      { text: "Lactose without glucose: fully on (cells turn blue)", test: S => S.lactose && !S.glucose && lac(S).tx > 0.9 }] },
+  { type: "sort", title: "Histone marks", tip: "Acetylation always opens chromatin. Methylation depends on which lysine.",
+    voice: ["Histone octamer, tails with lysines. H3K4me3 opens; H3K9me3 closes."],
+    bins: ["Opens chromatin (gene on)", "Closes chromatin (gene off)"],
+    items: [["Acetylation of a histone lysine", 0], ["H3K4me3", 0], ["H3K9me3", 1], ["A repressive methyl mark", 1], ["Histone acetyltransferase active at a promoter", 0], ["Heterochromatin", 1]] },
+  { type: "sort", title: "Operons and gene control (book, chapter 16)", tip: "The lac operon is inducible; the trp operon is repressible.",
+    voice: ["Prokaryotes control genes at the operon; eukaryotes have more knobs: chromatin, transcription, processing, stability, translation."],
+    bins: ["Lac operon (inducible)", "Trp operon (repressible)", "Eukaryote-only controls"],
+    items: [["Normally off; lactose turns it on", 0], ["Normally on; the amino acid tryptophan turns it off", 1], ["Repressor works only when bound to the end product", 1], ["Repressor is released when the inducer binds", 0], ["Enhancers far from the promoter", 2], ["Histone modification", 2], ["Alternative splicing", 2], ["mRNA half-life set by the 3′ UTR", 2]] },
+  { type: "sort", title: "Where is gene expression controlled?", tip: "Multiple knobs, the same output.",
+    voice: ["Chromatin state, transcription rate, mRNA processing, mRNA stability, translation rate."],
+    bins: ["Chromatin state", "Transcription", "mRNA processing", "mRNA stability", "Translation"],
+    items: [["Histone acetylation", 0], ["Enhancers and the TATA box", 1], ["Transcription factors binding the promoter", 1], ["Alternative splicing", 2], ["Capping and polyadenylation", 2], ["miRNA degrades the message", 3], ["3′ UTR sets the half-life", 3], ["Ribosome loading and tRNA supply", 4]] },
+  { type: "pick", title: "Introns, transposons, selfish RNA", tip: "Introns descend from self-splicing elements.",
+    voice: ["Nested dolls of replicators: organism, cell, genome, gene, transcript. Cancer is a cell-level escape. Introns are not for the host."],
+    qs: [
+      { q: "Introns are thought to descend from…", ok: "Self-splicing group II elements that inserted into genes", no: ["Viruses of bacteria", "Mitochondrial DNA", "tRNA genes"], why: "A good outcome of an insertion." },
+      { q: "How is an intron removed?", ok: "Lariat splicing by the spliceosome", no: ["Reverse transcription", "Methylation", "Translation"], why: "Alternative splicing makes several proteins from one gene." },
+      { q: "A transposon inserting into a gene most often…", ok: "Does little (neutral), sometimes harms", no: ["Always benefits", "Always kills", "Always silences"], why: "LINEs are neutral; occasionally an insert becomes useful." },
+      { q: "The lac repressor is released from the operator when…", ok: "Lactose (allolactose) binds it", no: ["Glucose binds it", "RNA polymerase pushes it", "The operon is deleted"], why: "Inducer binding changes its shape." },
+      { q: "The CAP site boosts transcription when…", ok: "Glucose is low, so cAMP is high", no: ["Glucose is high", "Lactose is absent", "The repressor is bound"], why: "Two inputs: lactose and glucose." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["operon", "promoter", "operator", "repressor", "inducer", "CAP", "cAMP", "lacZ", "enhancer", "TATA box", "acetylation", "methylation", "histone", "intron", "exon", "spliceosome", "transposon", "alternative splicing", "Xist"],
+    cards: [
+      C("A cluster of genes transcribed together with one promoter.", ["operon", "an operon"]), C("The DNA site where RNA polymerase begins.", ["promoter"]), C("The DNA site where a repressor binds.", ["operator"]),
+      C("The protein that blocks transcription.", ["repressor", "a repressor"]), C("A molecule that turns an operon on by binding the repressor.", ["inducer", "an inducer", "lactose", "allolactose"]),
+      C("The protein that activates the lac operon when glucose is low.", ["cap", "cap protein", "catabolite activator protein"]), C("The small molecule that rises when glucose is low.", ["camp"]),
+      C("The lac gene that encodes β-galactosidase and turns reporter cells blue.", ["lacz"]),
+      C("A DNA element that boosts transcription from far away.", ["enhancer", "enhancers"]), C("The promoter element near −25 in eukaryotes.", ["tata box", "tata"]),
+      C("Adding acetyl groups to histones makes chromatin…", ["open", "more open"]), C("Methylation of H3K9 makes chromatin…", ["closed", "condensed"]),
+      C("The proteins DNA wraps around.", ["histones", "histone"]),
+      C("A segment removed from the RNA.", ["intron", "introns"]), C("A segment kept in the mature RNA.", ["exon", "exons"]),
+      C("The machine that removes introns.", ["spliceosome"]),
+      C("A mobile DNA element.", ["transposon", "transposons", "a transposon"]),
+      C("Joining exons in different combinations makes proteins by…", ["alternative splicing"]),
+      C("The long non-coding RNA that inactivates an X chromosome.", ["xist"])] }
+] });
+
+</script>
+</body>
+</html>

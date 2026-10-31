@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 12</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 12</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+Kit.run({ id: "b145_lesson12", num: 12, stages: [
+  { type: "order", title: "A signaling pathway", tip: "The text-message analogy: write, send, read, act, finish.",
+    voice: ["Six steps: synthesis, transport, reception, transduction, response, termination.", "Why transduction? The receptor is stuck in the membrane; the intermediates are water-soluble and can reach the machinery. A work order to the physical plant."],
+    items: ["Synthesis: a cell makes the signal", "Transport: the signal travels to its target", "Reception: the signal binds its receptor", "Transduction: intermediate molecules pass the message inside", "Response: gene expression, enzyme activity, or membrane permeability changes", "Termination: the signal is removed and the pathway switches off"] },
+  { type: "sort", title: "How far does the signal go?", tip: "Autocrine, direct contact, paracrine, endocrine, or neurotransmitter.",
+    voice: ["A text to one person, a group text, a reply-all. Range is the difference between a hormone and a neighbor's whisper."],
+    bins: ["Autocrine", "Direct contact", "Paracrine", "Endocrine", "Neurotransmitter"],
+    items: [["The cell responds to its own signal", 0], ["A signal bound to the surface of one cell binds the receptor of a touching cell", 1], ["A growth factor diffuses to nearby cells", 2], ["Insulin travels in the blood to distant cells", 3], ["Acetylcholine crosses a synapse", 4], ["Glucocorticoids released by the adrenals", 3], ["Wnt acting on neighboring cells in an embryo", 2]] },
+  { type: "sort", title: "Four kinds of receptor", tip: "Where the receptor sits and what it does decide the type.",
+    voice: ["Ion-linked, G protein-linked (a GTP toggle), enzyme-linked (phosphorylation), and intracellular (lipid-soluble signals like steroids)."],
+    bins: ["Ion-linked (ligand-gated channel)", "G protein-linked", "Enzyme-linked", "Intracellular"],
+    items: [["The acetylcholine receptor opens a Na⁺ pore", 0], ["The β-adrenergic receptor for epinephrine", 1], ["A receptor that swaps GDP for GTP on its partner", 1], ["The insulin receptor, a kinase", 2], ["A receptor tyrosine kinase phosphorylates itself", 2], ["The estrogen receptor inside the nucleus", 3], ["A receptor for cortisol in the cytoplasm", 3]] },
+  { type: "pick", title: "Context and extras (book, chapter 9)", tip: "The book adds second messengers, apoptosis and quorum sensing.",
+    voice: ["The same signal can give opposite results in different cells, which is why pathways have many steps.", "The book adds: second messengers (cAMP, Ca²⁺, IP₃), apoptosis, and quorum sensing."],
+    qs: [
+      { q: "A rising blood glucose triggers insulin, which lowers glucose. This is…", ok: "Negative feedback", no: ["Positive feedback", "Autocrine signaling", "Apoptosis"], why: "The response shuts off the stimulus." },
+      { q: "A water-soluble hormone cannot cross the membrane. How does its message get inside?", ok: "A receptor and second messengers like cAMP", no: ["The hormone dissolves in the bilayer", "It is carried by a vesicle to the nucleus", "The hormone becomes a lipid"], why: "That is transduction." },
+      { q: "Bacteria release a signal and respond only when it is concentrated. This is…", ok: "Quorum sensing", no: ["Apoptosis", "Endocrine signaling", "Autocrine signaling"], why: "It tells the cell how many neighbors there are." },
+      { q: "A cell with severe DNA damage activates a signal for orderly self-destruction. This is…", ok: "Apoptosis", no: ["Mitosis", "Phagocytosis", "Quorum sensing"], why: "Programmed cell death; it is also how webbing between fingers disappears." },
+      { q: "Wnt in a wound, in an embryo and in a tumor can do different things. Why?", ok: "The response depends on the cell's context", no: ["Wnt is three different molecules", "Receptors do not matter", "Only the dose matters"], why: "Same signal, different cell, different outcome." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["autocrine", "paracrine", "endocrine", "ligand", "receptor", "transduction", "second messenger", "cAMP", "G protein", "kinase", "phosphorylation", "negative feedback", "apoptosis", "quorum sensing", "Wnt", "Hedgehog", "ion channel", "GTP"],
+    cards: [
+      C("Signaling to the same cell that made the signal.", "autocrine"), C("Signaling to nearby cells.", "paracrine"), C("Signaling through the bloodstream to distant cells.", "endocrine"),
+      C("A molecule that binds a receptor.", ["ligand", "a ligand"]), C("The protein that detects a signal.", ["receptor", "a receptor"]),
+      C("Passing the message inside the cell through intermediates is…", ["transduction", "signal transduction"]),
+      C("A small molecule such as cAMP that relays a signal inside a cell.", ["second messenger", "a second messenger"]),
+      C("A receptor class that toggles a protein between GDP and GTP.", ["g protein", "g protein-linked", "g protein coupled receptor", "gpcr"]),
+      C("The nucleotide a G protein binds when it is on.", "GTP"),
+      C("An enzyme that adds a phosphate group to a protein.", ["kinase", "a kinase"]),
+      C("Adding a phosphate to a protein.", ["phosphorylation", "phosphorylating"]),
+      C("Which response type is a change in transcription?", ["gene expression", "changes in gene expression"]),
+      C("When the response shuts off the stimulus, it is…", ["negative feedback", "negative"]),
+      C("Programmed cell death.", ["apoptosis"]), C("Bacteria sensing their population density.", ["quorum sensing"]),
+      C("Steroid hormones cross the membrane because they are…", ["lipid soluble", "lipid-soluble", "nonpolar", "hydrophobic"]),
+      C("The developmental signal in the Frizzled pathway.", "Wnt"),
+      C("The signal that acts through Patched and Smoothened.", ["hedgehog", "hh"]),
+      C("Which receptor type opens a pore on binding? (ion-linked or enzyme-linked)", ["ion-linked", "ion linked", "ligand-gated"])] }
+] });
+
+</script>
+</body>
+</html>

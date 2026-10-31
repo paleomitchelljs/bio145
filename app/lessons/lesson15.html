@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 15</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 15</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+Kit.run({ id: "b145_lesson15", num: 15, stages: [
+  { type: "sort", title: "Four steps of aerobic respiration", tip: "Glycolysis in the cytoplasm; pyruvate oxidation and the citric acid cycle in the matrix; the electron transport chain on the inner membrane.",
+    voice: ["Respiration is a controlled fire: same reaction, energy captured stepwise, like a bucket lowered down stairs."],
+    bins: ["Glycolysis", "Pyruvate to acetyl-CoA", "Citric acid cycle", "Electron transport chain"],
+    items: [["Happens in the cytoplasm", 0], ["Investment phase, then payoff phase", 0], ["Net 2 ATP and 2 NADH per glucose", 0], ["Pyruvate dehydrogenase, a giant complex", 1], ["The first carbon leaves as CO₂", 1], ["Coenzyme A, made from vitamin B5", 1], ["Acetyl joins oxaloacetate to make citrate", 2], ["Carbons exhaled as CO₂", 2], ["Oxygen is the final electron acceptor", 3], ["ATP synthase", 3]] },
+  { type: "sort", title: "Drugs and their enzymes", tip: "Inhibiting one enzyme can change a whole body.",
+    voice: ["Cyanide: one enzyme stops everything. Penicillin: the bacterial cell wall. Aspirin and ibuprofen: COX and prostaglandins. ACE inhibitors: blood pressure. Grapefruit juice: liver enzymes. Gila monster venom: Ozempic."],
+    bins: ["Cytochrome oxidase (respiration)", "COX (prostaglandins, inflammation)", "ACE (blood pressure)", "Cell wall enzyme of bacteria", "Liver enzymes that clear drugs", "GLP-1 receptor (appetite)"],
+    items: [["Cyanide", 0], ["Aspirin", 1], ["Ibuprofen", 1], ["Lisinopril and other ACE inhibitors", 2], ["Penicillin", 3], ["Grapefruit juice", 4], ["Exendin-4, from Gila monster venom, and Ozempic", 5]] },
+  { type: "pick", title: "Glycolysis and its control", tip: "Phosphofructokinase (PFK) is the control point of glycolysis.",
+    voice: ["Spend 2 ATP, make 4: net 2 ATP and 2 NADH. ATP inhibits PFK; AMP activates it. Insulin raises cAMP, which activates PFK and draws glucose from the blood.", "Type 2 diabetes breaks this loop."],
+    qs: [
+      { q: "Glycolysis spends 2 ATP and makes 4. The net per glucose is…", ok: "2 ATP", no: ["4 ATP", "6 ATP", "0 ATP"], why: "Plus 2 NADH and 2 pyruvate." },
+      { q: "A cell is flooded with ATP. What happens to PFK?", ok: "It is inhibited, slowing glycolysis", no: ["It is activated", "It is destroyed", "Nothing changes"], why: "Feedback: enough product, stop making more." },
+      { q: "A cell is low on energy and AMP rises. PFK is…", ok: "Activated", no: ["Inhibited", "Phosphorylated to death", "Replaced by ligase"], why: "AMP signals a hungry cell." },
+      { q: "How does insulin help clear glucose from blood?", ok: "cAMP rises, activating PFK, so cells use more glucose", no: ["It breaks glucose into CO₂ in the blood", "It blocks glycolysis", "It converts glucose to cholesterol"], why: "In type 2 diabetes the cells stop responding." },
+      { q: "Pyruvate becomes acetyl-CoA. The first carbon lost leaves as…", ok: "CO₂", no: ["Glucose", "ATP", "Pyruvate"], why: "Three carbons in, two carbons out plus one CO₂." },
+      { q: "Taking in grapefruit juice raises the effective dose of some drugs. Why?", ok: "It inhibits the liver enzymes that clear them", no: ["It makes the drug more soluble", "It raises stomach pH", "It adds more drug"], why: "Enzyme inhibition by food." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["glycolysis", "pyruvate", "acetyl-CoA", "citric acid cycle", "electron transport chain", "cytoplasm", "matrix", "inner membrane", "phosphofructokinase", "NADH", "ATP", "CO2", "oxygen", "cyanide", "penicillin", "aspirin", "coenzyme A", "ATP synthase"],
+    cards: [
+      C("The first step of respiration, in the cytoplasm.", "glycolysis"), C("The 3-carbon end product of glycolysis.", "pyruvate"),
+      C("Net ATP from glycolysis per glucose.", ["2", "two"]), C("Net NADH from glycolysis per glucose.", ["2", "two"]),
+      C("The control enzyme of glycolysis, abbreviated PFK.", ["phosphofructokinase", "pfk"]),
+      C("Does ATP activate or inhibit PFK?", ["inhibit", "inhibits", "inhibit it"]), C("Does AMP activate or inhibit PFK?", ["activate", "activates", "activate it"]),
+      C("The 2-carbon molecule that enters the citric acid cycle.", ["acetyl-coa", "acetyl coa", "acetyl coenzyme a"]),
+      C("The vitamin B5-derived carrier that holds the acetyl group.", ["coenzyme a", "coa"]),
+      C("The pathway also called the Krebs cycle.", ["citric acid cycle", "krebs cycle", "tca cycle"]),
+      C("Where the citric acid cycle runs in the mitochondrion.", ["matrix", "mitochondrial matrix"]),
+      C("Where the electron transport chain sits in the mitochondrion.", ["inner membrane", "inner mitochondrial membrane", "cristae"]),
+      C("The final electron acceptor of aerobic respiration.", ["oxygen", "o2"]),
+      C("The gas released when carbons are fully oxidized.", ["co2", "carbon dioxide"]),
+      C("The poison that binds the iron of a cytochrome.", "cyanide"), C("The antibiotic that blocks bacterial cell-wall construction.", "penicillin"),
+      C("The enzyme inhibited by aspirin and ibuprofen.", ["cox", "cyclooxygenase"]),
+      C("The enzyme that makes most of the ATP in mitochondria.", ["atp synthase"])] }
+] });
+
+</script>
+</body>
+</html>

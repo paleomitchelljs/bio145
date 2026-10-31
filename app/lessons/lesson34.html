@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 34</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 34</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const FR = [600, 1000, 1100, 2000, 3000];
+const dist = (s, S) => Math.max(0, (3.6 + 0.5 * S.agar - Math.log10(s)) * (1.2 / S.agar)) * S.v * S.t / 600;
+const onGel = d => d > 0.3 && d < 7.7;
+const comp = { A: "T", T: "A", G: "C", C: "G" };
+const rc = s => s.split("").reverse().map(b => comp[b]).join("");
+const six = () => { if (Math.random() < 0.5) { const h = Array.from({ length: 3 }, () => pick("ACGT".split(""))).join(""); return h + rc(h); } let s; do { s = Array.from({ length: 6 }, () => pick("ACGT".split(""))).join(""); } while (s === rc(s)); return s; };
+const fp = (lanes, mark) => (ctx, w, h) => { ctx.fillStyle = "#222"; ctx.fillRect(10, 10, w - 20, h - 20); const lw = (w - 40) / lanes.length; lanes.forEach((l, i) => { const x = 20 + i * lw; ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif"; ctx.fillText(l.n, x + 4, h - 2); l.b.forEach(y => { ctx.fillStyle = "#9fe0ff"; ctx.fillRect(x + 4, 18 + y * (h - 50), lw - 14, 4); }); }); };
+Kit.run({ id: "b145_lesson34", num: 34, stages: [
+  { type: "sim", title: "Run a gel", tip: "DNA is negative (phosphate backbone), so it runs toward the positive end. The agarose mesh holds big pieces back. Fragments here: 600, 1000, 1100, 2000, 3000 bp.",
+    voice: ["Technology built on technology, stolen from nature: agarose from seaweed.", "Small runs far, large runs short. Too long and the small ones run off the end; too high a gel and nothing separates."],
+    w: 640, h: 250,
+    controls: [{ id: "agar", label: "Agarose", min: 0.5, max: 3, step: 0.1, val: 1, fmt: v => v.toFixed(1) + "%" }, { id: "v", label: "Voltage", min: 20, max: 150, step: 5, val: 80, fmt: v => v + " V" }, { id: "t", label: "Run time", min: 5, max: 90, step: 1, val: 30, fmt: v => v + " min" }],
+    readout: S => FR.map(s => s + " bp: " + (dist(s, S) > 8 ? "off the end" : dist(s, S).toFixed(1) + " cm")).join(" · "),
+    draw(ctx, w, h, S) {
+      ctx.fillStyle = "#222"; ctx.fillRect(20, 20, w - 40, 210); ctx.fillStyle = "#fff"; ctx.font = "12px sans-serif"; ctx.fillText("− (wells)", 24, 16); ctx.fillText("+", w - 34, 16);
+      const X = d => 28 + d / 8 * (w - 70); FR.forEach((s, i) => { const d = dist(s, S); if (d > 8) return; ctx.fillStyle = onGel(d) ? "#9fe0ff" : "#667"; ctx.fillRect(X(d), 40 + i * 32, 6, 22); ctx.fillStyle = "#fff"; ctx.fillText(s, w - 36, 55 + i * 32); });
+    },
+    goals: [
+      { text: "Get all five bands onto the gel", test: S => FR.every(s => onGel(dist(s, S))) },
+      { text: "Separate the 1000 and 1100 bp bands by at least 0.15 cm with all five bands on the gel", test: S => FR.every(s => onGel(dist(s, S))) && dist(1000, S) - dist(1100, S) >= 0.15 },
+      { text: "Run it too long: the smallest piece runs off the end", test: S => dist(600, S) > 8 }] },
+  { type: "pick", title: "Reading a gel (and the book's DNA fingerprinting)", tip: "Each lane is a sample; matching band patterns means matching DNA. Repeat-number differences between people make fingerprints.",
+    voice: ["Allele length variation shows up as band position. Compare lanes; the shortest runs farthest.", "Blots: Southern is DNA, Northern is RNA, Western is protein."],
+    qs: [0, 1, 2].map(() => ({ make: () => { const pat = () => Array.from({ length: 4 }, () => Math.round(Math.random() * 90) / 100).sort(); const sus = [pat(), pat(), pat()], who = Math.floor(Math.random() * 3); const lanes = [{ n: "scene", b: sus[who] }].concat(sus.map((b, i) => ({ n: "suspect " + "ABC"[i], b }))); return { q: "Which suspect's DNA matches the crime scene sample?", ok: "Suspect " + "ABC"[who], no: ["Suspect A", "Suspect B", "Suspect C", "No one"].filter(x => x !== "Suspect " + "ABC"[who]), draw: fp(lanes), w: 420, h: 170, why: "Every band lines up." }; } })).concat([
+      { q: "A blot detects RNA. It is a…", ok: "Northern blot", no: ["Southern blot", "Western blot", "Eastern blot"], why: "Southern: DNA. Northern: RNA. Western: protein." },
+      { q: "Eric Southern moved DNA from the gel to a membrane by…", ok: "Capillary transfer with paper towels", no: ["Electric shock", "Boiling", "Centrifugation"], why: "A labeled complementary probe finds the band." }]) },
+  { type: "order", title: "PCR: one cycle", tip: "Each cycle doubles the number of copies.",
+    voice: ["Melt, anneal primers, extend. Taq polymerase from a hot spring survives the heat. 2ⁿ copies after n cycles, limited by nucleotides."],
+    items: ["Denature: heat to about 95 °C so the strands separate", "Anneal: cool to about 55 °C so primers bind", "Extend: Taq adds nucleotides from the primers at 72 °C", "Repeat: the copies double each cycle"] },
+  { type: "order", title: "Making recombinant DNA", tip: "Insulin in E. coli: cut, paste, transform, select.",
+    voice: ["Cut source and vector alike. The human gene has introns, so reverse-transcribe mature mRNA into cDNA. Insert into lacZ: white colonies carry the insert."],
+    items: ["Reverse-transcribe the mature mRNA into cDNA (no introns)", "Cut the cDNA and the plasmid vector with the same restriction enzyme", "Mix them: sticky ends pair", "DNA ligase seals the backbone", "Transform bacteria with the plasmid", "Select with antibiotic; white colonies carry an insert in lacZ"] },
+  { type: "pick", title: "Restriction enzymes and PCR math", tip: "Type II restriction enzymes cut inverted palindromes.",
+    voice: ["EcoRI cuts GAATTC. An inverted palindrome reads the same 5′ to 3′ on both strands. Sticky ends versus blunt cuts."],
+    qs: [0, 1, 2, 3].map(() => ({ make: () => { const s = six(); const yes = s === rc(s); return { q: "Could a restriction enzyme cut at <b>" + s + "</b>? (is it an inverted palindrome: equal to its reverse complement)", ok: yes ? "Yes" : "No", no: [yes ? "No" : "Yes"], why: "The reverse complement of " + s + " is " + rc(s) + "." }; } })).concat([
+      { q: "After 10 PCR cycles starting from one copy, you have about…", ok: "1,024 copies", no: ["10 copies", "100 copies", "20 copies"], why: "2¹⁰." },
+      { q: "Why does PCR use Taq polymerase?", ok: "It survives the 95 °C denaturing step", no: ["It makes RNA", "It cuts DNA", "It is the fastest enzyme"], why: "From Thermus aquaticus in hot springs." },
+      { q: "A linear DNA with 2 EcoRI sites is cut into…", ok: "3 fragments", no: ["2 fragments", "4 fragments", "1 fragment"], why: "Cuts + 1." },
+      { q: "A primer for RT-PCR that is a string of T's pairs with…", ok: "The poly-A tail of mature mRNA", no: ["The promoter", "An intron", "The cap"], why: "It captures mature mRNA only." }]) },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["agarose", "gel electrophoresis", "ladder", "Southern blot", "Northern blot", "Western blot", "probe", "restriction enzyme", "EcoRI", "palindrome", "sticky ends", "ligase", "plasmid", "cDNA", "reverse transcriptase", "PCR", "denature", "anneal", "extend", "primer", "Taq polymerase", "yes", "no"],
+    cards: [
+      { make: () => { const s = six(); const yes = s === rc(s); return { q: "Is <b>" + s + "</b> an inverted palindrome (equal to its reverse complement)? yes or no", a: yes ? "yes" : "no" }; } },
+      { make: () => { const s = six(); const yes = s === rc(s); return { q: "Is <b>" + s + "</b> an inverted palindrome (equal to its reverse complement)? yes or no", a: yes ? "yes" : "no" }; } },
+      C("The mesh used to separate DNA by size, from seaweed.", ["agarose"]),
+      C("In a gel, DNA runs toward which charge? (positive or negative)", ["positive", "the positive end", "+"]),
+      C("A lane of fragments of known sizes.", ["ladder", "a ladder", "dna ladder"]),
+      C("A blot for DNA.", ["southern", "southern blot"]), C("A blot for RNA.", ["northern", "northern blot"]), C("A blot for protein.", ["western", "western blot"]),
+      C("A labeled complementary strand used to find a sequence.", ["probe", "a probe"]),
+      C("Bacterial enzymes that cut DNA at specific sequences.", ["restriction enzymes", "restriction enzyme", "restriction endonucleases"]),
+      C("The restriction enzyme that cuts GAATTC.", ["ecori"]), C("Single-stranded overhangs left by some enzymes.", ["sticky ends", "sticky end"]),
+      C("The enzyme that seals the backbone.", ["dna ligase", "ligase"]),
+      C("A small circular DNA used as a vector.", ["plasmid", "a plasmid"]),
+      C("DNA copied from mature mRNA, with no introns.", ["cdna", "complementary dna"]),
+      C("The enzyme that makes cDNA.", ["reverse transcriptase"]),
+      C("PCR step: strands separate.", ["denature", "denaturation", "denaturing"]), C("PCR step: primers bind.", ["anneal", "annealing"]), C("PCR step: polymerase builds new DNA.", ["extend", "extension", "elongation"]),
+      C("The polymerase from a hot spring bacterium.", ["taq", "taq polymerase"]),
+      C("Copies after n cycles of PCR: 2 to the…", ["n", "the n"])] }
+] });
+
+</script>
+</body>
+</html>

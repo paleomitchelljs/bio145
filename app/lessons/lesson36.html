@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 36</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 36</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const dna = "…ATGGCATTACGCGTTGACCGG…";
+const edit = S => !S.match ? { out: "No cut: the guide does not match the target, so Cas9 leaves the DNA alone", cut: false } : S.tmpl ? { out: "Cut, then the cell copies the template: a precise correction", cut: true, fix: true } : { out: "Cut, then sloppy end joining: small insertions or deletions, usually a frameshift knockout", cut: true, fix: false };
+Kit.run({ id: "b145_lesson36", num: 36, stages: [
+  { type: "order", title: "CRISPR in bacteria", tip: "A bacterial immune system: clustered regularly interspaced short palindromic repeats.",
+    voice: ["Phage siege: surviving bacteria had defenses. Cas1 and Cas2 capture viral DNA and store it as a spacer between repeats in the CRISPR locus.", "A guide RNA has a constant part and a variable part, like an antibody. Cas9 cuts what the guide matches."],
+    items: ["A phage injects its DNA", "Cas1 and Cas2 capture a piece of it", "The piece is stored as a spacer in the CRISPR locus", "The locus is transcribed into guide RNAs", "Cas9 with a guide RNA finds the matching viral DNA", "Cas9 cuts the viral DNA"] },
+  { type: "sim", title: "Editing a genome", tip: "Cas9 cuts where the 20-base guide matches (next to a PAM). The cell repairs the cut: non-homologous end joining is error-prone; given a template, repair copies it.",
+    voice: ["Make a custom guide. NHEJ gives frameshift knockouts; a template gives precise changes. The cell does the repair."],
+    w: 640, h: 170,
+    controls: [{ id: "match", label: "Guide matches the target", type: "check", val: false }, { id: "tmpl", label: "Repair template supplied", type: "check", val: false }],
+    readout: S => edit(S).out,
+    draw(ctx, w, h, S) {
+      const e = edit(S); ctx.font = "600 15px ui-monospace,Menlo,monospace"; ctx.fillStyle = "#222"; ctx.fillText("DNA  " + (e.cut ? (e.fix ? "…ATGGCATAACGCGTTGACCGG…" : "…ATGGCATTA  GTTGACCGG…") : dna), 30, 70);
+      ctx.fillStyle = S.match ? "#2e7d32" : "#c0392b"; ctx.fillRect(110, 90, 220, 14); ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; ctx.fillText("guide RNA " + (S.match ? "(matches)" : "(mismatched)"), 110, 125);
+      if (e.cut) { ctx.strokeStyle = "#c0392b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(220, 40); ctx.lineTo(240, 78); ctx.stroke(); }
+    },
+    goals: [
+      { text: "A mismatched guide: nothing is cut", test: S => !S.match && !edit(S).cut },
+      { text: "Knock a gene out: matching guide, no template", test: S => S.match && !S.tmpl && edit(S).cut && !edit(S).fix },
+      { text: "Correct a mutation precisely: matching guide and a template", test: S => S.match && S.tmpl && edit(S).fix }] },
+  { type: "order", title: "Casgevy for sickle cell disease", tip: "Edit the cells outside the body, then put them back.",
+    voice: ["A point mutation in β-hemoglobin. The therapy reactivates fetal hemoglobin. Bone marrow out, edit ex vivo, ablate the marrow, reinfuse."],
+    items: ["Stem cells are taken from the patient's bone marrow", "The cells are edited in the lab to reactivate fetal hemoglobin", "The patient's own marrow is cleared with chemotherapy", "The edited cells are infused back", "They settle in the marrow and make red cells with fetal hemoglobin"] },
+  { type: "sort", title: "The omes", tip: "Closer to phenotype means harder to measure.",
+    voice: ["The genome is fixed; expression varies with stress, hunger and cancer. A liver and a pancreas cell: same genome, different expression."],
+    bins: ["Genomics", "Epigenomics", "Transcriptomics", "Proteomics", "Metabolomics"],
+    items: [["The complete DNA sequence", 0], ["Which histones and cytosines are modified", 1], ["Every mRNA being made in a cell right now", 2], ["Every protein present, with no universal handle to tag them", 3], ["Glucose, lactate and other small molecules", 4], ["Variants present in every cell of the body", 0], ["RNA-seq", 2], ["Mass spectrometry of proteins", 3]] },
+  { type: "pick", title: "Bioinformatics and the closing theme", tip: "Biotechnology steals from nature.",
+    voice: ["Statistics on omics data: dimensionality reduction, clustering by tissue, regression, deep learning. Foldit lets players fold proteins.", "Taq, restriction enzymes, reverse transcriptase, CRISPR: stolen from nature. Are viruses alive?"],
+    qs: [
+      { q: "Cells cluster by tissue in an expression dataset because…", ok: "Different tissues turn on different genes from the same genome", no: ["Their DNA differs", "They have different chromosomes", "Clustering invents groups"], why: "Dimensionality reduction makes this visible." },
+      { q: "Which tool came from a hot-spring bacterium?", ok: "Taq polymerase", no: ["Reverse transcriptase", "Cas9", "EcoRI"], why: "Thermus aquaticus." },
+      { q: "Which tool came from a virus?", ok: "Reverse transcriptase", no: ["Taq polymerase", "Restriction enzymes", "Agarose"], why: "Retroviruses." },
+      { q: "Restriction enzymes evolved as a bacterial defense against…", ok: "Viruses (phages)", no: ["Starvation", "Heat", "Antibiotics"], why: "Like CRISPR." },
+      { q: "A guide RNA is like an antibody in that…", ok: "Part is constant and part is variable to fit a target", no: ["It is a protein", "It is made by the host", "It cuts DNA itself"], why: "Constant region plus a variable region." },
+      { q: "In the book (chapter 17), making an organism with a gene from another species is…", ok: "Making a transgenic (genetically modified) organism", no: ["Cloning an individual", "Gene therapy only", "DNA fingerprinting"], why: "Cloning copies a whole genome; transgenics add a gene." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["CRISPR", "Cas9", "guide RNA", "spacer", "PAM", "phage", "non-homologous end joining", "knockout", "template", "genomics", "epigenomics", "transcriptomics", "proteomics", "metabolomics", "bioinformatics", "ex vivo", "fetal hemoglobin", "transgenic"],
+    cards: [
+      C("The bacterial immune system adapted for genome editing.", ["crispr", "crispr-cas9"]),
+      C("The enzyme that cuts the DNA.", ["cas9"]), C("The RNA that tells Cas9 where to cut.", ["guide rna", "grna", "sgrna"]),
+      C("Viral DNA stored in the CRISPR locus.", ["spacer", "spacers"]),
+      C("Which two proteins capture new spacers? (Cas1 and ___)", ["cas2"]),
+      C("A virus that infects bacteria.", ["phage", "bacteriophage"]),
+      C("Sloppy repair that joins cut ends.", ["non-homologous end joining", "nhej", "non homologous end joining"]),
+      C("Disabling a gene is a gene…", ["knockout", "knock out", "knockout"]),
+      C("Precise edits need the cell to copy a repair…", ["template", "a template"]),
+      C("Study of all DNA.", ["genomics"]), C("Study of chemical marks on DNA and histones.", ["epigenomics"]),
+      C("Study of all RNA transcripts.", ["transcriptomics"]), C("Study of all proteins.", ["proteomics"]), C("Study of all small molecules.", ["metabolomics"]),
+      C("Computation and statistics on biological data.", ["bioinformatics"]),
+      C("Editing cells outside the body is called ___ editing.", ["ex vivo"]),
+      C("Sickle cell therapy reactivates which hemoglobin?", ["fetal hemoglobin", "fetal"]),
+      C("An organism carrying a gene from another species.", ["transgenic", "gmo", "genetically modified"])] }
+] });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 5</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 5</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+/* steroid core drawn: three six-rings and a five-ring */
+function ring(ctx, cx, cy, r, n, rot) { ctx.beginPath(); for (let i = 0; i < n; i++) { const a = rot + i * 2 * Math.PI / n; const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.closePath(); ctx.stroke(); }
+function steroid(ctx, w, h) { ctx.strokeStyle = "#222"; ctx.lineWidth = 2; const r = 26, dx = r * Math.sqrt(3), cx = w / 2 - dx, cy = h / 2 + 12; ring(ctx, cx, cy, r, 6, Math.PI / 6); ring(ctx, cx + dx, cy - r * 1.5, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx, cy, r, 6, Math.PI / 6); ring(ctx, cx + 2 * dx + dx * 0.95, cy - r * 1.95, r * 0.88, 5, Math.PI / 10); }
+Kit.run({ id: "b145_lesson5", num: 5, stages: [
+  { type: "sort", title: "What proteins do", tip: "A verb in the cell needs a protein noun.",
+    voice: ["Proteins do stuff. Whenever the cell does something, a protein is doing it."],
+    bins: ["Enzyme", "Transport", "Motility", "Regulation", "Defense", "Structure", "Storage"],
+    items: [["Amylase breaks starch down", 0], ["A neuron's ion channel", 1], ["Hemoglobin carries oxygen", 1], ["Myosin slides along actin", 2], ["Kinesin walks along a microtubule", 2], ["Insulin tells cells to take up glucose", 3], ["An antibody binds a bacterium", 4], ["Collagen in skin", 5], ["Keratin in hair", 5], ["Albumin in egg white", 6]] },
+  { type: "sort", title: "Side chains", tip: "All twenty amino acids share a backbone; only the side chain differs. The same twenty are used in bacteria and trees.",
+    voice: ["Amino group, carboxyl group, and a variable side chain. Nonpolar, polar, or charged: that decides where it sits in the fold."],
+    bins: ["Nonpolar", "Polar, uncharged", "Charged"],
+    items: [["Leucine", 0], ["Valine", 0], ["Alanine", 0], ["Phenylalanine", 0], ["Serine", 1], ["Threonine", 1], ["Glutamine", 1], ["Cysteine", 1], ["Lysine", 2], ["Arginine", 2], ["Aspartate", 2], ["Glutamate", 2]] },
+  { type: "sort", title: "Four levels of structure", tip: "Primary is the sequence; secondary is local backbone shapes; tertiary is the whole chain's fold; quaternary is several chains together.",
+    voice: ["Sequence, then local shapes, then the fold, then the team of chains."],
+    bins: ["Primary", "Secondary", "Tertiary", "Quaternary"],
+    items: [["The order of amino acids in the chain", 0], ["A peptide bond joining two amino acids", 0], ["An α helix", 1], ["A β sheet", 1], ["Hydrogen bonds between backbone atoms", 1], ["The whole chain's 3D fold", 2], ["A disulfide bridge between two side chains", 2], ["Hydrophobic side chains packed inside", 2], ["Four chains of hemoglobin together", 3], ["Different complexes from the same gene's chains", 3]] },
+  { type: "pick", title: "Steroids and denaturation (book, chapter 3)", tip: "Cholesterol is the four-ring core every steroid hormone is built from.",
+    voice: ["One core, many hormones: cortisol, aldosterone, progesterone, testosterone, estradiol differ by small groups.", "Heat or pH can unfold a protein; the sequence is intact but the shape, and the job, are gone."],
+    qs: [
+      { q: "How many rings does the steroid core have?", ok: "Four", no: ["Two", "Three", "Six"], draw: steroid, w: 260, h: 120, why: "Three six-membered rings and one five-membered ring, fused." },
+      { q: "Cortisol, testosterone and estradiol are all made from which molecule?", ok: "Cholesterol", no: ["Glucose", "A fatty acid", "An amino acid"], why: "Same core, different small groups: a key blank with different teeth." },
+      { q: "Progesterone lacks three hydroxyl groups that cortisol has. What does that tell you?", ok: "Small group changes make different hormones", no: ["They are not steroids", "Only the number of rings matters", "They are different molecules entirely"], why: "Receptors read the groups, as they read isomer shape." },
+      { q: "Heat unfolds an egg white protein. Which level of structure is lost and which survives?", ok: "Secondary and tertiary lost; primary survives", no: ["Primary lost; the rest survives", "Only quaternary is lost", "Nothing is lost"], why: "Peptide bonds are strong; the folds are held by weak bonds." },
+      { q: "Why does a denatured enzyme stop working?", ok: "Its active site's shape is gone", no: ["Its amino acids were removed", "Its sequence changed", "It lost all its water"], why: "Shape is function." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["enzyme", "transport", "motility", "antibody", "collagen", "amino group", "carboxyl group", "side chain", "peptide bond", "primary", "secondary", "tertiary", "quaternary", "alpha helix", "beta sheet", "cholesterol", "denaturation", "20", "hydrolysis", "dehydration"],
+    cards: [
+      C("A protein that speeds up a reaction.", ["enzyme", "an enzyme"]),
+      C("Antibodies belong to which protein job?", ["defense", "immune defense"]),
+      C("Collagen and keratin belong to which protein job?", ["structure", "structural"]),
+      C("Insulin belongs to which protein job?", ["regulation", "signaling"]),
+      C("The part of an amino acid that differs among the twenty.", ["side chain", "r group"]),
+      C("An amino acid has an amino group, a carboxyl group, a side chain, and a central…", ["carbon", "alpha carbon", "central carbon"]),
+      C("How many amino acids do cells use?", ["20", "twenty"]),
+      C("The bond between amino acids.", ["peptide bond", "peptide"]),
+      C("Making a peptide bond releases a molecule of…", "water"),
+      C("Breaking a peptide bond by adding water.", ["hydrolysis", "hydrolyzing"]),
+      C("Level of structure: the sequence.", ["primary", "1", "1st", "primary structure"]),
+      C("Level of structure: helices and sheets.", ["secondary", "2", "2nd", "secondary structure"]),
+      C("Level of structure: the whole chain's 3D fold.", ["tertiary", "3", "3rd", "tertiary structure"]),
+      C("Level of structure: several chains together.", ["quaternary", "4", "4th", "quaternary structure"]),
+      C("A coil held by backbone hydrogen bonds.", ["alpha helix", "α helix", "helix"]),
+      C("A pleated, flat arrangement of backbone strands.", ["beta sheet", "β sheet", "beta pleated sheet", "sheet"]),
+      C("Unfolding a protein with heat or pH is called…", ["denaturation", "denaturing"]),
+      C("The four-ring molecule all steroid hormones come from.", "cholesterol"),
+      C("Which organ makes the cholesterol you need?", ["liver", "the liver"]),
+      C("Nonpolar side chains end up on the ___ of a folded protein. (inside or outside)", ["inside", "interior", "core"])] }
+] });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 18</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 18</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+Kit.run({ id: "b145_lesson18", num: 18, stages: [
+  { type: "order", title: "From leaf to chlorophyll", tip: "Largest to smallest: the nested levels of a leaf.",
+    voice: ["The leaf is a sandwich: cuticle, mesophyll, cuticle. Chloroplasts have a double membrane and their own DNA.", "Thylakoids stack into grana, like mitochondrial cristae: more membrane."],
+    items: ["Leaf", "Mesophyll cell", "Chloroplast", "Granum (a stack)", "Thylakoid membrane", "Chlorophyll molecule"] },
+  { type: "sort", title: "Where in the leaf and chloroplast?", tip: "Structure to function.",
+    voice: ["Palisade mesophyll catches light; spongy mesophyll exchanges gas. Stomata are mouths flanked by guard cells."],
+    bins: ["Palisade mesophyll", "Spongy mesophyll", "Stomata and guard cells", "Stroma", "Thylakoid membrane"],
+    items: [["Tightly packed cells under the upper surface, rich in chloroplasts", 0], ["Loose cells with air spaces for gas exchange", 1], ["Open and close to let CO₂ in and water out", 2], ["The fluid where the Calvin cycle runs", 3], ["Holds photosystems, the chain and ATP synthase", 4], ["Guard cells swell to open the pore", 2]] },
+  { type: "order", title: "The light reactions, in order", tip: "Follow one electron from water to NADPH.",
+    voice: ["Photon strikes an antenna complex; the energy is passed to the reaction center. P680 in photosystem II, P700 in photosystem I: named in order of discovery, not use.", "Water splitting replaces the electron and releases oxygen."],
+    items: ["A photon excites an electron in photosystem II (P680)", "The electron goes to the primary acceptor", "Water is split to replace the electron; O₂ is released", "The electron passes down the chain, pumping H⁺ into the lumen", "ATP synthase makes ATP as H⁺ flows back out", "Photosystem I (P700) re-excites the electron", "The electron reduces NADP⁺ to NADPH"] },
+  { type: "pick", title: "Light-reaction logic", tip: "Same machinery as the mitochondrion, run in a different direction.",
+    voice: ["The oxygen comes from water, not CO₂. Small steps capture more energy: one big drop gives one chance. Per glucose: 18 ATP, 12 NADPH, 6 O₂."],
+    qs: [
+      { q: "The oxygen released by photosynthesis comes from…", ok: "Water", no: ["Carbon dioxide", "Glucose", "Chlorophyll"], why: "Photolysis of water." },
+      { q: "Which product of the light reactions is carried to the Calvin cycle with ATP?", ok: "NADPH", no: ["NADH", "O₂", "Glucose"], why: "NADPH is the reducing power." },
+      { q: "Why do plants look green?", ok: "Green is reflected, not absorbed", no: ["Chlorophyll absorbs green best", "Plants prefer green light", "Chlorophyll emits green"], why: "Engelmann's bacteria clustered at red and blue." },
+      { q: "An excited electron can be lost as a glow or captured by a neighbor. Antenna complexes…", ok: "Funnel the energy to the reaction center, preventing fluorescence", no: ["Make ATP", "Split water", "Fix carbon"], why: "Energy passed along, not wasted." },
+      { q: "Where is the proton gradient built?", ok: "In the thylakoid lumen", no: ["In the stroma", "In the cytoplasm", "In the cell wall"], why: "ATP synthase lets them out into the stroma." },
+      { q: "A chloroplast and a mitochondrion both have…", ok: "A double membrane, their own DNA, and ATP synthase", no: ["Only a single membrane", "No DNA", "Photosystems"], why: "Endosymbiosis." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["mesophyll", "palisade", "stomata", "guard cell", "chloroplast", "stroma", "thylakoid", "granum", "lumen", "photosystem II", "photosystem I", "P680", "P700", "antenna complex", "plastoquinone", "NADPH", "photolysis", "ATP synthase", "oxygen", "water"],
+    cards: [
+      C("The middle layer of a leaf.", "mesophyll"), C("The layer of tightly packed light-catching cells.", ["palisade", "palisade mesophyll"]),
+      C("The pores in a leaf.", ["stomata", "stoma"]), C("The cells that open and close a stoma.", ["guard cells", "guard cell"]),
+      C("The organelle of photosynthesis.", "chloroplast"), C("The fluid inside the chloroplast.", "stroma"),
+      C("The flattened membrane sacs inside the chloroplast.", ["thylakoid", "thylakoids"]), C("A stack of thylakoids.", ["granum", "grana"]),
+      C("The space inside a thylakoid.", ["lumen", "thylakoid lumen"]),
+      C("The photosystem that splits water.", ["photosystem ii", "psii", "ps ii", "2"]),
+      C("The photosystem that reduces NADP⁺.", ["photosystem i", "psi", "ps i", "1"]),
+      C("The reaction-center pigment of photosystem II.", "P680"), C("The reaction-center pigment of photosystem I.", "P700"),
+      C("The pigments that funnel energy to a reaction center.", ["antenna complex", "antenna complexes", "antenna"]),
+      C("The mobile carrier between photosystem II and the cytochrome complex.", "plastoquinone"),
+      C("The carrier made by photosystem I.", "nadph"), C("Splitting water with light.", ["photolysis"]),
+      C("Where the light reactions occur.", ["thylakoid membrane", "thylakoid", "thylakoids"]),
+      C("The source of the oxygen released.", "water")] }
+] });
+
+</script>
+</body>
+</html>

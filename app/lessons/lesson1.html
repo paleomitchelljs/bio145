@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 1</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 1</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x); return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
+const pval = (d, n) => { const z = d / (6 * Math.sqrt(2 / n)); return Math.max(1e-12, 1 - erf(z / Math.SQRT2)); };
+Kit.run({ id: "b145_lesson1", num: 1, stages: [
+  { type: "sort", title: "Is it alive?", tip: "Sort each thing by the test it passes or fails. Life as used here: reproduction that passes features on (heredity), plus a metabolism that keeps the thing going.",
+    voice: ["Not 'made of cells' (circular) and not 'has DNA' (that describes Earth's life, it doesn't define it).", "Life is reproduction with heredity, paid for by metabolism. Take either away and you have fire or a photocopier."],
+    bins: ["Alive: heredity and metabolism", "Not alive: no heredity", "Not alive: no metabolism of its own"],
+    items: [["A bacterium dividing in broth", 0], ["A sperm cell", 0], ["An oak tree", 0], ["A tardigrade", 0], ["A fire spreading from match to paper", 1], ["A flame passed from candle to candle", 1], ["A photocopied page", 2], ["A virus particle outside a host cell", 2], ["A computer virus copying itself", 2]] },
+  { type: "pick", title: "A tree is made of air", tip: "A pot, weighed soil, a seed. The plant gains mass. Where did it come from?",
+    voice: ["Confirming is hard. Excluding is easy: weigh the soil before and after.", "A shrinking list of options, like Sherlock Holmes. Light has no mass."],
+    qs: [
+      { q: "The plant gained mass. The soil weighed the same before and after. What does that exclude?", ok: "The plant's mass came from the soil", no: ["The plant's mass came from the air", "The plant's mass came from water", "The plant did not grow"], why: "You only had to weigh. Soil is off the list." },
+      { q: "Why can't the unchanged soil confirm that the mass came from air?", ok: "It excludes soil but leaves water and air both on the list", no: ["Air has no mass", "Soil is too heavy to weigh", "Confirmation needs a bigger pot"], why: "Excluding is easy; confirming needs every other option gone." },
+      { q: "A pot sealed in a vacuum: the plant dies. What does that suggest?", ok: "Something in the air is needed", no: ["Soil is needed and air is not", "Plants need no water", "Light has mass"], why: "A hint, not a proof: it narrows the list." },
+      { q: "Which kind of evidence do scientists get more easily?", ok: "Evidence that excludes an explanation", no: ["Evidence that proves one beyond doubt", "Evidence that confirms and excludes equally", "Evidence from a single plant"], why: "That is why science is a shrinking pool of options." },
+      { q: "Where does most of a tree's dry mass come from?", ok: "Carbon dioxide in the air", no: ["The soil", "Sunlight", "Water it drinks"], why: "The elephant was grass, and the grass was air." }] },
+  { type: "sort", title: "How scientists reason (book, chapter 1)", tip: "Inductive reasoning goes from many specific observations to a general rule. Deductive reasoning goes from a general rule to a specific prediction.",
+    voice: ["Two directions of argument. Induction builds the rule; deduction tests it."],
+    bins: ["Inductive: specific to general", "Deductive: general to specific"],
+    items: [["Every lizard I have measured on this island is small, so the island's lizards are small.", 0], ["Twenty plants kept in the dark all yellowed, so plants need light.", 0], ["Many studies find larger males win fights, so size predicts winning.", 0], ["If plants need light, a plant in a closet will yellow. It did.", 1], ["All mammals have hair and a whale is a mammal, so a whale has hair.", 1], ["Cells come only from cells, so this new bacterium came from a bacterium.", 1]] },
+  { type: "sort", title: "Basic or applied?", tip: "Basic science asks how something works. Applied science aims at a use.",
+    voice: ["Basic science asks how. Applied science asks what it can do for us. Both use the same method."],
+    bins: ["Basic science", "Applied science"],
+    items: [["Working out how a motor protein walks along a filament", 0], ["Sequencing a rare orchid's genome out of curiosity", 0], ["Why do cells divide at a particular size?", 0], ["Designing a drug that blocks a viral enzyme", 1], ["Breeding a drought-tolerant corn", 1], ["Developing a faster diagnostic test", 1]] },
+  { type: "sim", title: "The null hypothesis", tip: "Two lizard populations. The null hypothesis says their average body mass differs by exactly zero. Individuals vary by about 6 g.",
+    voice: ["The null is always false: the true difference is never exactly zero. Large samples reject any null.", "The p value is the chance of data at least this extreme if the null were true. Low means clear; high means 'close enough', and we fail to reject. We never prove the null."],
+    w: 640, h: 300,
+    controls: [{ id: "d", label: "True difference in mean mass", min: 0, max: 3, step: 0.05, val: 0.5, fmt: v => v.toFixed(2) + " g" }, { id: "x", label: "Lizards per population", min: 0.7, max: 4.2, step: 0.05, val: 1.3, fmt: v => Math.round(Math.pow(10, v)).toLocaleString() }],
+    readout: S => { const n = Math.round(Math.pow(10, S.x)), p = pval(S.d, n); return "p = <b>" + (p < 0.0001 ? p.toExponential(1) : p.toFixed(4)) + "</b> · " + (p < 0.05 ? '<span class="ok">reject the null</span>' : '<span class="off">fail to reject the null</span> (not the same as proving it)'); },
+    draw(ctx, w, h, S) {
+      const n = Math.round(Math.pow(10, S.x)), p = pval(S.d, n), g = (x, m) => Math.exp(-0.5 * Math.pow((x - m) / 6, 2));
+      const base = 150, X = v => 20 + (v - 55) / 50 * (w - 40);
+      ctx.lineWidth = 2;
+      [[80, "#2e6da4"], [80 + S.d, "#b5651d"]].forEach(([m, col]) => { ctx.beginPath(); for (let v = 55; v <= 105; v += 0.5) { const y = base - 110 * g(v, m); v === 55 ? ctx.moveTo(X(v), y) : ctx.lineTo(X(v), y); } ctx.strokeStyle = col; ctx.stroke(); });
+      ctx.fillStyle = "#555"; ctx.font = "12px sans-serif"; ctx.fillText("body mass (g): the two populations", 20, base + 18);
+      const PX = lp => 20 + (-lp) / 8 * (w - 40), by = 235;
+      ctx.fillStyle = "#e8e6df"; ctx.fillRect(20, by, w - 40, 10);
+      ctx.fillStyle = "#555"; ctx.fillText("p = 1", 14, by + 28); ctx.fillText("1e-8", w - 40, by + 28);
+      ctx.strokeStyle = "#c0392b"; ctx.beginPath(); ctx.moveTo(PX(Math.log10(0.05)), by - 8); ctx.lineTo(PX(Math.log10(0.05)), by + 18); ctx.stroke(); ctx.fillStyle = "#c0392b"; ctx.fillText("0.05", PX(Math.log10(0.05)) - 12, by - 12);
+      ctx.fillStyle = p < 0.05 ? "#2e7d32" : "#555"; ctx.beginPath(); ctx.arc(PX(Math.max(-8, Math.log10(p))), by + 5, 7, 0, 7); ctx.fill();
+    },
+    goals: [
+      { text: "Reject the null even though the true difference is 1 g or less (raise the sample size)", test: S => S.d > 0 && S.d <= 1 && pval(S.d, Math.round(Math.pow(10, S.x))) < 0.05 },
+      { text: "Fail to reject the null although the true difference is 2.5 g or more (too few lizards)", test: S => S.d >= 2.5 && pval(S.d, Math.round(Math.pow(10, S.x))) > 0.05 },
+      { text: "Find a setup with p between 0.04 and 0.06: nearly the same evidence on either side of the line", test: S => { const p = pval(S.d, Math.round(Math.pow(10, S.x))); return p > 0.04 && p < 0.06; } }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["homeostasis", "metabolism", "heredity", "entropy", "null hypothesis", "p value", "0.05", "fail to reject", "no", "falsification", "inductive", "deductive", "basic science", "applied science", "control group", "carbon dioxide"],
+    cards: [
+      C("Keeping conditions steady inside, such as salt and water balance.", "homeostasis"),
+      C("The chemical reactions that free energy to pay for homeostasis, growth and reproduction.", "metabolism"),
+      C("Reproduction in which copies carry on the parent's features. What is the carrying-on called?", "heredity"),
+      C("The drift toward disorder that energy has to be spent to hold off.", "entropy"),
+      C("A fire spreading from match to paper fails which test of life?", "heredity"),
+      C("A virus particle outside a host fails which test of life?", "metabolism"),
+      C("A hypothesis that predicts a difference of exactly zero.", ["null hypothesis", "the null hypothesis", "null"]),
+      C("The probability of data at least this extreme if the null hypothesis were true.", ["p value", "p-value", "p"]),
+      C("The usual p value threshold.", ["0.05", ".05"]),
+      C("With p = 0.3 we ___ the null hypothesis. (two or three words)", ["fail to reject", "fail to reject the null", "do not reject"]),
+      C("Does a high p value prove the null hypothesis true? (yes or no)", "no"),
+      C("Showing an explanation cannot be true is called…", ["falsification", "exclusion", "excluding", "falsifying"]),
+      C("Reasoning from many observations to a general rule.", ["inductive", "induction", "inductive reasoning"]),
+      C("Reasoning from a general rule to a specific prediction.", ["deductive", "deduction", "deductive reasoning"]),
+      C("Research to understand how something works, with no use in mind.", ["basic science", "basic", "basic research"]),
+      C("Research aimed at a practical problem.", ["applied science", "applied", "applied research"]),
+      C("The group treated identically except for the factor being tested.", ["control group", "control"]),
+      C("Most of a tree's mass comes from which gas?", ["carbon dioxide", "co2"])] }
+] });
+
+</script>
+</body>
+</html>

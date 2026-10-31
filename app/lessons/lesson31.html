@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 31</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 31</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const lvl = S => { const t12 = S.hl; const k = Math.LN2 / t12; return { k, ss: S.rate / k }; };
+Kit.run({ id: "b145_lesson31", num: 31, stages: [
+  { type: "order", title: "The translation cycle", tip: "A, P and E sites: aminoacyl, peptidyl, exit.",
+    voice: ["Small and large subunits assemble on the mRNA (Voltron). tRNA enters A, bonds form, the ratchet moves everything one codon.", "A release factor at the stop codon."],
+    items: ["The small subunit binds the mRNA and the start tRNA sits in the P site", "The large subunit joins", "A tRNA with the next anticodon enters the A site", "A peptide bond forms between the amino acids", "The ribosome ratchets one codon: A → P → E", "The empty tRNA leaves from the E site", "A stop codon enters the A site and a release factor binds", "The polypeptide is released and the subunits separate"] },
+  { type: "sim", title: "How long an mRNA lives", tip: "Steady state = synthesis rate ÷ decay rate. Half-life t½ gives decay rate ln2/t½. E. coli mRNA lasts about 4 minutes; human mRNA about 10 hours.",
+    voice: ["Rate times duration. Match the half-life to the generation time. E. coli: 10 copies, 5, 2, gone.", "Stability versus translation rate: two separate knobs."],
+    w: 640, h: 230,
+    controls: [{ id: "rate", label: "Transcripts made per minute", min: 0.01, max: 30, step: 0.01, val: 2, fmt: v => v.toFixed(2) }, { id: "hl", label: "Half-life", min: 1, max: 600, step: 1, val: 4, fmt: v => v + " min" }],
+    readout: S => { const l = lvl(S); return "Steady state <b>" + l.ss.toFixed(0) + "</b> copies · reaches 90% of that in <b>" + (3.32 * S.hl).toFixed(0) + "</b> min"; },
+    draw(ctx, w, h, S) {
+      const l = lvl(S), T = 120, X = t => 40 + t / T * (w - 60), mx = Math.max(110, l.ss * 1.1), Y = v => 190 - 160 * v / mx;
+      ctx.strokeStyle = "#2e6da4"; ctx.lineWidth = 2; ctx.beginPath(); for (let t = 0; t <= T; t++) { const v = l.ss * (1 - Math.exp(-l.k * t)); t ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v)); } ctx.stroke();
+      ctx.strokeStyle = "#c0392b"; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(40, Y(100)); ctx.lineTo(w - 20, Y(100)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; ctx.fillText("copies per cell over 2 hours (dashed: 100)", 44, 20); ctx.fillText("0", 36, 206); ctx.fillText("120 min", w - 60, 206);
+    },
+    goals: [
+      { text: "A bacterial-style mRNA (half-life about 4 min): reach 100 copies at steady state", test: S => S.hl >= 3 && S.hl <= 5 && Math.abs(lvl(S).ss - 100) <= 8 },
+      { text: "A human-style mRNA (half-life 10 hours): reach the same 100 copies with a slow synthesis rate", test: S => S.hl >= 500 && Math.abs(lvl(S).ss - 100) <= 12 },
+      { text: "Make an mRNA that turns over so fast the cell can switch it off within 10 minutes (half-life 3 min or less)", test: S => S.hl <= 3 && lvl(S).ss >= 10 },
+      { text: "Same synthesis, but stabilize it: raise steady-state copies above 300", test: S => lvl(S).ss > 300 }] },
+  { type: "order", title: "A mature eukaryotic mRNA", tip: "Five parts, 5′ to 3′.",
+    voice: ["Cap, 5′ UTR, coding sequence, 3′ UTR, poly-A tail. Batch regulation happens through the 3′ UTR."],
+    items: ["5′ cap", "5′ UTR", "Coding sequence (start to stop)", "3′ UTR", "Poly-A tail"] },
+  { type: "sort", title: "Prokaryote or eukaryote translation?", tip: "Efficiency versus flexibility.",
+    voice: ["Bacteria couple transcription and translation; polysomes with many ribosomes. Eukaryotes process the mRNA and export it first."],
+    bins: ["Prokaryote", "Eukaryote"],
+    items: [["Translation begins while the mRNA is still being made", 0], ["The mRNA is capped, spliced and polyadenylated first", 1], ["Transcription and translation occur in separate compartments", 1], ["Translation on rough ER ribosomes", 1], ["Short-lived mRNAs (minutes)", 0], ["Long-lived mRNAs (hours)", 1], ["A polysome of 17 ribosomes on one mRNA", 0]] },
+  { type: "sort", title: "The RNA zoo", tip: "Different RNAs do different jobs.",
+    voice: ["Only about 2% of the genome codes protein. snRNA, miRNA, siRNA, snoRNA, lncRNA: tuning dials."],
+    bins: ["mRNA", "tRNA", "rRNA", "snRNA", "miRNA / siRNA", "snoRNA", "lncRNA"],
+    items: [["Carries the code from the gene to the ribosome", 0], ["Cloverleaf with an anticodon and an amino acid end", 1], ["Forms the ribosome's core", 2], ["Part of the spliceosome", 3], ["Blocks translation or targets mRNA for destruction (RNA interference)", 4], ["Guides modification of rRNA", 5], ["Long, regulatory; such as Xist", 6]] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["tRNA", "anticodon", "ribosome", "A site", "P site", "E site", "release factor", "polysome", "cap", "5' UTR", "3' UTR", "poly-A tail", "half-life", "siRNA", "miRNA", "snRNA", "lncRNA", "uracil", "plasmid"],
+    cards: [
+      C("The RNA that carries an amino acid.", ["trna", "transfer rna"]), C("The three bases on tRNA that pair with a codon.", ["anticodon", "the anticodon"]),
+      C("The ribosome site where the new tRNA enters.", ["a site", "a"]), C("The ribosome site that holds the growing chain.", ["p site", "p"]), C("The ribosome site where empty tRNAs leave.", ["e site", "e"]),
+      C("The protein that releases the polypeptide at a stop codon.", ["release factor"]),
+      C("Several ribosomes on one mRNA.", ["polysome", "polysomes", "polyribosome"]),
+      C("The protective structure at the 5′ end of eukaryotic mRNA.", ["cap", "5' cap", "5′ cap"]),
+      C("The untranslated region before the start codon.", ["5' utr", "5′ utr", "5 prime utr"]),
+      C("The untranslated region after the stop codon.", ["3' utr", "3′ utr", "3 prime utr"]),
+      C("The string of A's at the end of mRNA.", ["poly-a tail", "poly a tail", "poly-a", "poly a"]),
+      C("The time for half the copies of an mRNA to decay.", ["half-life", "half life"]),
+      C("Steady-state mRNA level = synthesis rate times…", ["duration", "lifetime", "half-life", "lifespan"]),
+      C("RNA that targets mRNAs for silencing and is made from a long double strand.", ["sirna"]), C("Small regulatory RNA made from a hairpin.", ["mirna"]),
+      C("RNA in the spliceosome.", ["snrna"]), C("Long non-coding RNA that silences an X chromosome.", ["xist", "lncrna"]),
+      C("RNA has this base in place of thymine.", ["uracil"]), C("Percent of the human genome that codes for protein, roughly.", ["2", "2%", "two"]),
+      C("A small circular DNA used as a vector.", ["plasmid", "a plasmid"])] }
+] });
+
+</script>
+</body>
+</html>

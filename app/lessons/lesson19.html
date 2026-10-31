@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 19</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 19</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+/* stomata open fraction falls with dryness; relative rates (arbitrary but self-consistent) */
+const plant = S => {
+  const open = 1 - 0.9 * S.dry / 100, co2 = 400 * open;
+  if (S.type === "c3") { const fix = co2 / (co2 + 150), loss = 0.45 * (1 - co2 / 400) * (S.hot / 100 + 0.5); return { net: Math.max(0, fix - loss), loss, water: open }; }
+  if (S.type === "c4") { const fix = (co2 * 4) / (co2 * 4 + 150); return { net: fix * 0.92, loss: 0.01, water: open }; }
+  return { net: 0.38 - 0.0005 * S.hot, loss: 0.01, water: 0.15 };
+};
+Kit.run({ id: "b145_lesson19", num: 19, stages: [
+  { type: "sim", title: "C3, C4 and CAM under drought", tip: "As the plant dries, stomata close: CO₂ falls and O₂ builds. RuBisCO binds O₂ instead (photorespiration). C4 plants concentrate CO₂ in bundle-sheath cells; CAM plants open stomata only at night. Rates are on a relative scale.",
+    voice: ["RuBisCO can't tell CO₂ from O₂. In a dry day with closed stomata it fixes oxygen instead and loses carbon, energy, and releases ammonia.", "C4 separates the steps in space (mesophyll to bundle sheath). CAM separates them in time (night to day)."],
+    w: 620, h: 250,
+    controls: [{ id: "type", label: "Plant", type: "select", opts: [["c3", "C3 (wheat, rice)"], ["c4", "C4 (corn, sugarcane)"], ["cam", "CAM (cactus, agave)"]], val: "c3" }, { id: "dry", label: "Water stress", min: 0, max: 100, step: 1, val: 0, fmt: v => v + "%" }, { id: "hot", label: "Heat", min: 0, max: 100, step: 1, val: 30, fmt: v => v + "%" }],
+    readout: S => { const p = plant(S); return "Net carbon fixed <b>" + (p.net * 100).toFixed(0) + "</b> · lost to photorespiration <b>" + (p.loss * 100).toFixed(0) + "</b> · water lost <b>" + (p.water * 100).toFixed(0) + "</b>"; },
+    draw(ctx, w, h, S) {
+      const p = plant(S), bars = [["net fixed", p.net, "#2e7d32"], ["photorespiration", p.loss, "#c0392b"], ["water lost", p.water, "#2e6da4"]]; ctx.font = "12px sans-serif";
+      bars.forEach(([n, v, c], i) => { const x = 60 + i * 170; ctx.fillStyle = "#eee"; ctx.fillRect(x, 30, 90, 170); ctx.fillStyle = c; ctx.fillRect(x, 200 - 170 * Math.min(1, v), 90, 170 * Math.min(1, v)); ctx.fillStyle = "#222"; ctx.fillText(n, x + 4, 220); });
+    },
+    goals: [
+      { text: "C3 plant in severe drought: photorespiration eats more than half of what it could fix", test: S => S.type === "c3" && S.dry >= 70 && plant(S).loss > plant(S).net },
+      { text: "C4 plant in the same drought: still fixing over 40", test: S => S.type === "c4" && S.dry >= 70 && plant(S).net > 0.4 },
+      { text: "CAM plant in drought: loses under 20 of the water an open C3 plant would", test: S => S.type === "cam" && S.dry >= 70 && plant(S).water < 0.2 },
+      { text: "Well-watered, cool C3: net fixation over 60", test: S => S.type === "c3" && S.dry <= 10 && S.hot <= 40 && plant(S).net > 0.6 }] },
+  { type: "pick", title: "Counting carbons in the Calvin cycle", tip: "Six turns, six CO₂ in. Each RuBP is 5 carbons; G3P is 3.",
+    voice: ["Fixation, reduction, regeneration. Six RuBP is 30 carbons; add 6 CO₂ to make 36; remove two G3P (6 carbons) for glucose; 30 carbons are rebuilt into RuBP.", "Not literally light-independent: it runs on ATP and NADPH from the light reactions. Per glucose: 18 ATP, 12 NADPH."],
+    qs: [
+      { q: "Six RuBP molecules have how many carbons?", ok: "30", no: ["6", "15", "36"], why: "5 carbons each." },
+      { q: "After six CO₂ are fixed, the pool holds…", ok: "36 carbons", no: ["30 carbons", "6 carbons", "12 carbons"], why: "30 + 6." },
+      { q: "How many carbons leave as two G3P?", ok: "6", no: ["3", "12", "30"], why: "Two 3-carbon G3P: enough for one glucose." },
+      { q: "So how many carbons are regenerated into RuBP?", ok: "30", no: ["6", "36", "0"], why: "Back where we started." },
+      { q: "The enzyme that attaches CO₂ to RuBP is…", ok: "RuBisCO", no: ["PEP carboxylase", "ATP synthase", "Catalase"], why: "Most abundant enzyme on Earth, slow and unable to tell CO₂ from O₂." },
+      { q: "Cyclic electron flow makes…", ok: "ATP only", no: ["NADPH only", "ATP and NADPH and O₂", "Glucose"], why: "It balances the ATP to NADPH ratio." }] },
+  { type: "sort", title: "Fixation, reduction, regeneration", tip: "The three phases of the Calvin cycle.",
+    voice: ["Three phases, each with its own job."],
+    bins: ["Fixation", "Reduction", "Regeneration"],
+    items: [["RuBisCO attaches CO₂ to RuBP", 0], ["An unstable six-carbon intermediate splits", 0], ["ATP and NADPH are spent to make G3P", 1], ["Two G3P leave to build glucose", 1], ["Ten G3P are rebuilt into six RuBP", 2], ["ATP is spent to remake the acceptor", 2]] },
+  { type: "sort", title: "C3, C4, or CAM", tip: "How the plant handles CO₂ and water.",
+    voice: ["C3: the default. C4: spatial separation. CAM: temporal separation."],
+    bins: ["C3", "C4", "CAM"],
+    items: [["Wheat and rice", 0], ["Fixes CO₂ directly with RuBisCO in mesophyll", 0], ["Corn and sugarcane", 1], ["PEP carboxylase makes a four-carbon acid in the mesophyll", 1], ["The bundle sheath runs the Calvin cycle", 1], ["Cacti and agave", 2], ["Stomata open at night, closed by day", 2], ["Stores acids overnight", 2]] },
+  { type: "order", title: "Oxygen and carbon through Earth history", tip: "Plants rewrote the atmosphere.",
+    voice: ["Free oxygen needs plants. Land plants pulled CO₂ down and made lignin that nothing could digest. Angiosperms broke the stomata-water trade-off."],
+    items: ["Cyanobacteria begin releasing oxygen", "Oxygen rusts the oceans' iron", "Land plants appear (about 400 million years ago)", "Lignin is buried; CO₂ falls; Earth cools", "Decomposers and herbivores evolve to use lignin", "Angiosperms appear (about 100 million years ago) with denser veins", "Rainforests, savannas and prairies spread"] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["RuBisCO", "RuBP", "G3P", "fixation", "reduction", "regeneration", "photorespiration", "C4", "CAM", "PEP carboxylase", "bundle sheath", "cyclic", "starch", "glycogen", "lignin", "angiosperm", "18", "12"],
+    cards: [
+      C("The enzyme that fixes CO₂.", ["rubisco"]), C("The 5-carbon acceptor.", ["rubp", "ribulose bisphosphate"]), C("The 3-carbon sugar that leaves the cycle.", ["g3p", "glyceraldehyde 3-phosphate", "glyceraldehyde-3-phosphate"]),
+      C("Where the Calvin cycle runs.", "stroma"),
+      C("Calvin cycle phase: CO₂ attached.", ["fixation", "carbon fixation"]), C("Calvin cycle phase: ATP and NADPH spent.", "reduction"), C("Calvin cycle phase: RuBP rebuilt.", "regeneration"),
+      C("ATP spent per glucose in the Calvin cycle.", ["18", "eighteen"]), C("NADPH spent per glucose.", ["12", "twelve"]),
+      C("RuBisCO binds O₂ instead of CO₂: this wasteful process is…", ["photorespiration"]),
+      C("Plants that separate steps in space with PEP carboxylase.", ["c4", "c4 plants"]), C("Plants that separate steps in time, opening stomata at night.", ["cam", "cam plants"]),
+      C("The enzyme in C4 mesophyll that captures CO₂ as a four-carbon acid.", ["pep carboxylase", "pepc"]),
+      C("In C4 plants the Calvin cycle runs in the…", ["bundle sheath", "bundle sheath cells"]),
+      C("Electron flow using photosystem I only.", ["cyclic", "cyclic electron flow"]),
+      C("Plants store glucose as…", "starch"), C("Animals store glucose as…", "glycogen"),
+      C("The tough polymer land plants made that nothing could digest at first.", "lignin"),
+      C("The flowering plants.", ["angiosperms", "angiosperm"])] }
+] });
+
+</script>
+</body>
+</html>

@@ -2,17 +2,38 @@
 # One row per page.  o = open   x = locked.  Change a letter, commit, push.
 # Add ?preview=1 to a URL to see a locked page. Same mechanics as BIO 202's LOCKS.txt (see that file's header).
 display: dim
+lesson1         o   Is it alive? Heredity, metabolism, and how science reasons
 lesson2         o   Greedy oxygen: who gets the electrons, and what shape does with it
+lesson3         o   Water, buffers and shape: pH, isomers and functional groups
 lesson4         o   Building molecules: functional groups and the joins between monomers
+lesson5         o   Proteins: jobs, side chains, four levels, steroids
 lesson6         o   Folding a chain in water: proteins
 lesson7         o   Scale and the levels of life
+lesson8         o   The cell's rooms: organelles and the endomembrane route
 lesson9         o   Motors: kinesin walks on ATP, filaments slide
 lesson10        o   Jiggling across a membrane: diffusion and osmosis
+lesson11        o   Across the membrane: tonicity, pumps, vesicles and junctions
+lesson12        o   Passing the message: signaling pathways and receptors
 lesson13        o   Downhill and uphill: free energy, the hill, and paying with ATP
+lesson14        o   Enzymes: redox, working conditions, inhibitors
+lesson15        o   Starting respiration: glycolysis, PFK and drugs that hit enzymes
+lesson16        o   Citric acid cycle and the chain: carbons, ATP, and heat
+lesson17        o   Other fuels, fermentation, and light
+lesson18        o   Light reactions: the leaf, the chloroplast, the electron's path
+lesson19        o   The Calvin cycle, photorespiration, C4 and CAM
+lesson21        o   Packing and copying a cell: chromatin, the cell cycle, mitosis
+lesson22        o   Checkpoints, cyclins and cancer
 lesson23        o   Dividing a cell: mitosis and meiosis
+lesson24        o   Eggs, drive, bees and the vocabulary of genetics
 lesson25        o   Parents to offspring: F1 and F2
 lesson26        o   Mystery crosses: dominance, blending, both at once, and test crosses
 lesson27        o   Hit the ratio: one gene, two genes, the X, and genes that travel together
 lesson28        o   Heavy and light: the Meselson–Stahl experiment
 lesson29        o   The copying relay: DNA replication, molecule by molecule
 lesson30        o   Reading a gene: transcription, the codon wheel, and mutations
+lesson31        o   Translation, mRNA lifetimes and the RNA zoo
+lesson32        o   Somites, mutation types, and reverse transcription
+lesson33        o   Switching genes: lac operon, histones, introns
+lesson34        o   Gels, blots, restriction enzymes, recombinant DNA and PCR
+lesson35        o   Reading genomes: Sanger, GWAS and pharmacogenomics
+lesson36        o   Omics and CRISPR editing

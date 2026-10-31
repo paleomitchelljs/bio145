@@ -14,7 +14,7 @@ picture.
 
 **Numbering: lesson N is the homework for lecture N.** `docs/GUIDE.md` maps all 36 lectures to the book and to the lessons; most slots are empty so far, and the fourteen drafts sit in their lecture's slot.
 
-**Status: first drafts, fourteen lessons.** The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20
+**Status: first drafts, thirty-five lessons** (every lecture but the unrecorded 20). The voice blocks are draft bullets for JM to dictate over, as in evo lesson 20
 (lesson 23 keeps JM's BIO 202 lesson 9 voice). `docs/PLAN.md` maps JM's idea list to the lessons and lists what is still open.
 
 **House rules for this repo (JM, 2026-10-31):** copy existing engines from BIO 202 wherever possible (the copies may drift;
@@ -36,6 +36,7 @@ app/assets/
   code.js                  the genetic code and a clickable codon wheel (lesson 30)
   cross.js                 crosses on lesson 23's meiosis (BIO 202 lesson 9's chromatids / two divisions, copied): gametes,
                            offspring, phenotype ratios, X-linkage, linkage, parent cards (lessons 25-27)
+  kit.js, kit.css          builds a lesson from a config of stages (sort / order / pick / sim / drill); lessons 1, 3, 5, 8, 11, 12, 14-19, 21, 22, 24, 31-36
   score.js, lock.js, hover.*, pips.js, score.css   copied from BIO 202 (salt and storage keys renamed to bio145)
 instructor/                verify_code.html, aggregate.html (decode student codes)
 scripts/

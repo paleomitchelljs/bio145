@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 14</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 14</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const ENZ = { liver: { t: 37, ph: 7.4, n: "A human liver enzyme" }, pepsin: { t: 37, ph: 2, n: "Pepsin (stomach)" }, taq: { t: 72, ph: 8.3, n: "Taq polymerase (hot spring bacterium)" } };
+const act = S => { const e = ENZ[S.enz], dt = S.t - e.t, ft = dt <= 0 ? Math.exp(-Math.pow(dt / 18, 2)) : Math.exp(-Math.pow(dt / 5, 2)), fp = Math.exp(-Math.pow((S.ph - e.ph) / 1.3, 2)); return ft * fp; };
+Kit.run({ id: "b145_lesson14", num: 14, stages: [
+  { type: "sim", title: "An enzyme's working conditions", tip: "Activity falls off slowly as it gets colder (molecules slow down) and fast as it gets hotter (the protein denatures).",
+    voice: ["Temperature: a fever of a few degrees hurts; a ten-degree rise kills. pH: pepsin works in the stomach and would be dead in the cytoplasm.", "Compartments are separate rooms with separate conditions."],
+    w: 620, h: 250,
+    controls: [{ id: "enz", label: "Enzyme", type: "select", opts: [["liver", "Human liver enzyme"], ["pepsin", "Pepsin (stomach)"], ["taq", "Taq polymerase"]], val: "liver" }, { id: "t", label: "Temperature", min: 0, max: 100, step: 1, val: 20, fmt: v => v + " °C" }, { id: "ph", label: "pH", min: 1, max: 12, step: 0.1, val: 7, fmt: v => v.toFixed(1) }],
+    readout: S => "Activity <b>" + (act(S) * 100).toFixed(0) + "%</b> of its best",
+    draw(ctx, w, h, S) {
+      const a = act(S), e = ENZ[S.enz]; ctx.font = "12px sans-serif";
+      [["temperature", 0, 100, S.t, e.t, v => Math.exp(-Math.pow((v - e.t) / (v <= e.t ? 18 : 5), 2))], ["pH", 1, 12, S.ph, e.ph, v => Math.exp(-Math.pow((v - e.ph) / 1.3, 2))]].forEach(([nm, lo, hi, cur, opt, f], r) => {
+        const y0 = 100 + r * 120, X = v => 30 + (v - lo) / (hi - lo) * (w - 60);
+        ctx.strokeStyle = r ? "#3a5fa8" : "#c0392b"; ctx.lineWidth = 2; ctx.beginPath(); for (let v = lo; v <= hi; v += (hi - lo) / 120) { const y = y0 - 70 * f(v); v === lo ? ctx.moveTo(X(v), y) : ctx.lineTo(X(v), y); } ctx.stroke();
+        ctx.fillStyle = "#222"; ctx.beginPath(); ctx.arc(X(cur), y0 - 70 * f(cur), 6, 0, 7); ctx.fill(); ctx.fillText(nm, 30, y0 + 16);
+      });
+      ctx.fillStyle = a > 0.8 ? "#2e7d32" : "#555"; ctx.fillRect(w - 50, 20, 20, 200 * a); ctx.strokeStyle = "#999"; ctx.strokeRect(w - 50, 20, 20, 200);
+    },
+    goals: [
+      { text: "Find pepsin's working conditions: more than 90% activity", test: S => S.enz === "pepsin" && act(S) > 0.9 },
+      { text: "A fever: the human enzyme at 42 °C and pH 7.4 drops below half", test: S => S.enz === "liver" && S.t === 42 && Math.abs(S.ph - 7.4) < 0.3 && act(S) < 0.5 },
+      { text: "Put the human enzyme in stomach acid (pH 2): under 5%", test: S => S.enz === "liver" && S.ph <= 2.5 && act(S) < 0.05 },
+      { text: "Taq polymerase at 72 °C and pH 8.3: over 90%", test: S => S.enz === "taq" && S.t >= 70 && S.t <= 74 && act(S) > 0.9 },
+      { text: "Heat the human enzyme to 72 °C: under 1%", test: S => S.enz === "liver" && S.t >= 70 && act(S) < 0.01 }] },
+  { type: "sort", title: "Enzyme classes", tip: "Names tell the reaction: -ase on a verb.",
+    voice: ["Hydrolases, kinases, oxidoreductases, ligases, isomerases. Learn the verb behind the name."],
+    bins: ["Hydrolase", "Kinase", "Oxidoreductase", "Ligase", "Isomerase"],
+    items: [["Breaks a bond by adding water", 0], ["Splits starch into sugars", 0], ["Adds a phosphate from ATP to a target", 1], ["Phosphofructokinase", 1], ["Moves electrons between molecules", 2], ["Pyruvate dehydrogenase", 2], ["Joins two molecules using ATP", 3], ["DNA ligase seals the backbone", 3], ["Rearranges a molecule into an isomer", 4], ["Turns glucose 6-phosphate into fructose 6-phosphate", 4]] },
+  { type: "sort", title: "Turning enzymes off", tip: "Competitive inhibitors imitate the substrate; allosteric ones bind a second site; irreversible ones bond for good.",
+    voice: ["Competitive: an impostor in the active site. Allosteric: a second site that changes the shape. Irreversible: it never lets go.", "Feedback inhibition: the end product shuts the first enzyme."],
+    bins: ["Competitive", "Allosteric", "Irreversible"],
+    items: [["An impostor that fits the active site", 0], ["An ACE inhibitor that resembles the substrate", 0], ["Binds a second site and changes the shape", 1], ["The end product of a pathway shuts off its first enzyme", 1], ["ATP binds PFK somewhere other than the active site", 1], ["Cyanide stopping cytochrome oxidase", 2], ["Penicillin locking a cell-wall enzyme", 2], ["Aspirin acetylating COX", 2]] },
+  { type: "pick", title: "Redox and activation energy", tip: "OIL RIG: oxidation is loss, reduction is gain, of electrons.",
+    voice: ["NAD⁺ and FAD carry electrons to the electron transport chain. An enzyme lowers the hill, not the valleys; it is not used up."],
+    qs: [
+      { q: "NAD⁺ becomes NADH. NAD⁺ has been…", ok: "Reduced: it gained electrons", no: ["Oxidized: it gained electrons", "Oxidized: it lost electrons", "Neither"], why: "Reduction is gain (OIL RIG)." },
+      { q: "Glucose sits on a shelf without burning for centuries. Why?", ok: "The activation energy hill is high", no: ["Glucose is at a high free energy valley", "The reaction is endergonic", "There is no oxygen"], why: "Downhill overall, but the hill must be climbed first." },
+      { q: "Adding an enzyme to a reaction…", ok: "Lowers the activation energy and is not used up", no: ["Makes the products more stable", "Makes the reaction more exergonic", "Is consumed as the reaction runs"], why: "A screwdriver, not lighter fluid." },
+      { q: "A vitamin often serves as a…", ok: "Coenzyme", no: ["Substrate for every reaction", "Competitive inhibitor", "Product"], why: "Cofactors are like the electrical plug an appliance needs." },
+      { q: "Allosteric regulation is faster than new transcription because…", ok: "The enzyme already exists and only changes shape", no: ["It makes new enzymes", "It lowers the temperature", "It removes the substrate"], why: "Flip a switch rather than build a machine." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["oxidation", "reduction", "NAD+", "FAD", "activation energy", "substrate", "active site", "induced fit", "cofactor", "coenzyme", "competitive inhibitor", "allosteric", "feedback inhibition", "hydrolase", "kinase", "ligase", "isomerase", "oxidoreductase", "denature"],
+    cards: [
+      C("Losing electrons.", ["oxidation", "oxidized"]), C("Gaining electrons.", ["reduction", "reduced"]),
+      C("The electron carrier derived from niacin.", ["nad+", "nad", "nad⁺"]), C("The other electron carrier that becomes FADH₂.", "FAD"),
+      C("The energy hill a reaction has to climb.", ["activation energy"]),
+      C("The molecule an enzyme acts on.", ["substrate", "a substrate"]), C("The pocket where the substrate binds.", ["active site", "the active site"]),
+      C("The enzyme changes shape slightly as the substrate binds: this is…", ["induced fit"]),
+      C("A metal ion an enzyme needs.", ["cofactor", "a cofactor"]), C("An organic helper, often made from a vitamin.", ["coenzyme", "a coenzyme"]),
+      C("An inhibitor that fits the active site.", ["competitive", "competitive inhibitor"]),
+      C("An inhibitor that binds a second site.", ["allosteric", "allosteric inhibitor"]),
+      C("The end product shuts off the first enzyme: this is…", ["feedback inhibition", "feedback"]),
+      C("Enzyme class that adds water to break bonds.", ["hydrolase", "hydrolases"]), C("Enzyme class that adds phosphate.", ["kinase", "kinases"]),
+      C("Enzyme class that joins molecules.", ["ligase", "ligases"]), C("Enzyme class that rearranges atoms within a molecule.", ["isomerase", "isomerases"]),
+      C("Enzyme class that moves electrons.", ["oxidoreductase", "oxidoreductases"]),
+      C("To unfold a protein by heat or pH.", ["denature", "denaturation"])] }
+] });
+
+</script>
+</body>
+</html>

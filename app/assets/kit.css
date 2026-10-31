@@ -1,0 +1,21 @@
+/* styles for kit.js stages (sort, order, pick, sim) */
+.kit-tray { padding:8px; background:#f6f4ec; border:1px dashed #c9c5b8; border-radius:4px; margin-bottom:10px; }
+.kit-bins { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; }
+.kit-bin { border:1px solid var(--rule); border-radius:5px; padding:6px 8px; background:#fff; }
+.kit-binh { font-size:12.5px; font-weight:600; margin-bottom:5px; color:var(--ink); }
+.kit-bin .tiles { min-height:60px; align-content:flex-start; }
+.kit-slots { display:flex; flex-direction:column; gap:5px; }
+.kit-slots .slot b { min-width:20px; color:var(--ink); font-family:ui-monospace,Menlo,monospace; }
+.kit-q { font-size:15px; line-height:1.45; margin:0 0 8px; }
+.kit-n { font:12px ui-monospace,Menlo,monospace; color:var(--muted); margin-right:6px; }
+.kit-cv canvas { margin:2px 0 8px; max-width:100%; }
+.kit-opts { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:6px; }
+.kit-opts button { background:#fff; color:var(--ink); border:1px solid var(--rule); border-radius:4px; padding:7px 9px; font-size:13.5px; cursor:pointer; text-align:left; }
+.kit-opts button:hover:not(:disabled) { border-color:var(--ink); }
+.kit-opts button.wrong { border-color:var(--bad); background:#f8e3df; }
+.kit-opts button.right { border-color:var(--good); background:#eef5e4; }
+.kit-read { font-size:13.5px; margin:6px 0; min-height:20px; }
+.kit-ctl { display:flex; flex-direction:column; gap:7px; margin-top:8px; }
+.kit-row { display:flex; align-items:center; gap:8px; font-size:13.5px; }
+.kit-row input[type=range] { flex:1; min-width:120px; max-width:320px; }
+.kit-val { font:12.5px ui-monospace,Menlo,monospace; color:var(--muted); min-width:60px; }

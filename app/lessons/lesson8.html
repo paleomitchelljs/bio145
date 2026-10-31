@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 8</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 8</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+Kit.run({ id: "b145_lesson8", num: 8, stages: [
+  { type: "order", title: "A protein's trip out of the cell", tip: "A secreted protein is made on the rough ER and leaves the cell by vesicle. Put the trip in order.",
+    voice: ["DNA to mRNA to protein. Generic ribosomes, specific mRNA: blueprint into tool.", "Then membrane delivery: ER, vesicle, Golgi (cis to trans), vesicle, out."],
+    items: ["The gene is transcribed into mRNA in the nucleus", "The mRNA leaves through a nuclear pore", "A ribosome on the rough ER translates it into the ER lumen", "A vesicle buds off the ER", "The vesicle fuses with the cis face of the Golgi", "The Golgi modifies the protein and reads its sugar tag", "A vesicle leaves the trans face", "The vesicle fuses with the plasma membrane and the protein is secreted"] },
+  { type: "sort", title: "Which organelle?", tip: "Match each job to the organelle that does it.",
+    voice: ["Each organelle is a room with one job. Know the job and you know the cell types that have a lot of it (liver: smooth ER)."],
+    bins: ["Rough ER", "Smooth ER", "Golgi", "Lysosome", "Vacuole", "Peroxisome", "Nucleus", "Ribosome"],
+    items: [["Ribosome-studded; makes proteins to export", 0], ["Continuous with the nuclear envelope", 0], ["Makes lipids and detoxifies, abundant in liver", 1], ["Cis and trans faces; sorts and ships", 2], ["Reads sugar tags on proteins", 2], ["Hydrolytic enzymes; autophagy recycling", 3], ["Central, with a tonoplast; turgor pressure", 4], ["Catalase turns H₂O₂ into water and oxygen", 5], ["Holds the DNA; nucleolus builds ribosomes", 6], ["Small subunit binds mRNA, large forms peptide bonds", 7]] },
+  { type: "sort", title: "Animal, plant, or both?", tip: "A common student error: plants have mitochondria too. The chloroplast is a bonus.",
+    voice: ["Plants add a wall, a big vacuole, chloroplasts, and plasmodesmata. Animals have lysosomes and centrioles. Both have mitochondria."],
+    bins: ["Plant only", "Animal only", "Both"],
+    items: [["Chloroplast", 0], ["Cell wall", 0], ["Central vacuole", 0], ["Plasmodesmata", 0], ["Lysosome", 1], ["Centriole", 1], ["Mitochondrion", 2], ["Nucleus", 2], ["Golgi apparatus", 2], ["Ribosome", 2], ["Rough ER", 2]] },
+  { type: "pick", title: "Why internal membranes help", tip: "Membranes keep jobs in separate rooms and carry goods between them.",
+    voice: ["Delivery highways: mRNA near ribosomes, enzymes next to their substrates, error-correcting logistics."],
+    qs: [
+      { q: "Why are the tonoplast and the central vacuole important for a celery stalk?", ok: "Turgor pressure keeps it crisp", no: ["They make ATP", "They digest the cell wall", "They store DNA"], why: "A wilted celery stalk has lost turgor." },
+      { q: "A cell lacking catalase would suffer from a build-up of…", ok: "Hydrogen peroxide", no: ["Glucose", "Lipids", "Ribosomes"], why: "Catalase splits H₂O₂ into water and oxygen." },
+      { q: "A damaged mitochondrion is wrapped in membrane and digested. What is this called?", ok: "Autophagy", no: ["Phagocytosis", "Exocytosis", "Endosymbiosis"], why: "The lysosome recycles it." },
+      { q: "In the cell's money story, the mitochondrion is the…", ok: "Exchange that turns glucose (gold) into ATP (dollars)", no: ["Mine that makes glucose", "Bank vault for DNA", "Post office"], why: "The chloroplast is the mine." },
+      { q: "A liver cell detoxifies drugs. Which organelle will it have lots of?", ok: "Smooth ER", no: ["Rough ER", "Central vacuole", "Chloroplast"], why: "Smooth ER: lipids and detox." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["ribosome", "rough ER", "smooth ER", "Golgi apparatus", "lysosome", "central vacuole", "tonoplast", "peroxisome", "catalase", "mitochondrion", "chloroplast", "nucleus", "autophagy", "turgor pressure", "cis", "trans", "vesicle", "centriole"],
+    cards: [
+      C("The two-subunit machine that builds proteins.", ["ribosome", "ribosomes"]),
+      C("Which subunit of the ribosome binds the mRNA? (small or large)", ["small", "small subunit"]),
+      C("Which subunit forms the peptide bonds? (small or large)", ["large", "large subunit"]),
+      C("ER studded with ribosomes.", ["rough er", "rough endoplasmic reticulum", "rough"]),
+      C("ER that makes lipids and detoxifies.", ["smooth er", "smooth endoplasmic reticulum", "smooth"]),
+      C("The organelle that sorts and ships proteins.", ["golgi", "golgi apparatus", "golgi complex"]),
+      C("The face of the Golgi that receives vesicles.", ["cis", "cis face"]),
+      C("The face of the Golgi that sends vesicles out.", ["trans", "trans face"]),
+      C("Membrane bubble that carries cargo.", ["vesicle", "a vesicle"]),
+      C("The organelle with hydrolytic enzymes for digestion.", ["lysosome", "lysosomes"]),
+      C("Digesting your own worn-out organelles.", ["autophagy"]),
+      C("The big plant organelle that gives turgor pressure.", ["central vacuole", "vacuole"]),
+      C("The membrane around the central vacuole.", "tonoplast"),
+      C("The organelle that breaks down hydrogen peroxide.", ["peroxisome", "peroxisomes"]),
+      C("The enzyme that does it.", "catalase"),
+      C("Organelle that runs aerobic respiration.", ["mitochondrion", "mitochondria"]),
+      C("Organelle that runs photosynthesis.", ["chloroplast", "chloroplasts"]),
+      C("Animal cells have these two-barrel structures near the nucleus.", ["centriole", "centrioles"]),
+      C("The nuclear region where ribosomes are assembled.", "nucleolus"),
+      C("Do plant cells have mitochondria? (yes or no)", "yes")] }
+] });
+
+</script>
+</body>
+</html>

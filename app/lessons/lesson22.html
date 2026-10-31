@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 22</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 22</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+/* where does a cell stop? */
+const fate = S => {
+  if (!S.suppress && S.onco) return { stop: null, msg: "No brakes and the accelerator stuck on: it divides regardless" };
+  if (!S.growth) return { stop: "G1/S checkpoint", msg: "No growth signal: held at the G1/S checkpoint (or G0)" };
+  if (S.damage && S.suppress) return { stop: "G1/S checkpoint", msg: "DNA damage: tumor suppressors hold the cell at G1/S" };
+  if (!S.attached && S.suppress) return { stop: "spindle checkpoint (metaphase)", msg: "An unattached chromosome: held at the spindle checkpoint" };
+  if (S.damage || !S.attached) return { stop: null, msg: "Checkpoints gone: damaged or unbalanced cell divides anyway" };
+  return { stop: null, msg: "All clear: the cell completes mitosis" };
+};
+Kit.run({ id: "b145_lesson22", num: 22, stages: [
+  { type: "sim", title: "Checkpoints", tip: "The default is stop. G1/S, G2/M and the spindle assembly checkpoint each need a green light. There is no checkpoint in S phase.",
+    voice: ["Checkpoint proteins block progress; CDKs degrade the blockers, but need their cyclin partner. Cyclin levels oscillate.", "Multicellularity requires restraint: tumor suppressors are brakes, oncogenes are stuck accelerators. Cancer needs several mutations."],
+    w: 640, h: 170,
+    controls: [{ id: "growth", label: "Growth signal present", type: "check", val: true }, { id: "damage", label: "DNA damaged", type: "check", val: false }, { id: "attached", label: "All chromosomes attached to the spindle", type: "check", val: true }, { id: "suppress", label: "Tumor suppressors working", type: "check", val: true }, { id: "onco", label: "Oncogene stuck on", type: "check", val: false }],
+    readout: S => fate(S).msg,
+    draw(ctx, w, h, S) {
+      const f = fate(S), stops = ["G1/S checkpoint", "G2/M checkpoint", "spindle checkpoint (metaphase)"], xs = [90, 270, 450]; ctx.font = "12px sans-serif";
+      ctx.strokeStyle = "#999"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(30, 70); ctx.lineTo(w - 30, 70); ctx.stroke();
+      stops.forEach((s, i) => { ctx.fillStyle = f.stop === s ? "#c0392b" : "#2e7d32"; ctx.beginPath(); ctx.arc(xs[i], 70, 14, 0, 7); ctx.fill(); ctx.fillStyle = "#222"; ctx.fillText(s.replace(" (metaphase)", ""), xs[i] - 40, 108); });
+      ctx.fillStyle = "#222"; ctx.fillText("G1 → S → G2 → M →", 30, 40);
+    },
+    goals: [
+      { text: "Hold a damaged cell at the G1/S checkpoint", test: S => S.damage && S.growth && S.suppress && !S.onco && fate(S).stop === "G1/S checkpoint" },
+      { text: "Hold a cell with an unattached chromosome at the spindle checkpoint", test: S => !S.attached && S.growth && !S.damage && S.suppress && !S.onco && fate(S).stop && fate(S).stop.indexOf("spindle") === 0 },
+      { text: "Let a damaged cell divide anyway: it needs its tumor suppressors broken", test: S => S.damage && !S.suppress && fate(S).stop === null },
+      { text: "Starve the cell of growth signal: it does not enter S", test: S => !S.growth && !S.onco && fate(S).stop === "G1/S checkpoint" }] },
+  { type: "sort", title: "Cytokinesis across life", tip: "Three ways to make two cells.",
+    voice: ["Animals and fungi pinch with actin and myosin. Plants build a wall from the middle outward. Prokaryotes divide by binary fission with an FtsZ ring."],
+    bins: ["Animals and fungi", "Plants", "Prokaryotes"],
+    items: [["A contractile ring of actin and myosin pinches the cell", 0], ["Vesicles line up at the midline and fuse to build a new cell wall", 1], ["The cell wall is a box, so the new wall is built inside", 1], ["Binary fission", 2], ["An FtsZ ring", 2], ["A cleavage furrow", 0]] },
+  { type: "pick", title: "Control, cancer, and treatment", tip: "Cancer needs more than one mutation.",
+    voice: ["Growth hormone raises cyclins. Tumor suppressors are brakes. Chemotherapy poisons cells with cyclins: hair, stomach lining, blood.", "Asexual reproduction is mitosis that separates: hydra budding makes clones."],
+    qs: [
+      { q: "A CDK is active only when it has…", ok: "Its cyclin partner", no: ["ATP only", "A kinetochore", "A spindle"], why: "Cyclin levels oscillate, driving the cycle." },
+      { q: "Which cells are non-dividing (G0) in an adult?", ok: "Neurons and cardiac muscle", no: ["Skin and gut lining", "Bone marrow", "Hair follicles"], why: "Tardigrades too." },
+      { q: "Chemotherapy causes hair loss and anemia because…", ok: "It poisons all rapidly dividing cells", no: ["It targets only tumors", "It targets neurons", "It cuts DNA at the telomere"], why: "Narrow therapeutic window." },
+      { q: "Losing a tumor suppressor is like…", ok: "Cutting the brake line", no: ["Pressing the accelerator", "Adding fuel", "Turning the steering wheel"], why: "An oncogene is a stuck accelerator." },
+      { q: "Why does a single mutation rarely cause cancer?", ok: "Several checkpoints must fail before uncontrolled division", no: ["Mutations are rare in the tumor suppressors", "Cells repair mutations perfectly", "Cancer is caused by viruses only"], why: "Needs multiple mutations." }] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["G0", "checkpoint", "cyclin", "CDK", "tumor suppressor", "oncogene", "p53", "apoptosis", "cytokinesis", "cleavage furrow", "cell plate", "binary fission", "FtsZ", "chemotherapy", "spindle assembly checkpoint", "mitosis"],
+    cards: [
+      C("The non-dividing state.", ["g0"]), C("A control point where the cycle can halt.", ["checkpoint", "a checkpoint"]),
+      C("Is there a checkpoint during S phase? (yes or no)", "no"),
+      C("The protein whose levels oscillate to drive the cycle.", ["cyclin", "cyclins"]), C("The kinase that needs a cyclin partner.", ["cdk", "cyclin-dependent kinase"]),
+      C("A gene whose normal job is to stop division.", ["tumor suppressor", "tumor suppressor gene"]), C("A gene whose overactive form drives division.", ["oncogene", "oncogenes"]),
+      C("The default state of a checkpoint is to…", ["stop", "block", "halt"]),
+      C("The checkpoint that checks that every kinetochore is attached.", ["spindle assembly checkpoint", "spindle checkpoint", "spindle"]),
+      C("The animal cell's pinch.", ["cleavage furrow"]), C("The plant cell's new wall as it forms.", ["cell plate"]),
+      C("Prokaryotes divide by…", ["binary fission"]), C("The ring protein of binary fission.", ["ftsz"]),
+      C("Drugs that poison dividing cells.", ["chemotherapy", "chemo"]),
+      C("Mitosis that produces clones, as in hydra budding, is ___ reproduction.", ["asexual"])] }
+] });
+
+</script>
+</body>
+</html>

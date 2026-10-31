@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../assets/lock.js"></script>
+<title>BIO 145 — Lesson 3</title>
+<link rel="stylesheet" href="../assets/b145.css">
+<link rel="stylesheet" href="../assets/score.css">
+<link rel="stylesheet" href="../assets/hover.css">
+<link rel="stylesheet" href="../assets/kit.css">
+</head>
+<body>
+<header><h1>Lesson 3</h1></header>
+<div id="score-name" style="max-width:1300px; margin:16px auto 0; padding:0 24px;"></div>
+<nav class="toc" id="toc"></nav>
+<div id="kit"></div>
+<div class="done-banner" id="done-banner"></div>
+<div id="score-final" style="max-width:1300px; margin:0 auto; padding:0 24px 40px;"></div>
+<script src="../assets/pips.js"></script>
+<script src="../assets/score.js"></script>
+<script src="../assets/hover.js"></script>
+<script src="../assets/stage.js"></script>
+<script src="../assets/drill.js"></script>
+<script src="../assets/kit.js"></script>
+<script>
+const C = (q, a) => ({ q, a });
+const BI = 24; /* blood bicarbonate, mM */
+const phBlood = (pco2, acid) => 6.1 + Math.log10(Math.max(0.5, BI - acid) / (0.03 * pco2));
+const phPlain = acid => acid <= 0 ? 7 : Math.max(1, -Math.log10(acid / 1000 + 1e-7));
+Kit.run({ id: "b145_lesson3", num: 3, stages: [
+  { type: "sim", title: "A buffer holds the pH", tip: "Blood is buffered by carbonic acid and bicarbonate: CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. Breathing sets the CO₂. The pH is 6.1 + log([HCO₃⁻] / 0.03·pCO₂).",
+    voice: ["Acids donate protons, bases accept them. pH is the log scale of how many protons float free.", "A buffer is a weak acid and its partner sitting in equilibrium: add acid, the partner soaks it up. Hyperventilate and you blow off CO₂, so the pH rises."],
+    w: 640, h: 190,
+    controls: [{ id: "buf", label: "Buffer present (blood)", type: "check", val: false }, { id: "acid", label: "Acid added", min: 0, max: 20, step: 0.5, val: 0, fmt: v => v + " mmol/L" }, { id: "co2", label: "CO₂ in the blood (breathing)", min: 15, max: 80, step: 1, val: 40, fmt: v => v + " mmHg" }],
+    readout: S => { const ph = S.buf ? phBlood(S.co2, S.acid) : phPlain(S.acid); return "pH <b>" + ph.toFixed(2) + "</b>" + (S.buf ? (ph < 7.35 ? ' · <span class="off">acidosis</span>' : ph > 7.45 ? ' · <span class="off">alkalosis</span>' : ' · <span class="ok">normal range 7.35–7.45</span>') : " · plain water"); },
+    draw(ctx, w, h, S) {
+      const ph = S.buf ? phBlood(S.co2, S.acid) : phPlain(S.acid), X = v => 20 + v / 14 * (w - 40);
+      const grd = ctx.createLinearGradient(20, 0, w - 20, 0); grd.addColorStop(0, "#d9534f"); grd.addColorStop(0.5, "#6cae5c"); grd.addColorStop(1, "#3a5fa8");
+      ctx.fillStyle = grd; ctx.fillRect(20, 70, w - 40, 26);
+      ctx.fillStyle = "#222"; ctx.font = "12px sans-serif"; for (let v = 0; v <= 14; v += 2) ctx.fillText(v, X(v) - 4, 114);
+      ctx.fillStyle = "#555"; ctx.fillText("acid", 20, 56); ctx.fillText("base", w - 46, 56);
+      ctx.fillStyle = "#fff"; ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X(ph), 62); ctx.lineTo(X(ph) - 8, 44); ctx.lineTo(X(ph) + 8, 44); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#222"; ctx.font = "600 13px sans-serif"; ctx.fillText("7.4: healthy blood", X(7.4) - 40, 150);
+    },
+    goals: [
+      { text: "Add 10 mmol/L of acid to plain water and watch the pH crash below 3", test: S => !S.buf && S.acid >= 10 },
+      { text: "Add the same acid to buffered blood at normal CO₂ and keep the pH above 7", test: S => S.buf && S.acid >= 10 && Math.abs(S.co2 - 40) <= 2 && phBlood(S.co2, S.acid) > 7 },
+      { text: "Hyperventilate: blow off CO₂ until blood pH is above 7.5 (no acid)", test: S => S.buf && S.acid === 0 && phBlood(S.co2, 0) > 7.5 },
+      { text: "Hypoventilate: let CO₂ build until blood pH is below 7.3 (no acid)", test: S => S.buf && S.acid === 0 && phBlood(S.co2, 0) < 7.3 }] },
+  { type: "sort", title: "Water's properties", tip: "All of these come from hydrogen bonds between water molecules.",
+    voice: ["One cause, many consequences: water sticks to itself, so it pulls tight, soaks heat, and holds ice open."],
+    bins: ["Surface tension and cohesion", "High specific heat", "Evaporative cooling", "Ice is less dense than liquid"],
+    items: [["A water strider walks on a pond", 0], ["A drop of water beads up", 0], ["A lake stays cool on a hot day", 1], ["The coast has milder weather than the desert", 1], ["Sweat cools you off", 2], ["Panting cools a dog", 2], ["Ice floats", 3], ["Lakes freeze from the top down and fish survive underneath", 3]] },
+  { type: "sort", title: "Isomers", tip: "Isomers have the same atoms in a different arrangement. Receptors read shape, so shape is function.",
+    voice: ["Same formula, different shape. Ethanol and dimethyl ether; cis and trans; left- and right-handed linalool (orange or lavender)."],
+    bins: ["Structural: atoms connected in a different order", "Geometric: cis or trans around a double bond", "Chiral: mirror-image hands"],
+    items: [["Ethanol and dimethyl ether", 0], ["Butane and isobutane", 0], ["A straight chain and a ring with the same formula", 0], ["cis-2-butene and trans-2-butene", 1], ["A cis fat and a trans fat", 1], ["Linalool that smells of orange and linalool that smells of lavender", 2], ["A left-handed and a right-handed amino acid", 2]] },
+  { type: "sort", title: "Functional groups", tip: "The group, not the chain length, decides how a molecule behaves.",
+    voice: ["Memorize by writing them out. A vitamin was a 'vital amine': the name outlived the chemistry."],
+    bins: ["Hydroxyl (–OH): alcohol", "Carbonyl (C=O): aldehyde or ketone", "Amino (–NH₂): amine", "Phosphate (–OPO₃²⁻)", "Sulfhydryl (–SH): thiol"],
+    items: [["Ethanol's polar end", 0], ["The sugar in a sugar's ring corners", 0], ["Acetone's central C=O", 1], ["The end carbon of an aldehyde", 1], ["The N-terminal end of an amino acid", 2], ["The group on an amine base", 2], ["The tail of ATP", 3], ["The backbone link in DNA", 3], ["Cysteine's side chain", 4], ["Forms disulfide bridges", 4]] },
+  { type: "drill", title: "Cards", voice: ["Type each term. Two right in a row masters a card."],
+    bank: ["hydrogen bond", "cohesion", "specific heat", "evaporative cooling", "acid", "base", "buffer", "bicarbonate", "pH", "structural isomer", "geometric isomer", "cis", "trans", "chiral", "hydroxyl", "carbonyl", "amino", "phosphate", "sulfhydryl", "carbon"],
+    cards: [
+      C("The bond between a hydrogen on one water and the oxygen of another.", ["hydrogen bond", "hydrogen bonds"]),
+      C("Water molecules sticking to each other.", "cohesion"),
+      C("The amount of heat needed to warm a substance by one degree is its…", ["specific heat", "specific heat capacity"]),
+      C("The most energetic water molecules leave as vapor and the rest cool: this is…", ["evaporative cooling", "evaporation"]),
+      C("A molecule that donates protons.", "acid"), C("A molecule that accepts protons.", ["base", "a base"]),
+      C("A mix of a weak acid and its partner that resists changes in pH.", ["buffer", "a buffer"]),
+      C("The buffer pair in blood: carbonic acid and ___.", "bicarbonate"),
+      C("Hyperventilation blows off CO₂, so blood pH goes… (up or down)", ["up", "rises"]),
+      C("The pH scale is logarithmic: one unit means a ___-fold change in H⁺.", ["10", "ten", "tenfold"]),
+      C("Pure water has a pH of…", "7"),
+      C("Same atoms, different connections, such as butane and isobutane.", ["structural isomer", "structural isomers", "structural"]),
+      C("Same connections, different arrangement around a double bond.", ["geometric isomer", "geometric isomers", "geometric", "cis-trans", "cis trans"]),
+      C("Both groups on the same side of a double bond.", "cis"), C("Groups on opposite sides of a double bond.", "trans"),
+      C("Molecules that are mirror images, like hands.", ["chiral", "enantiomers", "enantiomer"]),
+      C("–OH is the ___ group.", "hydroxyl"), C("C=O is the ___ group.", "carbonyl"), C("–NH₂ is the ___ group.", "amino"),
+      C("–SH is the ___ group.", ["sulfhydryl", "thiol"]), C("–OPO₃²⁻ is the ___ group.", "phosphate"),
+      C("The element whose backbones hold organic molecules together.", "carbon")] }
+] });
+
+</script>
+</body>
+</html>
