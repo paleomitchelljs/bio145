@@ -214,20 +214,6 @@
       `<path class="f-hb" style="stroke:var(--muted)" d="M340 140H476"/><circle class="ch-ball el-Cl" cx="520" cy="140" r="42"/><text class="ch-ballt" x="520" y="140" style="font-size:24px">Cl⁻</text>` +
       txt(720, 132, 'ionic:', 'f-t') + txt(720, 170, 'full charges, +1 and −1', 'f-t2')));
 
-  /* a protein chain bent by two hydrogen bonds and locked by a disulfide bridge */
-  F.fold = () => {
-    const top = [], bot = [];
-    for (let i = 0; i < 9; i++) { top.push([200 + i * 100, 160]); bot.push([1000 - i * 100, 380]); }
-    const turn = [[1080, 200], [1110, 270], [1080, 340]], pts = top.concat(turn, bot);
-    const path = 'M' + pts.map((p) => p.join(' ')).join('L');
-    return svg(1400, 520,
-      `<path class="f-ink2" style="stroke-width:4" d="${path}"/>` + pts.map(([x, y]) => `<circle class="k3s" cx="${x}" cy="${y}" r="22"/>`).join('') +
-      `<path class="f-hb" d="M300 184V356M500 184V356"/>` + txt(400, 275, 'hydrogen bonds', 'f-t2 f-mid') +
-      `<circle class="k6" cx="800" cy="160" r="22"/><circle class="k6" cx="800" cy="380" r="22"/>` + txt(800, 168, 'S', 'f-tb f-mid', 'font-size:24px') + txt(800, 388, 'S', 'f-tb f-mid', 'font-size:24px') +
-      `<path class="f-ink k6l" style="stroke-width:6" d="M800 184V356"/>` + txt(822, 262, 'disulfide bridge', 'f-t2') + txt(822, 292, '(covalent)', 'f-t2') +
-      txt(200, 110, 'a protein: a string of amino acids', 'f-t2'));
-  };
-
   /* heat breaks bonds: an egg white sets (hydrogen bonds); boiling water stays H2O (covalent bonds hold) */
   F.heat = () => {
     const pan = (x) => `<ellipse class="f-board2" cx="${x}" cy="330" rx="160" ry="56" style="stroke:var(--ink-2);stroke-width:4"/><path class="f-ink" style="stroke-width:16" d="M${x + 156} 325h80"/>`;

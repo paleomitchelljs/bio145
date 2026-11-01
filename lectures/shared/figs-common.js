@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const D = window.Deck, F = D.figs = D.figs || {}, { svg, st, water, arrow, mol, balls } = D.chem;
+  const txt = (x, y, s, cls, style) => `<text class="${cls || 'f-t'}" x="${x}" y="${y}"${style ? ` style="${style}"` : ''}>${s}</text>`;
 
   /* a tent and a house: prokaryote and eukaryote */
   F.tentHouse = () => svg(1400, 520,
@@ -52,4 +53,34 @@
     return `<g transform="translate(${x} ${y}) scale(${s} ${s * d})"><circle class="k1s" cx="0" cy="0" r="16"/>` +
       `<path class="f-ink2 lip" style="fill:none;stroke:var(--lipid);stroke-width:5" d="M-6 16v56"/><path style="fill:none;stroke:var(--lipid);stroke-width:5" d="M6 16v24${kink ? 'l10 14v18' : 'v32'}"/></g>`;
   };
+  /* lectures 2 and 4: a protein chain bent by two hydrogen bonds and locked by a disulfide bridge */
+  F.fold = () => {
+    const top = [], bot = [];
+    for (let i = 0; i < 9; i++) { top.push([200 + i * 100, 160]); bot.push([1000 - i * 100, 380]); }
+    const turn = [[1080, 200], [1110, 270], [1080, 340]], pts = top.concat(turn, bot);
+    const path = 'M' + pts.map((p) => p.join(' ')).join('L');
+    return svg(1400, 520,
+      `<path class="f-ink2" style="stroke-width:4" d="${path}"/>` + pts.map(([x, y]) => `<circle class="k3s" cx="${x}" cy="${y}" r="22"/>`).join('') +
+      `<path class="f-hb" d="M300 184V356M500 184V356"/>` + txt(400, 275, 'hydrogen bonds', 'f-t2 f-mid') +
+      `<circle class="k6" cx="800" cy="160" r="22"/><circle class="k6" cx="800" cy="380" r="22"/>` + txt(800, 168, 'S', 'f-tb f-mid', 'font-size:24px') + txt(800, 388, 'S', 'f-tb f-mid', 'font-size:24px') +
+      `<path class="f-ink k6l" style="stroke-width:6" d="M800 184V356"/>` + txt(822, 262, 'disulfide bridge', 'f-t2') + txt(822, 292, '(covalent)', 'f-t2') +
+      txt(200, 110, 'a protein: a string of amino acids', 'f-t2'));
+  };
+
+  /* lectures 3 and 4: the functional groups, one per step */
+  F.groups = () => {
+    const G = [
+      ['Hydroxyl', 'polar; alcohols (cholesterol has one)', { atoms: [['R', 0, 0], ['O', 80, 0], ['H', 150, 0]], bonds: [[0, 1], [1, 2]] }],
+      ['Carbonyl', 'aldehyde at an end, ketone in the middle', { atoms: [['R', 0, 0], ['C', 80, 0], ['O', 80, -70], ['H', 160, 0]], bonds: [[0, 1], [1, 2, 2], [1, 3]] }],
+      ['Carboxyl', 'organic acids', { atoms: [['R', 0, 0], ['C', 80, 0], ['O', 80, -70], ['O', 160, 0], ['H', 230, 0]], bonds: [[0, 1], [1, 2, 2], [1, 3], [3, 4]] }],
+      ['Amino', 'amines', { atoms: [['R', 0, 0], ['N', 80, 0], ['H', 140, -50], ['H', 140, 50]], bonds: [[0, 1], [1, 2], [1, 3]] }],
+      ['Phosphate', 'phosphate esters, as in ATP', { atoms: [['R', 0, 0], ['O', 75, 0], ['P', 150, 0], ['O', 150, -62], ['O⁻', 150, 58], ['O⁻', 225, 0]], bonds: [[0, 1], [1, 2], [2, 3, 2], [2, 4], [2, 5]] }],
+      ['Sulfhydryl', 'thiols: stabilize proteins', { atoms: [['R', 0, 0], ['S', 80, 0], ['H', 150, 0]], bonds: [[0, 1], [1, 2]] }]
+    ];
+    return svg(1500, 640, txt(40, 30, 'R: the rest of the molecule', 'f-t2') + G.map(([n, what, m], i) => {
+      const x = 40 + (i % 3) * 490, y = 60 + Math.floor(i / 3) * 290;
+      return st(i, `<rect class="f-card" x="${x}" y="${y}" width="450" height="260" rx="20"/><text class="f-tb" x="${x + 24}" y="${y + 50}">${n}</text><text class="f-t2" x="${x + 24}" y="${y + 240}">${what}</text>` + mol(Object.assign({ x: x + 110, y: y + 145, fs: 32 }, m)));
+    }).join(''));
+  };
+
 })();

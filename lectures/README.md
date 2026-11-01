@@ -9,7 +9,7 @@ not what he says: a prompt is only a question he asks the room, there are no quo
 a slide are labels, numbers and the few terms to write down (rules in `HANDOFF.md` and at the top of
 `lec01/content.js`). PowerPoint material the lecture skipped goes in an extra (X) segment. Lecture 1 is built this way
 (2026-10-31).
-Lectures 2 and 3 are rebuilt the same way (drafts for review). Lectures 4–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild. `HANDOFF.md` has the procedure and the state of each deck for that pass.
+Lectures 2 to 4 are rebuilt the same way. Lectures 5–9 are still the first drafts, written from the outlines and PowerPoint text, and need the same rebuild. `HANDOFF.md` has the procedure and the state of each deck for that pass.
 
 Open the course page (`index.html` at the repo root: each lecture's deck on the left, its homework on the right), or a
 deck's `lectures/lecNN/index.html`, straight from the file. No build step.
@@ -74,7 +74,7 @@ public site. No deck uses it now; a missing local photo shows as a dashed box wi
 | 8 | the cell map (animal or plant; click a part) |
 | 9 | kinesin walks, one ATP a step |
 
-Lectures 4–9 end or pause on room votes (P shows the answer); keep one only where JM asked the room something.
+Lectures 5–9 end or pause on room votes (P shows the answer); keep one only where JM asked the room something.
 
 ## Checks
 

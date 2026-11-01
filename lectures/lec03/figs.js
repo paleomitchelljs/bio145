@@ -187,22 +187,6 @@
         txt(420, 620, 'the orange receptor', 'f-t2 f-mid') + txt(1060, 620, 'the lavender receptor', 'f-t2 f-mid')));
   };
 
-  /* the functional groups, one per step */
-  F.groups = () => {
-    const G = [
-      ['Hydroxyl', 'polar; alcohols (cholesterol has one)', { atoms: [['R', 0, 0], ['O', 80, 0], ['H', 150, 0]], bonds: [[0, 1], [1, 2]] }],
-      ['Carbonyl', 'aldehyde at an end, ketone in the middle', { atoms: [['R', 0, 0], ['C', 80, 0], ['O', 80, -70], ['H', 160, 0]], bonds: [[0, 1], [1, 2, 2], [1, 3]] }],
-      ['Carboxyl', 'organic acids', { atoms: [['R', 0, 0], ['C', 80, 0], ['O', 80, -70], ['O', 160, 0], ['H', 230, 0]], bonds: [[0, 1], [1, 2, 2], [1, 3], [3, 4]] }],
-      ['Amino', 'amines', { atoms: [['R', 0, 0], ['N', 80, 0], ['H', 140, -50], ['H', 140, 50]], bonds: [[0, 1], [1, 2], [1, 3]] }],
-      ['Phosphate', 'phosphate esters, as in ATP', { atoms: [['R', 0, 0], ['O', 75, 0], ['P', 150, 0], ['O', 150, -62], ['O⁻', 150, 58], ['O⁻', 225, 0]], bonds: [[0, 1], [1, 2], [2, 3, 2], [2, 4], [2, 5]] }],
-      ['Sulfhydryl', 'thiols: stabilize proteins', { atoms: [['R', 0, 0], ['S', 80, 0], ['H', 150, 0]], bonds: [[0, 1], [1, 2]] }]
-    ];
-    return svg(1500, 640, txt(40, 30, 'R: the rest of the molecule', 'f-t2') + G.map(([n, what, m], i) => {
-      const x = 40 + (i % 3) * 490, y = 60 + Math.floor(i / 3) * 290;
-      return st(i, `<rect class="f-card" x="${x}" y="${y}" width="450" height="260" rx="20"/><text class="f-tb" x="${x + 24}" y="${y + 50}">${n}</text><text class="f-t2" x="${x + 24}" y="${y + 240}">${what}</text>` + mol(Object.assign({ x: x + 110, y: y + 145, fs: 32 }, m)));
-    }).join(''));
-  };
-
   /* ---------------- the pH scale ---------------- */
   const THINGS = [[0, 'battery acid'], [2, 'lemon juice, stomach acid'], [5, 'black coffee'], [7, 'pure water'], [7.4, 'blood'], [8.3, 'baking soda'], [10, 'soapy water'], [12.5, 'bleach']];
   D.parts.phScale = function (def, host) {

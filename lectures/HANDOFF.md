@@ -11,9 +11,10 @@ for lectures 10 onward. Read this, then `lectures/README.md` (how the decks work
   it** (2026-10-31, second pass; see "The rule"). It is the model for the rest.
 - **Lectures 2 and 3 are rebuilt the same way** (2026-10-31), uncommitted at first, for JM to review alongside lecture 1
   and look for common issues. Their decisions and open questions are under "Lectures 2 and 3" below.
-- **Lectures 4–9 are first drafts** written from the 2026 outlines and the PowerPoint text. JM on the lecture 1 first
+- **Lecture 4 is rebuilt the same way** (2026-10-31), a draft for JM's review; see "Lecture 4" below.
+- **Lectures 5–9 are first drafts** written from the 2026 outlines and the PowerPoint text. JM on the lecture 1 first
   draft, which was written the same way: *"It's a lot of words that aren't actually my verbiage, and some of it is
-  weirdly out of order (why does the fire example come after the sorting exercise?)"*. Expect the same faults in 4–9.
+  weirdly out of order (why does the fire example come after the sorting exercise?)"*. Expect the same faults in 5–9.
 - The sandbox blocks Chrome, so the agent can't open a deck in a browser. `tools/check_decks.js` (jsdom) catches script
   errors and missing parts. For layout, this session rendered every build to PNG with resvg (`@resvg/resvg-js`) and the
   Source Sans 3 fonts (npm `source-sans`), both installed in the session scratchpad, not the repo: figures render
@@ -97,10 +98,29 @@ All of these are outside git (`refs/` is gitignored; the transcripts are elsewhe
     the lavender one) and his claim that linalool isn't found in lavender is wrong (lavender oil is rich in it).
   - SI logistics are kept generic (no room or times).
 - Shared change: `saltWater` in `shared/figs-common.js` takes `opts.dry` and `opts.wet` for its two captions.
+- Style pass (JM asked for one, 2026-10-31): topic headings, not punch lines or repeats of what's on screen; each taught
+  term on screen once (valence, electronegativity, surface tension, specific heat, structural and geometric isomers,
+  chiral); no doubled labels; agenda builds get their own segment.
 
-## Lectures 4–9, then 10 onward
+## Lecture 4 (rebuilt 2026-10-31)
 
-- Same procedure for 4–9, after JM has reviewed 1–3 for common issues.
+- 19 segments, 71 builds. Pictures after `lec_chpt02.pptx` slides 40-46, `lec_chpt03.pptx` slides 2-21 and homework 4.
+  Keeps the joiner and fat-packing demos; homework 4's bench (drag monomer ends together) is the fuller version.
+- `groups` (lecture 3) and `fold` (lecture 2) moved to `shared/figs-common.js`; he recaps both here.
+- Decided, and flagged for JM:
+  - He called α and β glucose "structural isomers"; by lecture 3's definitions they aren't (same bonds). The slide
+    says only "carbon 1's OH: down / up".
+  - "Mammals don't make unsaturated fats": mammals do make monounsaturated ones (oleic acid); what you must eat are
+    omega-3s and omega-6s. The slide says that. Palm oil, his unsaturated example, is about half saturated; the slide
+    uses corn oil.
+  - Slips not carried over: "unsaturated fats are normally solid"; fats as "carbs and a protein stuck together".
+  - The lab announcement (microscopy, then macromolecules) moved to the opening logistics.
+  - The HDL/LDL trucks are cut: he only starts lipoproteins in the last minute ("we'll pick up next time"), so they
+    belong to lecture 5's opening. The marbled steak is drawn (the PowerPoint photo isn't openly licensed).
+
+## Lectures 5–9, then 10 onward
+
+- Same procedure for 5–9. Lecture 5 should open with the lipoprotein trucks.
 - New decks (10–36): `python3 lectures/tools/make_page.py NN "Title" "description"`, write `content.js` and
   `figs.js`, add a `lecNN` row to `LOCKS.txt`, and replace the lecture's "deck not built yet" placeholder on the course
   page with a link (copy lecture 9's card). `docs/GUIDE.md` maps lectures to book chapters.

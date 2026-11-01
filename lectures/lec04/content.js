@@ -1,98 +1,140 @@
-/* Lecture 4: Carbohydrates and lipids. Pacing from refs/outlines/2026_lec04_outline.tex; slide text from
- * lec_chpt02.pptx slides 45-46 and lec_chpt03.pptx slides 1-21, reworded toward the outline. */
+/* Lecture 4: functional groups again, joining and breaking, carbohydrates, lipids. Order from the 2026 recording
+ * (Courses/transcripts/145/transcripts/raw/2026_exam01_lec04_transcript.txt); pictures after lec_chpt02.pptx slides
+ * 40-46, lec_chpt03.pptx slides 2-21, and homework 4. The screen follows lecture 1's rules (see the top of
+ * lec01/content.js): the slide shows what JM would draw or point at, a prompt is only a question he puts to the room,
+ * words on a slide are labels.
+ *
+ * Lipoproteins (the single-layer ball he starts at the very end, "we'll pick up next time") get one build here; the
+ * HDL/LDL trucks belong to lecture 5's opening.
+ */
 (function (root) {
   'use strict';
-  const L = [60, 110, 760, 660], R = [860, 110, 700, 660], WIDE = [60, 110, 1480, 660];
+  const FULL = [40, 100, 1520, 680];
+  const none = (n) => Array.from({ length: n }, () => ({}));
+  const os = (fig, who) => `OpenStax Biology 2e, Fig. ${fig}${who ? ` (${who})` : ''}, CC BY 4.0`;
   const segments = [
     {
       id: 'title', title: 'Carbohydrates and lipids', noHead: true, mins: [0, 1],
       builds: [{}],
-      items: [{ kind: 'title', box: [100, 180, 1400, 460], kick: 'BIO 145 · Lecture 4 · Chapter 3', text: 'Carbohydrates and lipids', sub: 'Big molecules from small ones, and what water does to them' }]
+      items: [{ kind: 'title', box: [100, 180, 1400, 460], kick: 'BIO 145 · Lecture 4 · Chapters 2–3', text: 'Carbohydrates and lipids' }]
     },
     {
-      id: 'recap', title: 'Recap', mins: [1, 4],
-      builds: [{ prompt: 'Shape controls *where and when*' }, { prompt: 'The functional group controls *what reaction*' }],
-      items: [{ kind: 'points', box: WIDE, cls: 'big', lines: ['Shape: where a molecule fits, and when', 'Functional group: what reaction it does'] }]
+      id: 'logistics', title: 'Before we start', mins: [1, 2.4],
+      builds: [{}],
+      items: [{
+        kind: 'points', box: [60, 110, 1480, 660], cls: 'big', noLit: true,
+        lines: [{ t: 'Exam 1 next week: 50 questions', sub: 'multiple choice and select-all; the select-alls are labeled', at: 0 }, { t: 'SI sessions are running: add yourself to the SI Moodle page', at: 0 }, { t: 'Lab: microscopy this week, macromolecules next week', at: 0 }]
+      }]
     },
     {
-      id: 'polymers', title: 'Building and breaking polymers', mins: [4, 12],
-      builds: [
-        { prompt: 'Join two monomers: a water comes out' },
-        { prompt: '*Dehydration* synthesis. Not the medical kind.' },
-        { prompt: 'Put the water back: *hydrolysis*' },
-        { prompt: 'Lysis: break apart. A lysosome is a "breaking body".' }
-      ],
-      items: [{ kind: 'joiner', id: 'j1', box: [40, 110, 1520, 660] }]
+      id: 'recap', title: 'Shape and functional groups', mins: [2.4, 4.3],
+      builds: none(2),
+      items: [{ kind: 'fig', box: FULL, fig: 'shapeGroup' }]
     },
     {
-      id: 'sugars', title: 'Carbohydrates', mins: [12, 22],
-      builds: [
-        { prompt: '-ose: a sugar' },
-        { prompt: 'In water, glucose closes into a ring' },
-        { prompt: 'The OH on carbon 1 can point down…' },
-        { prompt: '…or up. Same atoms.' },
-        { prompt: 'Carbon 1 joins carbon 4: a *glycosidic* bond' }
-      ],
+      id: 'groups', title: 'Functional groups', mins: [4.3, 10.4],
+      builds: none(8),
       items: [
-        { kind: 'points', box: WIDE, builds: [0, 1], cls: 'big', lines: [{ t: 'Monosaccharides: glucose, fructose, galactose', sub: 'aldoses carry the C=O at the end; ketoses in the middle' }, { t: 'Rings, with distinct shapes', sub: 'shape = function' }] },
-        { kind: 'fig', box: [80, 110, 1440, 600], fig: 'alphaBeta', builds: [2, 3, 4] },
-        { kind: 'points', box: [80, 700, 1440, 80], builds: [4], cls: 'small plain', lines: [{ t: 'Maltose: glucose + glucose. Sucrose: glucose + fructose. Lactose: glucose + galactose.', at: 4 }] }
+        { kind: 'fig', box: FULL, fig: 'groups', builds: [0, 1, 2, 3, 4, 6] },
+        { kind: 'fig', box: [40, 160, 1520, 440], fig: 'atp', builds: [5] },
+        { kind: 'fig', box: FULL, fig: 'fold', builds: [7] }
       ]
     },
     {
-      id: 'storage', title: 'Storing and building with sugar', mins: [22, 31],
-      builds: [
-        { prompt: 'Starch: pasta, sticky rice' },
-        { prompt: 'Glycogen: the not-plants\' store' },
-        { prompt: 'Cellulose: wood, plant fiber' },
-        { prompt: 'One OH decides whether you can eat it' },
-        { prompt: 'Cellulose and *cellulase*: the -ase breaks the -ose' },
-        { prompt: 'Herbivores rent their guts to bacteria' },
-        { prompt: 'Chitin: arthropods and fungi' }
-      ],
+      id: 'dehyd', title: 'Dehydration and hydrolysis', mins: [10.4, 15],
+      builds: [{}, {}, {}, {}, {}, { prompt: 'Is there any limit to how many times I could do that?' }],
       items: [
-        { kind: 'fig', box: [40, 110, 1520, 600], fig: 'polysacc', builds: [0, 1, 2, 3] },
-        { kind: 'points', box: L, builds: [4, 5], at: 4, lines: [{ t: 'Amylase breaks starch; lactase breaks lactose', sub: 'no lactase as an adult: lactose intolerance' }, { t: 'No animal makes cellulase', sub: 'cows and termites carry microbes that do' }] },
-        { kind: 'photo', box: R, builds: [4, 5], img: 'os-34-08-ruminant-stomachs.jpg', credit: 'OpenStax Biology 2e, Fig. 34.8, CC BY 4.0', alt: 'A ruminant\'s four stomachs: rumen, reticulum, omasum, abomasum', diagram: true },
-        { kind: 'photo', box: [260, 110, 1080, 600], builds: [6], img: 'os-3-11-chitin-bee.jpg', credit: 'OpenStax Biology 2e, Fig. 3.11 (Louise Docker), CC BY 4.0', alt: 'A bee: an insect, its exoskeleton made of chitin' }
+        { kind: 'fig', box: FULL, fig: 'words', builds: [0, 1] },
+        { kind: 'fig', box: FULL, fig: 'zip', builds: [2, 3, 4] },
+        { kind: 'joiner', id: 'j1', box: [40, 110, 1520, 660], builds: [5] }
       ]
     },
     {
-      id: 'lipids', title: 'Lipids', mins: [31, 41],
-      builds: [
-        { prompt: 'Defined by *hydrophobicity*, not by a monomer' },
-        { prompt: 'Straight tails, or kinked ones' },
-        { prompt: 'Pack them' },
-        { prompt: 'A fat: glycerol and three fatty acids' }, {}, {}, { prompt: 'Ester bonds; three waters out' }
-      ],
+      id: 'activity', title: 'On a scrap of paper', mins: [15, 16.8],
+      builds: [{ prompt: 'Your name, and: what is this reaction?' }, {}],
+      items: [{ kind: 'fig', box: FULL, fig: 'ester' }]
+    },
+    {
+      id: 'macro', title: 'Macromolecules', mins: [16.8, 21.2],
+      builds: none(4),
+      items: [{ kind: 'fig', box: FULL, fig: 'macro' }]
+    },
+    {
+      id: 'sugars', title: 'Simple sugars', mins: [21.2, 22.7],
+      builds: none(4),
+      items: [{ kind: 'fig', box: FULL, fig: 'oses' }]
+    },
+    {
+      id: 'ring', title: 'Rings', mins: [22.7, 27.7],
+      builds: [{}, {}, {}, {}, { prompt: 'Does that feel like it should matter?' }],
       items: [
-        { kind: 'fig', box: [40, 120, 1520, 600], fig: 'fattyAcids', builds: [0, 1] },
-        { kind: 'fatPack', id: 'f1', box: [40, 110, 1520, 660], builds: [2] },
-        { kind: 'fig', box: [40, 120, 1520, 600], fig: 'triglyceride', builds: [3, 4, 5, 6] }
+        { kind: 'fig', box: FULL, fig: 'ringClose', builds: [0, 1, 2] },
+        { kind: 'fig', box: FULL, fig: 'alphaBeta', builds: [3, 4] }
       ]
     },
     {
-      id: 'phospho', title: 'Phospholipids', mins: [41, 50],
-      builds: [
-        { prompt: 'A polar head on nonpolar tails' },
-        { prompt: 'Put them in water…' },
-        { prompt: '…and they build a bilayer themselves' },
-        { prompt: 'Soap, detergent, bubbles: the same trick' }
-      ],
+      id: 'link', title: 'Linking sugars', mins: [27.7, 31],
+      builds: none(4),
+      items: [{ kind: 'fig', box: FULL, fig: 'glyco' }]
+    },
+    {
+      id: 'starch', title: 'Starch and cellulose', mins: [31, 34.2],
+      builds: [{}, { prompt: 'What do we call cellulose when we eat it?' }, {}],
+      items: [{ kind: 'fig', box: FULL, fig: 'chains' }]
+    },
+    {
+      id: 'storage', title: 'Storing glucose', mins: [34.2, 35.4],
+      builds: none(2),
+      items: [{ kind: 'fig', box: FULL, fig: 'storage' }]
+    },
+    {
+      id: 'plants', title: 'Fuel or structure', mins: [35.4, 36.5],
+      builds: [{}],
+      items: [{ kind: 'fig', box: FULL, fig: 'plantSugar' }]
+    },
+    {
+      id: 'enzymes', title: '-ose and -ase', mins: [36.5, 38.5],
+      builds: [{}, {}, { prompt: 'What enzyme breaks down amylose?' }, {}, { prompt: 'What\'s the sugar in milk? What breaks it down?' }, {}],
       items: [
-        { kind: 'points', box: WIDE, builds: [0], cls: 'big', lines: [{ t: 'Partly hydrophilic, partly hydrophobic', sub: 'one end loves water, the other hides from it' }] },
-        { kind: 'fig', box: [40, 110, 1520, 640], fig: 'bilayer', builds: [1, 2, 3] }
+        { kind: 'fig', box: FULL, fig: 'oseAse', builds: [0, 2, 3, 4, 5] },
+        { kind: 'photo', box: [300, 110, 1000, 660], builds: [1], img: 'os-34-08-ruminant-stomachs.jpg', credit: os('34.8'), alt: 'A ruminant\'s four stomachs: rumen, reticulum, omasum, abomasum', diagram: true }
       ]
     },
     {
-      id: 'lipoproteins', title: 'Lipoproteins', mins: [50, 54],
-      builds: [{ prompt: 'Fat can\'t travel loose in blood' }, { prompt: 'Two container trucks' }],
-      items: [{ kind: 'fig', box: [100, 110, 1400, 640], fig: 'trucks', builds: [0, 1] }]
+      id: 'structural', title: 'Structural carbohydrates', mins: [38.5, 41.3],
+      builds: [{}, { prompt: 'Glucosamine: what does the name tell you?' }, {}, {}],
+      items: [
+        { kind: 'fig', box: FULL, fig: 'fibers', builds: [0] },
+        { kind: 'fig', box: FULL, fig: 'chitin', builds: [1, 2] },
+        { kind: 'photo', box: [260, 110, 1080, 640], builds: [3], img: 'os-3-11-chitin-bee.jpg', credit: os('3.11', 'Louise Docker'), alt: 'An insect: its exoskeleton is chitin' }
+      ]
     },
     {
-      id: 'check', title: 'Check yourself', mins: [54, 57],
-      builds: [{ prompt: 'Why can\'t we digest grass?' }],
-      items: [{ kind: 'vote', id: 'q1', box: [160, 110, 1280, 660], q: 'Starch and cellulose are both chains of glucose. We digest only starch because…', opts: ['our enzymes fit α linkages, not β', 'cellulose has no glucose', 'cellulose is a lipid', 'starch is smaller'], ans: 0, why: 'Same sugar, the other turn of one OH. A cow digests grass with its microbes\' cellulase.' }]
+      id: 'lipids', title: 'Lipids', mins: [41.3, 41.6],
+      builds: none(2),
+      items: [{ kind: 'fig', box: FULL, fig: 'steak' }]
+    },
+    {
+      id: 'fatty', title: 'Fatty acids', mins: [41.6, 45],
+      builds: none(4),
+      items: [
+        { kind: 'fig', box: FULL, fig: 'fattyAcids', builds: [0, 1, 2] },
+        { kind: 'fatPack', id: 'f1', box: [40, 110, 1520, 660], builds: [3] }
+      ]
+    },
+    {
+      id: 'fats', title: 'Fats', mins: [45, 48.1],
+      builds: [{}, {}, { prompt: 'Does it matter how big the fatty acid is?' }, {}, {}],
+      items: [{ kind: 'fig', box: FULL, fig: 'triglyceride' }]
+    },
+    {
+      id: 'phospho', title: 'Phospholipids', mins: [48.1, 50],
+      builds: none(7),
+      items: [
+        { kind: 'fig', box: FULL, fig: 'philic', builds: [0, 1, 2] },
+        { kind: 'fig', box: FULL, fig: 'bilayer', builds: [3, 4, 5] },
+        { kind: 'fig', box: FULL, fig: 'micelle', builds: [6] }
+      ]
     }
   ];
   root.LECTURE = { id: 'lec04', short: 'Lecture 4', title: 'Carbohydrates and lipids', segments };
